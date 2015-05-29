@@ -1,0 +1,86 @@
+html {background-color:#fff;height:100%;font-family:'Arial';font-size:18px;}
+body {margin:0px;padding:0px;}
+
+.header span{font-size:100px;}
+.headerbar {background-color:#E7EAEF;}
+.footer {width:100%:margin:auto;height:40px;background-color:#dddddd;border-top:1px solid #aaaaaa;border-bottom:1px solid #aaaaaa;}
+.footerbar {background-color:#E7EAEF;border-top:1px solid #D2D2D2;border-bottom:1px solid #D2D2D2;margin-top:60px;}
+.pageFooter{clear:both;}
+
+.pagination{height:40px;font-size:16px;}
+.pagination li.active{background-color:#0a2024;}
+.pagination li{float:left;list-style-type: none;margin-left:12px;background-color:#7eabb8;padding:2px;border:2px solid #000;border-radius:6px;}
+.pagination li:hover{background-color:#0a2128;}
+.pagination li a{text-decoration:none;color:#000;}
+
+.on{background-color:#1e424c !important;}
+.clear{clear:both;}
+
+table {width:100%;background-color: #eee;font-size:11px;border-collapse: collapse;border-spacing: 0px;box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.24);}
+table tr {transition: all 0.3s ease 0s;}
+table th {padding:16px;}
+table td{padding:16px;border-bottom: 1px solid rgba(0, 0, 0, 0.12);}
+table caption{font-size:16px;}
+tbody tr:nth-child(odd) {
+   background-color: #eee;
+   font-size:11px;
+}
+.tabrow1(background-color:#eee;)
+
+
+#topbar {position:relative;position:absolute;top:0px;width:100%;z-index:10;}
+
+
+.hover:hover {background-color:#9fa8da;}
+.hover:hover {background-color:#9fa8da;}
+.hover-expand:hover .children { display: block; }
+
+
+/* new styles */
+.copyright {float:right;margin-top:20px;color:#fff;}
+
+p {margin:25px;}
+h2 {margin-left:25px;color:#fff;}
+h3 {color:#fff;}
+
+label {margin-bottom:10px;float:left;clear:both;display:block;color:#fff;}
+input {width:100%;margin:0px;margin-bottom:20px;padding:10px;}
+button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; border-radius: 3px;box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);}
+
+.tile-right {float:right;clear:right;}
+#headerstrip{position:absolute;left:0px;right:0px;height:68px;top:0px;background-color:#00232D;}
+#headerstrip .navstrip{margin:10px;height:48px;}
+#headerstrip .mini-logo{font-size:22px;padding-top: 12px;color:#fff;font-weight:bold;padding-left:58px;height:48px;background-image:url('/static/template/images/hackspace.png');background-repeat:no-repeat;}
+#headerstrip .middle{}
+
+#navstrip{}
+
+.menu {position:absolute;left:0px;right:0px;height:40px;height:388px;top:68px;background-color:#00232D;z-index:-1;}
+.menu ul {width:960px;margin:auto;height:40px;padding-left:20px;background-color:#0087A8;}
+.menu li {width:130px;float:left;list-style-type:none;margin:11px;text-align:center;}
+.menu li:hover {width:130px;float:left;list-style-type:none;border-bottom:4px solid #1C4085;}
+.menu a {color:#ffffff;font-weight:bold;text-decoration:none;}
+.menu li:hover {}
+
+.page {width:980px;margin:auto;margin-top:155px;padding-bottom:48px;background-color:#0087A8;}
+
+.google-groups-signup {width:300px;float:left;}
+.google-groups-signup input{width:274px;}
+.google-groups-signup a{color:#fff;}
+
+.banner-slide {position:absolute;width:750px;}
+.banner-slide ul{position:relative;overflow:hidden;width:750px;height:300px;margin:0px;}
+.banner-slide li{position:absolute;left:0px;top:0px;list-style-type:none;}
+.banner-slide .content{display:none;position:absolute;top:250px;width:100%;background-color: #eee;}
+.banner-slide .left{text-align:left;padding:6px;font-size:48px;color:#fff;position:absolute;top:122px;left:0px;width:60px;height:60px;background-color: transparent;}
+.banner-slide .right{text-align:right;padding:6px;font-size:48px;color:#fff;position:absolute;top:122px;right:0px;width:60px;height:60px;background-color: transparent;}
+
+.bullet-list li {margin:10px;}
+
+.tile {background-color:#eee;width:300px;height:350px;margin:10px;float:left;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);}
+.tile img{width:300px;height:200px;}
+
+#footertop {background-color:#00232D;height:48px;}
+#footerbottom {background-color:#0087A8;height:300px;}
+#footerbottom div.container {margin:auto;background-color:#0087A8;height:250px;width:960px;}
+.twitter-feed {width:460px;margin:10px;}
