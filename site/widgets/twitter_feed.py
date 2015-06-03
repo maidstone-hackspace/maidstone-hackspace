@@ -18,10 +18,10 @@ class control(www.default.html_ui):
     def render(self):
         self.count += 1
         htm = '''
-            <div class="twitter-feed">'
-            '<a class="twitter-timeline" href="https://twitter.com/%s" data-widget-id="603654160072974336">'
-            'Tweets by @%s'
-            '</a>'
-            '</div>''' % (
+            <div class="twitter-feed">
+            <a class="twitter-timeline" href="https://twitter.com/%s" data-widget-id="603654160072974336">
+            Tweets by @%s
+            </a>
+            </div>''' % (
             self.name, self.name)
         return htm

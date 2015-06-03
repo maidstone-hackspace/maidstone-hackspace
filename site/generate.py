@@ -26,6 +26,8 @@ image_path = domain + os.sep + 'template' + os.sep + 'images' + os.sep
 
 web.template.css_includes.append('/static/template/default.css')
 web.template.css_includes.append('/static/template/js/jquery-ui/themes/base/jquery-ui.css')
+#~ web.template.javascript_includes.append('/static/template/js/jquery-ui/themes/base/jquery-ui.css')
+web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>')
 
 def todict(data):
     new_dict = {}
@@ -42,10 +44,7 @@ class feed_reader:
         fp = open('rss_example.xml', 'r')
         self.feed = etree.parse(fp)
         self.feed = self.feed.getroot()
-        #~ self.channel = self.feed.xpath('.//item')
-        #~ print self.channel
-        
-            #for channel in feed.xpath(".//item"):
+
         self.title = self.feed.xpath('./channel/title/text()')[-1]
         self.link = self.feed.xpath('./channel/link/text()')[-1]
         self.description = self.feed.xpath('./channel/description/text()')[-1]
@@ -73,9 +72,10 @@ def header():
     web.menu * site.page_menu
     web.template.body.append(web.header_strip.create({}).render())
     web.template.body.append(web.menu.render())
-    web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
 
 def footer():    
+    web.footer_content.create().append(
+        web.google_groups_signup.create(' and make yourself known','maidstone-hackspace').set_id('mailing-list-signup').render())
     web.template.body.append(web.footer_content.render())
     web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
     web.template.body.append(web.google_analytics.render())
@@ -84,16 +84,29 @@ def footer():
 def examples():
     """ page for testing new components"""
     header()
-    print 'examples page'
-    #~ web.template.create('examples')
     web.page.create('examples')
     web.twitter_feed.create('olymk2')
     web.page.section(web.twitter_feed.render())
-    footer()
+
+    web.page.append(
+        web.google_groups.create(
+            ' and make yourself known','maidstone-hackspace'
+        ).set_id('mailing-list').render()
+    )
+
+    web.tiles.create()
+    feed = feed_reader('')
+    for row in feed:
+        web.tiles.append(
+            title = feed.title,
+            link = feed.link,
+            image = feed.channel_image, 
+            description = 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.')
+        web.div.append(str(row))
+    web.page.append(web.tiles.render())
 
     web.template.body.append(web.page.render())
-    with open('examples.html', 'w') as fp:
-        fp.write(footer())
+    return footer()
 
 def index():
     header()
@@ -105,7 +118,12 @@ def index():
     web.template.body.append(web.menu.render())
 
     web.page.create('')
-    web.page.section(web.images.create('/static/template/images/tile-01.jpg').set_classes('tile-right').append('/static/template/images/tile-01.jpg').render())
+    web.page.section(
+        web.images.create(
+            '/static/template/images/tile-01.jpg'
+        ).append(
+            '/static/template/images/tile-01.jpg'
+        ).set_classes('tile-right').render())
     web.banner_slider.reset()
     web.banner_slider * site.banner_images
     
@@ -133,48 +151,22 @@ def index():
     bullet_list.append(
         (web.link.create('Suggest a new activity', 'Suggest a new activity', '#mailing-list').render(),))
 
-
-    
     web.list.create(ordered=False).set_classes('bullet-list')
     web.list * bullet_list
     web.page.append(web.list.render())
 
-    web.footer_content.create().append(
-        web.google_groups.create(' and make yourself known','maidstone-hackspace').set_id('mailing-list').render())
-
     web.div.create('').set_classes('panel')
 
-    web.tiles.create()
-    #~ for project in get_users_projects({'user_id': data.get('user_id')}):
-        #~ web.tiles.append(project.get('title'), project.get('id'))
-    #~ return web.tiles.render()
-
-    feed = feed_reader('')
-    for row in feed:
-        web.tiles.append(
-            title = feed.title,
-            link = feed.link,
-            image = feed.channel_image, 
-            description = 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.')
-        web.div.append(str(row))
-    web.page.append(web.tiles.render())
-    
     web.page.append(web.twitter_feed.render())
-    
     web.template.body.append(web.page.render())
 
-    #~ web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
-    #~ web.template.body.append(web.google_analytics.render())
-    
-    #~ with open('index.html', 'w') as fp:
-        #~ fp.write()
     return footer()
 
-parser = argparse.ArgumentParser(description = 'Generate static pages')
-#~ parser.add_argument('--help', help='Return help')
-#~ parser.add_argument('--folder', dest='folder', nargs='?', help='output folder')
-#~ args = parser.parse_args()
-#~ print(args.accumulate(args.integers))
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description = 'Generate static pages')
+    parser.add_argument('--folder', dest='folder', nargs='?', help='output folder')
+    #~ args = parser.parse_args()
+    #~ print(args.accumulate(args.integers))
 
-index()
-examples()
+    index()
+    examples()

@@ -1,8 +1,8 @@
 
 page_menu = [
-    ('Home', '#home'),
+    ('Home', '/'),
     #('About', '#about'),
-    ('Contact', '#mailing-list')]
+    ('Contact', '#mailing-list-signup')]
 
 banner_images = [
     ('/static/template/images/example-01.jpg', 'http://www.google.co.uk', 'title', 'intro text'),
