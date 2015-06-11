@@ -11,3 +11,7 @@ banner_images = [
 tile_images = [
     ('/static/template/images/tile-01.jpg',),
     ('/static/template/images/tile-02.jpg',)]
+
+rss_feed = [
+    ('/static/template/images/background.png', 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'), # simon ridley
+]

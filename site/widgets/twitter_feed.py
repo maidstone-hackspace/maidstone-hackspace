@@ -5,9 +5,10 @@ class control(www.default.html_ui):
     https://dev.twitter.com/web/embedded-timelines#customization"""
     script = ["""//twitter code\n!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");\n"""]
 
-    def create(self, name=""):
+    def create(self, username, widget_id):
         self.reset()
-        self.name = name
+        self.username = username
+        self.widget_id = widget_id
         return self
     
     def set_size(self, width, height):
@@ -19,9 +20,9 @@ class control(www.default.html_ui):
         self.count += 1
         htm = '''
             <div class="twitter-feed">
-            <a class="twitter-timeline" href="https://twitter.com/%s" data-widget-id="603654160072974336">
+            <a class="twitter-timeline" href="https://twitter.com/%s" data-widget-id="%s">
             Tweets by @%s
             </a>
             </div>''' % (
-            self.name, self.name)
+            self.username, self.widget_id, self.username)
         return htm

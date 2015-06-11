@@ -8,10 +8,10 @@ class control(www.default.html_ui):
 
     def render(self):
         htm = '<div %s class="google-groups-signup"><h3>Signup %s</h3>' % (self.node_id, self.title)
-        htm += '<form class="block" action="http://groups.google.com/group/%s/boxsubscribe">' % self.name
+        htm += '<form class="block" name="signup" method="get" action="http://groups.google.com/group/%s/boxsubscribe">' % self.name
         htm += '<label for="groups-email">Email Address</label>'
         htm += '<input id="groups-email" name="email" class="required"/>'
-        htm += '<button type="submit"  />Subscribe</button>'
+        htm += '<button type="submit" />Subscribe</button>'
         htm += '<a href="http://groups.google.com/group/%s">Browse Archives</a>' % self.name
         htm += '</form><div style="clear:both;"></div><div>'
         return htm

@@ -13,7 +13,7 @@ class control(www.default.html_ui):
         htm = ''
         for project in self.data:
             htm+='<div class="tile">'
-            htm+='<div><img src="%s"/></div>' % project[2]
-            htm+='<div><a href="%s">%s</a><p>%s</p></div>' % (project[1], project[0], project[3])
+            htm+='<div class="tile-img"><img src="%s"/></div>' % project[2]
+            htm+='<div class="tile-content"><a href="%s">%s</a><p>%s</p></div>' % (project[1], project[0], project[3])
             htm+='</div>'
         return htm

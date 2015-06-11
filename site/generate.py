@@ -13,6 +13,8 @@ from scaffold.web import www
 
 import constants as site
 
+from libs.rss_fetcher import feed_reader
+
 web = html()
 web.load_widgets('widgets')
 web.template.create('Maidstone Hackspace', 'Hackspace for Maidstone, kent. for collaberation and discussion for artists, designers, makers, hackers, programmers, tinkerer, professionals and hobbyists.')
@@ -27,7 +29,6 @@ image_path = domain + os.sep + 'template' + os.sep + 'images' + os.sep
 web.template.css_includes.append('/static/template/default.css')
 web.template.css_includes.append('/static/template/js/jquery-ui/themes/base/jquery-ui.css')
 #~ web.template.javascript_includes.append('/static/template/js/jquery-ui/themes/base/jquery-ui.css')
-web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>')
 
 def todict(data):
     new_dict = {}
@@ -38,27 +39,27 @@ def todict(data):
 def dict_to_list(data, keys):
     return [data.get(k) for k in keys]
 
-class feed_reader:
-    def __init__(self, url):
+#~ class feed_reader:
+    #~ def __init__(self, url):
         #~ self.feed = requests.get(url, stream=True)
-        fp = open('rss_example.xml', 'r')
-        self.feed = etree.parse(fp)
-        self.feed = self.feed.getroot()
-
-        self.title = self.feed.xpath('./channel/title/text()')[-1]
-        self.link = self.feed.xpath('./channel/link/text()')[-1]
-        self.description = self.feed.xpath('./channel/description/text()')[-1]
-
-        self.channel_image = self.feed.xpath('.//image/url/text()')[-1]
-        self.channel_image_title = self.feed.xpath('.//image/title/text()')[-1]
-        self.channel_image_link = self.feed.xpath('.//image/link/text()')[-1]
-
-    def __iter__(self):
-        for item in self.feed.xpath('.//item'):
-            title = item.xpath('./title/text()')
-            link = item.xpath('./link/text()')
-            description = item.xpath('./description/text()')
-            yield title, link, description
+        #~ fp = open('rss_example.xml', 'r')
+        #~ self.feed = etree.parse(fp)
+        #~ self.feed = self.feed.getroot()
+#~ 
+        #~ self.title = self.feed.xpath('./channel/title/text()')[-1]
+        #~ self.link = self.feed.xpath('./channel/link/text()')[-1]
+        #~ self.description = self.feed.xpath('./channel/description/text()')[-1]
+#~ 
+        #~ self.channel_image = self.feed.xpath('.//image/url/text()')[-1]
+        #~ self.channel_image_title = self.feed.xpath('.//image/title/text()')[-1]
+        #~ self.channel_image_link = self.feed.xpath('.//image/link/text()')[-1]
+#~ 
+    #~ def __iter__(self):
+        #~ for item in self.feed.xpath('.//item'):
+            #~ title = item.xpath('./title/text()')
+            #~ link = item.xpath('./link/text()')
+            #~ description = item.xpath('./description/text()')
+            #~ yield title, link, description
 
 #~ class page:
     #~ def __enter__(self):
@@ -72,6 +73,10 @@ def header():
     web.menu * site.page_menu
     web.template.body.append(web.header_strip.create({}).render())
     web.template.body.append(web.menu.render())
+    web.template.javascript_includes.append('<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>')
+    web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
+    web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')
+
 
 def footer():    
     web.footer_content.create().append(
@@ -85,7 +90,7 @@ def examples():
     """ page for testing new components"""
     header()
     web.page.create('examples')
-    web.twitter_feed.create('olymk2')
+    web.twitter_feed.create(username='MHackspace', widget_id='606798560374484992')
     web.page.section(web.twitter_feed.render())
 
     web.page.append(
@@ -95,13 +100,19 @@ def examples():
     )
 
     web.tiles.create()
-    feed = feed_reader('')
+    #~ feed = feed_reader('')
+    
+    feed_url = 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'
+
+    feed = feed_reader(feed_url)
+
     for row in feed:
+        print row
         web.tiles.append(
-            title = feed.title,
-            link = feed.link,
-            image = feed.channel_image, 
-            description = 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.')
+            title = '%s By %s' %(row.get('title'), row.get('author')),
+            link = row.get('link'),
+            image = row.get('image'), 
+            description = row.get('description'))
         web.div.append(str(row))
     web.page.append(web.tiles.render())
 
@@ -111,8 +122,8 @@ def examples():
 def index():
     header()
 
-    web.menu.create('/', 'leftNav')
-    web.menu * site.page_menu
+    #~ web.menu.create('/', 'leftNav')
+    #~ web.menu * site.page_menu
 
     web.template.body.append(web.header_strip.create({}).render())
     web.template.body.append(web.menu.render())
@@ -157,6 +168,7 @@ def index():
 
     web.div.create('').set_classes('panel')
 
+    web.twitter_feed.create(username='MHackspace', widget_id='606798560374484992')
     web.page.append(web.twitter_feed.render())
     web.template.body.append(web.page.render())
 
@@ -168,5 +180,8 @@ if __name__ == "__main__":
     #~ args = parser.parse_args()
     #~ print(args.accumulate(args.integers))
 
-    index()
-    examples()
+    with open('index.html', 'w') as fp:
+        fp.write(index())
+    with open('examples.html', 'w') as fp:
+        fp.write(examples())
+
