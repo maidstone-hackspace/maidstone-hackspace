@@ -13,6 +13,8 @@ from scaffold.web import www
 
 import constants as site
 
+import codecs
+
 from libs.rss_fetcher import feed_reader
 
 web = html()
@@ -38,28 +40,6 @@ def todict(data):
 
 def dict_to_list(data, keys):
     return [data.get(k) for k in keys]
-
-#~ class feed_reader:
-    #~ def __init__(self, url):
-        #~ self.feed = requests.get(url, stream=True)
-        #~ fp = open('rss_example.xml', 'r')
-        #~ self.feed = etree.parse(fp)
-        #~ self.feed = self.feed.getroot()
-#~ 
-        #~ self.title = self.feed.xpath('./channel/title/text()')[-1]
-        #~ self.link = self.feed.xpath('./channel/link/text()')[-1]
-        #~ self.description = self.feed.xpath('./channel/description/text()')[-1]
-#~ 
-        #~ self.channel_image = self.feed.xpath('.//image/url/text()')[-1]
-        #~ self.channel_image_title = self.feed.xpath('.//image/title/text()')[-1]
-        #~ self.channel_image_link = self.feed.xpath('.//image/link/text()')[-1]
-#~ 
-    #~ def __iter__(self):
-        #~ for item in self.feed.xpath('.//item'):
-            #~ title = item.xpath('./title/text()')
-            #~ link = item.xpath('./link/text()')
-            #~ description = item.xpath('./description/text()')
-            #~ yield title, link, description
 
 #~ class page:
     #~ def __enter__(self):
@@ -102,28 +82,47 @@ def examples():
     web.tiles.create()
     #~ feed = feed_reader('')
     
-    feed_url = 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'
 
-    feed = feed_reader(feed_url)
+    feed = feed_reader(site.rss_feeds)
 
     for row in feed:
         print row
+        print type(row.get('description'))
         web.tiles.append(
             title = '%s By %s' %(row.get('title'), row.get('author')),
-            link = row.get('link'),
+            link = row.get('url'),
             image = row.get('image'), 
             description = row.get('description'))
-        web.div.append(str(row))
+        web.div.append(row)
     web.page.append(web.tiles.render())
+
+    web.template.body.append(web.page.render())
+    return footer()
+
+def blogs():
+    """ page for testing new components"""
+    header()
+    web.page.create('blogs')
+
+    web.tiles.create()
+    feed = feed_reader(site.rss_feeds)
+
+    for row in feed:
+        web.tiles.append(
+            title = row.get('title'),
+            author = row.get('author'),
+            link = row.get('url'),
+            image = row.get('image'), 
+            date = row.get('date'), 
+            description = row.get('description'))
+        web.div.append(row)
+    web.page.section(web.tiles.render())
 
     web.template.body.append(web.page.render())
     return footer()
 
 def index():
     header()
-
-    #~ web.menu.create('/', 'leftNav')
-    #~ web.menu * site.page_menu
 
     web.template.body.append(web.header_strip.create({}).render())
     web.template.body.append(web.menu.render())
@@ -136,6 +135,7 @@ def index():
             '/static/template/images/tile-01.jpg'
         ).set_classes('tile-right').render())
     web.banner_slider.reset()
+    print site.banner_images
     web.banner_slider * site.banner_images
     
     web.page.append(web.banner_slider.render())
@@ -180,8 +180,13 @@ if __name__ == "__main__":
     #~ args = parser.parse_args()
     #~ print(args.accumulate(args.integers))
 
-    with open('index.html', 'w') as fp:
-        fp.write(index())
-    with open('examples.html', 'w') as fp:
-        fp.write(examples())
+    with codecs.open('./index.html', 'w', "utf-8") as fp:
+        fp.write(index().decode('utf-8'))
+    #~ with open('./html/examples.html', 'w') as fp:
+        #~ fp.write(examples())
+    with codecs.open('./html/blog.html', 'w', "utf-8") as fp:
+        fp.write(blogs().decode('utf-8'))
 
+#~ file = codecs.open("lol", "w", "utf-8")
+#~ file.write(u'\ufeff')
+#~ file.close()

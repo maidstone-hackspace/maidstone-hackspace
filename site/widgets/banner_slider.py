@@ -27,20 +27,21 @@ class control(www.default.html_ui):
         self.content=[]
 
     def append(self,image,link,title,intro=''):
-        htm='<a href="%s" ><img src="%s" /><div class="content">%s<br />%s</div></a>'%(link,image,title,intro)
+        htm = u'<a href="%s" ><img src="%s" /><div class="content">%s<br />%s</div></a>'%(link,image,title,intro)
         self.content.append(htm)
 
     def render(self):   
         #~ self.script.append(self.javascript())
         self.count+=1
-        htm='<div class="banner-slide" ng-app="myApp" ng-controller="sliderController">'
-        htm+='<ul style="%s" >' % self.height
-        count=0
-        #~ for item in self.content:
-            #~ htm+='<li class="slide" ng-hide="!isCurrentSlideIndex($index)">%s</li>' % (item)
-            #~ count+=1
-        htm += '''<li class="slide" ng-repeat="slide in slides" ng-hide="!isCurrentSlideIndex($index)" ng-show="isCurrentSlideIndex($index)"><a href="{{slide.link}}" ><img src="{{slide.src}}" /><div class="content">{{slide.title}}<br />{{slide.description}}</div></a></li>'''
-        htm += '<li style="clear:both;"></li></ul>'
-        htm += '<div ng-click="prev()" title="Previous" class="left">&lt;</div><div ng-click="next()" title="Next" class="right">&gt;</div>'
-        htm += '</div><div class="clear"></div>'
+        htm = u'<div class="banner-slide" ng-app="myApp" ng-controller="sliderController">'
+        htm += u'<ul style="%s" ng-switch on="currentSlide" ng-init="length=%d;">' % (self.height, len(self.content))
+        count = 0
+        for item in self.content:
+            htm += u'<li class="slide" ng-switch-when="%s">%s</li>' % (count, item)
+            count += 1
+        #htm += '''<li class="slide" ng-repeat="slide in slides" ng-hide="!isCurrentSlideIndex($index)" ng-show="isCurrentSlideIndex($index)"><a href="{{slide.link}}" ><img src="{{slide.src}}" /><div class="content">{{slide.title}}<br />{{slide.description}}</div></a></li>'''
+        htm += u'<li style="clear:both;"></li></ul>'
+        htm += u'<div ng-click="prev()" title="Previous" role="button" class="slide-button left">&lt;</div>'
+        htm += u'<div ng-click="next()" title="Next" role="button" class="slide-button right">&gt;</div>'
+        htm += u'</div><div class="clear"></div>'
         return htm

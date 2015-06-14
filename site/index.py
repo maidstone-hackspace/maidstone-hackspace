@@ -7,18 +7,25 @@ from flask import make_response
 
 import generate as pages
 
-app = Flask(__name__, static_url_path='/static')
 
-@app.route("/examples/", methods=['GET'])
+web_app = Flask(__name__, static_url_path='/static')
+
+# local testing server, add your pages here
+
+@web_app.route("/examples/", methods=['GET'])
 def examples():
+    """temporary for testing / examples"""
     return make_response(pages.examples())
+    
+@web_app.route("/blogs/", methods=['GET'])
+def blogs():
+    """temporary for testing / examples"""
+    return make_response(pages.blogs())
 
-@app.route("/", methods=['GET'])
+@web_app.route("/", methods=['GET'])
 def index():
+    """home page"""
     return make_response(pages.index())
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-
-
-#http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss
+    web_app.run(host='0.0.0.0', port=5000, debug=True)
