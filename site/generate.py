@@ -108,6 +108,7 @@ def blogs():
     feed = feed_reader(site.rss_feeds)
 
     for row in feed:
+        print row.get('image')
         web.tiles.append(
             title = row.get('title'),
             author = row.get('author'),
@@ -148,7 +149,7 @@ def index():
 
     web.paragraph.append(
         """We are in the process of developing Maidstone Hackspace. We're previous members of <span class="info" title="Innovation center medway prototype">(ICMP)</span> and looking to form a new space in the future.
-        At the moment, communication is via google groups, email, and the website. If you're at all intrested please join our <a href="#mailing-list">mailing list</a>
+        At the moment, communication is via google groups, email, and the website. If you're at all intrested please join our <a href="#mailing-list-signup">mailing list</a>
         and make yourself known!""")
     web.page.section(web.paragraph.render())
 
@@ -160,7 +161,7 @@ def index():
     bullet_list.append(
         ("""Build an interactive splash screen to feature on this site.""",))
     bullet_list.append(
-        (web.link.create('Suggest a new activity', 'Suggest a new activity', '#mailing-list').render(),))
+        (web.link.create('Suggest a new activity', 'Suggest a new activity', '#mailing-list-signup').render(),))
 
     web.list.create(ordered=False).set_classes('bullet-list')
     web.list * bullet_list
@@ -180,7 +181,7 @@ if __name__ == "__main__":
     #~ args = parser.parse_args()
     #~ print(args.accumulate(args.integers))
 
-    with codecs.open('./index.html', 'w', "utf-8") as fp:
+    with codecs.open('./html/index.html', 'w', "utf-8") as fp:
         fp.write(index().decode('utf-8'))
     #~ with open('./html/examples.html', 'w') as fp:
         #~ fp.write(examples())
