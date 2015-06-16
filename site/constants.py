@@ -19,7 +19,7 @@ rss_feeds = [
     {'author':'Simon Ridley',
      'url': 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'},
     {'author':'Mathew Beddow', 'tags': ['tech'], 'url': 'http://www.matthewbeddow.co.uk/?feed=rss2'},
-    #{'author':'Oliver Marks', 'url': 'http://www.digitaloctave.co.uk/rss.xml'},
+    {'author':'Oliver Marks', 'url': 'http://www.digitaloctave.co.uk/rss.xml'},
     {'author':'Mike McRoberts', 'url': 'http://thearduinoguy.org/?feed=rss2'}]
 
 kent_hackspace = ['http://www.medwaymakers.co.uk/']

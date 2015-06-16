@@ -1,0 +1,4 @@
+flask
+lxml
+requests
+pip install -e bzr+lp:scaffold#egg=scaffold
