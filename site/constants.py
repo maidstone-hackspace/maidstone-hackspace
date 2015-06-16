@@ -22,4 +22,4 @@ rss_feeds = [
     {'author':'Oliver Marks', 'url': 'http://www.digitaloctave.co.uk/rss.xml'},
     {'author':'Mike McRoberts', 'url': 'http://thearduinoguy.org/?feed=rss2'}]
 
-kent_hackspace = ['http://www.medwaymakers.co.uk/']
+kent_hackspace = ['http://www.medwaymakers.co.uk/', 'http://canterbury.hackspace.org.uk/']

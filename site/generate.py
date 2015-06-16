@@ -7,7 +7,6 @@ import requests.exceptions
 from lxml import etree
 import lxml
 
-from settings import *
 from scaffold.web import web as html
 from scaffold.web import www
 
