@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:sa="/">
+	<head>
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+		<link rel="stylesheet" id="navigationCss" href="/static/template/default.css" media="" type="text/css" />
+
+		<link rel="stylesheet" id="navigationCss" href="/static/template/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />
+
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+		<link rel="stylesheet" id="navigationCss" href="/static/template/default.css" media="" type="text/css" />
+
+		<link rel="stylesheet" id="navigationCss" href="/static/template/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />
+
+<link rel="icon" type="image/png" href="/static/images/favicon.png">
+		<link rel="stylesheet" id="navigationCss" href="/static/template/default.css" media="" type="text/css" />
+
+		<link rel="stylesheet" id="navigationCss" href="/static/template/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />
+		<script type="text/javascript" src="/static/js/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+	</head>
+<body>
+	<div id="headerstrip"><nav class="navstrip"><div class="left mini-logo">Maidstone Hackspace</div><div class="social"><div size="standard" class="g-plusone"  data-href="http://maidstone-hackspace.org.uk/"  data-size="medium" data-annotation="inline" count="true"></div></div></nav></div>
+<nav id="leftNav" class="menu" ><ul><li class="active mi0"><a href="/" >Home</a></li><li class="mi1"><a href="#mailing-list-signup" >Contact</a></li></ul><div style="clear:both;"></div></nav>
+<div class="page" ><header class="pageHeader"><img src="/static/images/competitions/screw_sorting_competition_banner.jpg" alt="Screw sorting competition banner"  align="middle" style="margin:auto;display:block;width:500px;" /></header><section class="pageSection"><p>We are some friendly competitions, so if your not sure what to work on consider entering and win some swag.The First cometition will be to design a device which can sort a jar of screws by size, the winning entry we will attempt to build.</p></section><section class="pageSection"><ul class="bullet-list" >
+<li>Submit designs by some date here</li>
+<li>Images can be design in any software or on a piece of paper but must be submitted as a jpg on the mailing list.</li>
+<li>stick figures and crude line drawing are fine, we are not judge your artistic ability.</li>
+</ul></section><footer class="pageFooter"></footer></div>
+<div id="footer"><div id="footertop"></div><div id="footerbottom"><div class="container"><div class="copyright">&copy;2015 Maidstone Hackspace</div><div id="mailing-list-signup" class="google-groups-signup"><h3>Signup  and make yourself known</h3><form class="block" name="signup" method="get" action="http://groups.google.com/group/maidstone-hackspace/boxsubscribe"><label for="groups-email">Email Address</label><input id="groups-email" name="email" class="required"/><button type="submit" />Subscribe</button><a href="http://groups.google.com/group/maidstone-hackspace">Browse Archives</a></form><div style="clear:both;"></div><div></div></div><div>
+<script type="text/javascript" ><!--//--><![CDATA[//><!--
+//twitter code
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+
+
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                
+
+ga('create', 'UA-63373181-1', 'maidstone-hackspace.org.uk');
+                
+ga('send', 'pageview');
+
+var app = angular.module('myApp', ['ngAnimate']);
+
+app.controller('sliderController', function($scope, $interval) {
+    $scope.currentSlide = 0;
+    $scope.autoSlide = true;
+    //$scope.length = 0;
+
+    $scope.next = function() {
+        $scope.autoSlide=false;
+        if ($scope.currentSlide < $scope.length - 1){
+            $scope.currentSlide += 1;
+        }else{
+            $scope.currentSlide = 0;
+        };
+    }
+
+    $scope.prev = function() {
+        $scope.autoSlide=false;
+        if ($scope.currentSlide > 0){
+            $scope.currentSlide -= 1;
+        }else{
+            $scope.currentSlide = $scope.length - 1;
+        }
+    }
+
+    $scope.isCurrentSlideIndex = function (index) {
+        return $scope.currentSlide === index;
+    };
+
+    $scope.loopSlides = function (index) {
+        if ($scope.autoSlide==false){return false;}
+        if ($scope.currentSlide < $scope.length - 1){
+            $scope.currentSlide += 1;
+        }else{
+            $scope.currentSlide = 0;
+        }
+    };
+
+    $interval(function(){$scope.loopSlides();}, 5000);
+
+});
+
+//]]>
+</script>
+
+</body>
+</html>
+	

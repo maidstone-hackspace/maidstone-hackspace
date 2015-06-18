@@ -1,77 +1,16 @@
-import argparse
-
 import os
 import sys
-import requests
-import requests.exceptions
-from lxml import etree
-import lxml
+import codecs
+import argparse
 
 from scaffold.web import web as html
 from scaffold.web import www
 
 import constants as site
+from pages import web
+from pages import header, footer
+from pages import blog
 
-import codecs
-
-from libs.rss_fetcher import feed_reader
-
-web = html()
-web.load_widgets('widgets')
-web.template.create('Maidstone Hackspace', 'Hackspace for Maidstone, kent. for collaberation and discussion for artists, designers, makers, hackers, programmers, tinkerer, professionals and hobbyists.')
-web.template.append('<link rel="icon" type="image/png" href="/static/template/images/icon.png">')
-
-#paths
-web.document_root = os.path.abspath('./')
-web.template.domain = 'http://maidstone-hackspace.org.uk/'
-web.template.theme_full_path = os.path.abspath('./static/template') + os.sep
-domain = 'http://192.168.21.41:5000/'
-image_path = domain + os.sep + 'template' + os.sep + 'images' + os.sep
-
-web.template.css_includes.append('/static/template/default.css')
-web.template.css_includes.append('/static/template/js/jquery-ui/themes/base/jquery-ui.css')
-#~ web.template.javascript_includes.append('/static/template/js/jquery-ui/themes/base/jquery-ui.css')
-
-def todict(data):
-    new_dict = {}
-    for key, value in data.items():
-        new_dict[key] = value
-    return new_dict
-
-def dict_to_list(data, keys):
-    return [data.get(k) for k in keys]
-
-#~ class page:
-    #~ def __enter__(self):
-        #~ header()
-    #~ 
-    #~ def __exit(self):
-        #~ footer()
-
-def header():
-    # logo and social links at very top of the page
-    web.header_strip.create({})
-    web.header_strip.social(web.google_plus.create(web.template.domain, plus=True, share=False, comments=False).render())
-    web.template.body.append(web.header_strip.render())
-
-    # navigation
-    web.menu.create('/', 'leftNav')
-    web.menu * site.page_menu
-    web.template.body.append(web.menu.render())
-
-    # extra javascript libraries
-    web.template.javascript_includes.append('<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>')
-    web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
-    web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')
-    web.template.header.append('<link rel="icon" type="image/png" href="/static/images/favicon.png">')
-
-def footer():    
-    web.footer_content.create().append(
-        web.google_groups_signup.create(' and make yourself known','maidstone-hackspace').set_id('mailing-list-signup').render())
-    web.template.body.append(web.footer_content.render())
-    web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
-    web.template.body.append(web.google_analytics.render())
-    return web.render()
 
 def examples():
     """ page for testing new components"""
@@ -92,8 +31,11 @@ def competition():
 
     web.page.create(
         web.images.create(
-            image='/static/template/images/hackspace-banner.png',
-            title="Screw sorting competition banner").render())
+            image='/static/images/competitions/screw_sorting_competition_banner.jpg',
+            title="Screw sorting competition banner"
+        ).add_attributes('align', 'middle'
+        ).add_attributes('style', 'margin:auto;display:block;width:500px;'
+        ).render())
 
     web.paragraph.create(
         """We are some friendly competitions, so if your not sure what to work on consider entering and win some swag.""")
@@ -106,7 +48,6 @@ def competition():
         ("Images can be design in any software or on a piece of paper but must be submitted as a jpg on the mailing list.", ),
         ("stick figures and crude line drawing are fine, we are not judge your artistic ability.",)]
 
-    print bullet_list
     web.list.create(ordered=False).set_classes('bullet-list')
     web.list * bullet_list
     web.page.section(web.list.render())
@@ -115,34 +56,6 @@ def competition():
     web.template.body.append(web.page.render())
 
     #finish of the page
-    return footer()
-
-
-def blogs():
-    """ page for testing new components"""
-    header()
-    web.page.create('blogs')
-
-    web.columns.create()
-    web.columns.append('test1')
-    web.columns.append('test2')
-    web.page.section(web.columns.render())
-
-    web.tiles.create()
-    feed = feed_reader(site.rss_feeds)
-    for row in feed:
-        print row.get('image')
-        web.tiles.append(
-            title = row.get('title'),
-            author = row.get('author'),
-            link = row.get('url'),
-            image = row.get('image'), 
-            date = row.get('date'), 
-            description = row.get('description'))
-        web.div.append(row)
-    web.page.section(web.tiles.render())
-
-    web.template.body.append(web.page.render())
     return footer()
 
 
@@ -160,7 +73,6 @@ def index():
             '/static/template/images/tile-01.jpg'
         ).set_classes('tile-right').render())
     web.banner_slider.reset()
-    print site.banner_images
     web.banner_slider * site.banner_images
     
     web.page.append(web.banner_slider.render())
@@ -196,19 +108,19 @@ def index():
     
     web.page.append(web.twitter_feed.render())
 
-    web.tiles.create()
-    feed = feed_reader(site.rss_feeds)
-    for row in feed:
-        print row.get('image')
-        web.tiles.append(
-            title = row.get('title'),
-            author = row.get('author'),
-            link = row.get('url'),
-            image = row.get('image'), 
-            date = row.get('date'), 
-            description = row.get('description'))
-        web.div.append(row)
-    web.page.append(web.tiles.render())
+    #~ web.tiles.create()
+    #~ feed = feed_reader(site.rss_feeds)
+    #~ for row in feed:
+        #~ print row.get('image')
+        #~ web.tiles.append(
+            #~ title = row.get('title'),
+            #~ author = row.get('author'),
+            #~ link = row.get('url'),
+            #~ image = row.get('image'), 
+            #~ date = row.get('date'), 
+            #~ description = row.get('description'))
+        #~ web.div.append(row)
+    #~ web.page.append(web.tiles.render())
 
     web.template.body.append(web.page.render())
 
@@ -222,14 +134,13 @@ if __name__ == "__main__":
 
     with codecs.open('./html/index.html', 'w', "utf-8") as fp:
         fp.write(index().decode('utf-8'))
+
     #~ with open('./html/examples.html', 'w') as fp:
         #~ fp.write(examples())
+
     with codecs.open('./html/blog.html', 'w', "utf-8") as fp:
-        fp.write(blogs().decode('utf-8'))
+        fp.write(blog.index().decode('utf-8'))
 
     with codecs.open('./html/competition.html', 'w', "utf-8") as fp:
         fp.write(competition().decode('utf-8'))
 
-#~ file = codecs.open("lol", "w", "utf-8")
-#~ file.write(u'\ufeff')
-#~ file.close()
