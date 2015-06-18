@@ -23,6 +23,7 @@ web.template.append('<link rel="icon" type="image/png" href="/static/template/im
 
 #paths
 web.document_root = os.path.abspath('./')
+web.template.domain = 'http://maidstone-hackspace.org.uk/'
 web.template.theme_full_path = os.path.abspath('./static/template') + os.sep
 domain = 'http://192.168.21.41:5000/'
 image_path = domain + os.sep + 'template' + os.sep + 'images' + os.sep
@@ -48,14 +49,21 @@ def dict_to_list(data, keys):
         #~ footer()
 
 def header():
+    # logo and social links at very top of the page
+    web.header_strip.create({})
+    web.header_strip.social(web.google_plus.create(web.template.domain, plus=True, share=False, comments=False).render())
+    web.template.body.append(web.header_strip.render())
+
+    # navigation
     web.menu.create('/', 'leftNav')
     web.menu * site.page_menu
-    web.template.body.append(web.header_strip.create({}).render())
     web.template.body.append(web.menu.render())
+
+    # extra javascript libraries
     web.template.javascript_includes.append('<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>')
     web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
     web.template.javascript_includes.append('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')
-
+    web.template.header.append('<link rel="icon" type="image/png" href="/static/images/favicon.png">')
 
 def footer():    
     web.footer_content.create().append(
@@ -68,44 +76,60 @@ def footer():
 def examples():
     """ page for testing new components"""
     header()
-    web.page.create('examples')
-    web.twitter_feed.create(username='MHackspace', widget_id='606798560374484992')
-    web.page.section(web.twitter_feed.render())
 
-    web.page.append(
-        web.google_groups.create(
-            ' and make yourself known','maidstone-hackspace'
-        ).set_id('mailing-list').render()
-    )
-
-    web.tiles.create()
-    #~ feed = feed_reader('')
+    #this is as simple as you can get
+    web.page.section('put some content on the page')
     
-
-    feed = feed_reader(site.rss_feeds)
-
-    for row in feed:
-        print row
-        print type(row.get('description'))
-        web.tiles.append(
-            title = '%s By %s' %(row.get('title'), row.get('author')),
-            link = row.get('url'),
-            image = row.get('image'), 
-            description = row.get('description'))
-        web.div.append(row)
-    web.page.append(web.tiles.render())
-
+    #render to the template
     web.template.body.append(web.page.render())
+    
+    #finish of the page
     return footer()
+
+def competition():
+    """ page for testing new components"""
+    header()
+
+    web.page.create(
+        web.images.create(
+            image='/static/template/images/hackspace-banner.png',
+            title="Screw sorting competition banner").render())
+
+    web.paragraph.create(
+        """We are some friendly competitions, so if your not sure what to work on consider entering and win some swag.""")
+    web.paragraph.append(
+        """The First cometition will be to design a device which can sort a jar of screws by size, the winning entry we will attempt to build.""")
+    web.page.section(web.paragraph.render())
+    
+    bullet_list = [
+        ("Submit designs by some date here", ),
+        ("Images can be design in any software or on a piece of paper but must be submitted as a jpg on the mailing list.", ),
+        ("stick figures and crude line drawing are fine, we are not judge your artistic ability.",)]
+
+    print bullet_list
+    web.list.create(ordered=False).set_classes('bullet-list')
+    web.list * bullet_list
+    web.page.section(web.list.render())
+
+    #render to the template
+    web.template.body.append(web.page.render())
+
+    #finish of the page
+    return footer()
+
 
 def blogs():
     """ page for testing new components"""
     header()
     web.page.create('blogs')
 
+    web.columns.create()
+    web.columns.append('test1')
+    web.columns.append('test2')
+    web.page.section(web.columns.render())
+
     web.tiles.create()
     feed = feed_reader(site.rss_feeds)
-
     for row in feed:
         print row.get('image')
         web.tiles.append(
@@ -120,6 +144,7 @@ def blogs():
 
     web.template.body.append(web.page.render())
     return footer()
+
 
 def index():
     header()
@@ -154,13 +179,11 @@ def index():
 
     web.page.section(web.title.create('Proposed activities').render())
 
-    bullet_list = []
-    bullet_list.append(
-        ("""Workshop on building a mobile application which can run on ios and android, potentially game oriented for a bit of fun, but open to suggestions.""",))
-    bullet_list.append(
-        ("""Build an interactive splash screen to feature on this site.""",))
-    bullet_list.append(
-        (web.link.create('Suggest a new activity', 'Suggest a new activity', '#mailing-list-signup').render(),))
+    bullet_list = [
+        ("Workshop on building a mobile application which can run on ios and android,"
+        "potentially game oriented for a bit of fun, but open to suggestions.", ),
+        ("Build an interactive splash screen to feature on this site.",),
+        (web.link.create('Suggest a new activity', 'Suggest a new activity', '#mailing-list-signup').render(),)]
 
     web.list.create(ordered=False).set_classes('bullet-list')
     web.list * bullet_list
@@ -169,7 +192,24 @@ def index():
     web.div.create('').set_classes('panel')
 
     web.twitter_feed.create(username='MHackspace', widget_id='606798560374484992')
+
+    
     web.page.append(web.twitter_feed.render())
+
+    web.tiles.create()
+    feed = feed_reader(site.rss_feeds)
+    for row in feed:
+        print row.get('image')
+        web.tiles.append(
+            title = row.get('title'),
+            author = row.get('author'),
+            link = row.get('url'),
+            image = row.get('image'), 
+            date = row.get('date'), 
+            description = row.get('description'))
+        web.div.append(row)
+    web.page.append(web.tiles.render())
+
     web.template.body.append(web.page.render())
 
     return footer()
@@ -186,6 +226,9 @@ if __name__ == "__main__":
         #~ fp.write(examples())
     with codecs.open('./html/blog.html', 'w', "utf-8") as fp:
         fp.write(blogs().decode('utf-8'))
+
+    with codecs.open('./html/competition.html', 'w', "utf-8") as fp:
+        fp.write(competition().decode('utf-8'))
 
 #~ file = codecs.open("lol", "w", "utf-8")
 #~ file.write(u'\ufeff')

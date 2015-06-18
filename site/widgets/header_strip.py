@@ -1,23 +1,19 @@
+from scaffold.core.widget import base_widget
 
-#from scaffold.web import web as html
-from scaffold.web import www
-#from scaffold.web import web as html
-#from libs import html as customhtml
-
-class control(www.default.html_ui):
+class control(base_widget):
     def create(self, params):
         self.params = params
+        self.social_html = []
         return self
+
+    def social(self, htm):
+        self.social_html.append(htm)
 
     def render(self):
         htm = '<div id="headerstrip"><nav class="navstrip">'
         htm += '<div class="left mini-logo">Maidstone Hackspace</div>'
-        htm += '<div id="user_info" class="left">'
-        htm += '<div id="newticket"></div>'
-        htm += '<div id="username"></div>'
-        htm += '</div>'
-        htm += '<div class="right">'
-        htm += '<div ></div>'
+        htm += '<div class="social">'
+        htm += "".join(self.social_html)
         htm += '</div>'
         htm += '</nav></div>'
         return htm

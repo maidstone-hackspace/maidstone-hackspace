@@ -130,3 +130,6 @@ button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; bor
 #footerbottom {background-color:#0087A8;height:300px;}
 #footerbottom div.container {margin:auto;background-color:#0087A8;height:250px;width:960px;}
 .twitter-feed {width:460px;margin:20px;}
+
+
+.social {z-index:1;position:absolute;right:0px;top:0px;margin-top:25px;}

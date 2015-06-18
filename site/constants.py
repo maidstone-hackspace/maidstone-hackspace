@@ -2,6 +2,7 @@
 page_menu = [
     ('Home', '/'),
     #('About', '#about'),
+    ('Competition', '/competition'),
     ('Contact', '#mailing-list-signup')]
 
 banner_images = [

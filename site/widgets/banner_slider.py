@@ -7,7 +7,6 @@ class control(www.default.html_ui):
     buttons = []
     content = []
     count = 0
-    
     with open(os.path.abspath('./widgets/banner_slider.js')) as fp:
         script = [fp.read()]
     
@@ -25,8 +24,8 @@ class control(www.default.html_ui):
         else:
             self.content.append(u'<img src="%s" /><div class="content">%s<br />%s</div>' % (image, title, intro))
 
-    def render(self):   
-        self.count += 0
+    def render(self):
+        self.count += 1
         htm = u'<div class="banner-slide" ng-app="myApp" ng-controller="sliderController">'
         htm += u'<ul ng-switch on="currentSlide" ng-init="length=%d;">' % (len(self.content))
         count = 0

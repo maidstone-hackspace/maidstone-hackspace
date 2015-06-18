@@ -16,7 +16,7 @@ web_app = Flask(__name__, static_url_path='/static')
 def examples():
     """temporary for testing / examples"""
     return make_response(pages.examples())
-    
+
 @web_app.route("/blogs/", methods=['GET'])
 def blogs():
     """temporary for testing / examples"""
@@ -26,6 +26,11 @@ def blogs():
 def index():
     """home page"""
     return make_response(pages.index())
+
+@web_app.route("/competition/", methods=['GET'])
+def competition():
+    """competition page"""
+    return make_response(pages.competition())
 
 if __name__ == '__main__':
     web_app.run(host='0.0.0.0', port=5000, debug=True)
