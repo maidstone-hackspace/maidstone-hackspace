@@ -1,6 +1,6 @@
-from scaffold.web import www
+from scaffold.core.widget import base_widget
 
-class control(www.default.html_ui):
+class control(base_widget):
     """rss feed widgets"""
     def create(self):
         self.data = []
@@ -14,6 +14,7 @@ class control(www.default.html_ui):
             'link': link,
             'image': image, 
             'description': description})
+        return self
 
     def render(self):
         htm = u''

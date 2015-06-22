@@ -6,10 +6,13 @@ import argparse
 from scaffold.web import web as html
 from scaffold.web import www
 
+from libs.rss_fetcher import feed_reader
+
 import constants as site
 from pages import web
 from pages import header, footer
 from pages import blog
+from pages import competition
 
 
 def examples():
@@ -22,39 +25,6 @@ def examples():
     #render to the template
     web.template.body.append(web.page.render())
     
-    #finish of the page
-    return footer()
-
-def competition():
-    """ page for testing new components"""
-    header()
-
-    web.page.create(
-        web.images.create(
-            image='/static/images/competitions/screw_sorting_competition_banner.jpg',
-            title="Screw sorting competition banner"
-        ).add_attributes('align', 'middle'
-        ).add_attributes('style', 'margin:auto;display:block;width:500px;'
-        ).render())
-
-    web.paragraph.create(
-        """We are some friendly competitions, so if your not sure what to work on consider entering and win some swag.""")
-    web.paragraph.append(
-        """The First cometition will be to design a device which can sort a jar of screws by size, the winning entry we will attempt to build.""")
-    web.page.section(web.paragraph.render())
-    
-    bullet_list = [
-        ("Submit designs by some date here", ),
-        ("Images can be design in any software or on a piece of paper but must be submitted as a jpg on the mailing list.", ),
-        ("stick figures and crude line drawing are fine, we are not judge your artistic ability.",)]
-
-    web.list.create(ordered=False).set_classes('bullet-list')
-    web.list * bullet_list
-    web.page.section(web.list.render())
-
-    #render to the template
-    web.template.body.append(web.page.render())
-
     #finish of the page
     return footer()
 
@@ -108,19 +78,20 @@ def index():
     
     web.page.append(web.twitter_feed.render())
 
-    #~ web.tiles.create()
-    #~ feed = feed_reader(site.rss_feeds)
-    #~ for row in feed:
-        #~ print row.get('image')
-        #~ web.tiles.append(
-            #~ title = row.get('title'),
-            #~ author = row.get('author'),
-            #~ link = row.get('url'),
-            #~ image = row.get('image'), 
-            #~ date = row.get('date'), 
-            #~ description = row.get('description'))
-        #~ web.div.append(row)
-    #~ web.page.append(web.tiles.render())
+    feed = feed_reader(site.rss_feeds)
+    
+    web.columns.create()
+    for row in feed:
+        web.tiles.create()
+        web.columns.append(
+            web.tiles.append(
+                title = row.get('title'),
+                author = row.get('author'),
+                link = row.get('url'),
+                image = row.get('image'), 
+                date = row.get('date'), 
+                description = row.get('description')).render())
+    web.page.append(web.columns.render())
 
     web.template.body.append(web.page.render())
 
@@ -142,5 +113,5 @@ if __name__ == "__main__":
         fp.write(blog.index().decode('utf-8'))
 
     with codecs.open('./html/competition.html', 'w', "utf-8") as fp:
-        fp.write(competition().decode('utf-8'))
+        fp.write(competition.index().decode('utf-8'))
 

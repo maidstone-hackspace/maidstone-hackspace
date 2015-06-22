@@ -7,6 +7,7 @@ from flask import make_response
 
 import generate
 from pages import blog
+from pages import competition
 
 
 web_app = Flask(__name__, static_url_path='/static')
@@ -29,9 +30,9 @@ def index():
     return make_response(generate.index())
 
 @web_app.route("/competition/", methods=['GET'])
-def competition():
+def competition_index():
     """competition page"""
-    return make_response(generate.competition())
+    return make_response(competition.index())
 
 if __name__ == '__main__':
     web_app.run(host='0.0.0.0', port=5000, debug=True)

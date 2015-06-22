@@ -8,5 +8,4 @@ from pages import header, footer
 
 def index():
     header()
-
     return footer()

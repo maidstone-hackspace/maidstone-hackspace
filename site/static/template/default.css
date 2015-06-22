@@ -116,7 +116,7 @@ button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; bor
     left:0px;opacity:1;
 }
 
-.bullet-list li {margin:10px;}
+.bullet-list li {margin:0px;margin-left:10px;line-height:100%;}
 
 .tile {position:relative;background-color:#eee;width:460px;margin-left:20px;margin-bottom:20px;float:left;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);}
 .tile-img {margin:20px;width:420px;height:200px;overflow:hidden;background-repeat: no-repeat;background-position: center;background-image:url('/static/template/images/background.png');}

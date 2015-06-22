@@ -26,7 +26,10 @@ web.template.css_includes.append('/static/template/js/jquery-ui/themes/base/jque
 def header():
     # logo and social links at very top of the page
     web.header_strip.create({})
+    
     web.header_strip.social(web.google_plus.create(web.template.domain, plus=True, share=False, comments=False).render())
+    
+    web.header_strip.social(web.like.create(url=web.template.domain, plus=True, twitter='MHackspace').render())
     web.template.body.append(web.header_strip.render())
 
     # navigation
