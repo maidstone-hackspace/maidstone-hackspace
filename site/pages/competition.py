@@ -63,7 +63,7 @@ def index():
     web.page.section(web.paragraph.render())
     
     bullet_list = [
-        ("Submit designs by some date here", ),
+        ("Submit designs by 31st of July", ),
         ("Images can be design in any software or drawn on a piece of paper but must be submitted as a jpg on the mailing list.", ),
         ("Stick figures and crude line drawing are fine, we are not judge your artistic ability.",)]
 

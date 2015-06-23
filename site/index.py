@@ -6,6 +6,7 @@ from flask import Flask
 from flask import make_response
 
 import generate
+from pages import homepage
 from pages import blog
 from pages import competition
 
@@ -27,7 +28,7 @@ def blogs():
 @web_app.route("/", methods=['GET'])
 def index():
     """home page"""
-    return make_response(generate.index())
+    return make_response(homepage.index())
 
 @web_app.route("/competition/", methods=['GET'])
 def competition_index():

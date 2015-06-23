@@ -118,7 +118,7 @@ button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; bor
 
 .bullet-list li {margin:0px;margin-left:10px;line-height:100%;}
 
-.tile {position:relative;background-color:#eee;width:460px;margin-left:20px;margin-bottom:20px;float:left;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);}
+.tile {position:relative;background-color:#eee;width:460px;margin-left:20px;margin-bottom:20px;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);}
 .tile-img {margin:20px;width:420px;height:200px;overflow:hidden;background-repeat: no-repeat;background-position: center;background-image:url('/static/template/images/background.png');}
 .tile header {background-color: #00232D;width:100%;bottom:20px;top:220px;overflow:auto;left:20px;right:20px;text-align:justify;line-height:150%;font-size:12px;}
 .tile h2 {line-height:150%;font-size:12px;margin-right:20px;}
@@ -133,3 +133,5 @@ button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; bor
 
 
 .social {z-index:1;position:absolute;right:0px;top:0px;margin-top:25px;}
+.social div{float:left;margin-left:20px;}
+.col {width:480px;float:left;}

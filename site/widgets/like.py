@@ -7,29 +7,39 @@ class control(base_widget):
     script = []
 
     facebook = False
-    twitter = True
-    plus = True
+    twitter = False
+    plus = False
+    linkedin = False
 
     plus_script = False
     linkedin_script = False
     facebook_script = False
     twitter_script = False
 
-    size = 'medium'
-    annotation = 'inline'
-
     def create(self, url, plus=None, twitter=None, facebook=None, linkedin=None):
+        self.url = url
         self.plus = plus
+        self.twitter = twitter
+        self.facebook = facebook
+        self.linkedin = linkedin
+        
         if plus:
             if self.plus_script is False:
                 self.plus_script = True
-                self.includes.append('<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>')
+                self.includes.append("""<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>""")
+
         if twitter:
             if self.twitter_script is False:
                 self.twitter_script = True
                 self.footer.append("""
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>""")
-        
+
+        if linkedin:
+            if self.linkedin_script is False:
+                self.linkedin_script = True
+                self.footer.append("""
+                    <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>""") 
+
         if facebook:
             if self.facebook_script is False:
                 self.facebook_script = True
@@ -38,21 +48,16 @@ class control(base_widget):
         
         return self
 
-    def url(self, link=None):
-        self.link = link
-        return self
-
     def render(self):
-        link = ''
         self.count += 1
         htm = ''
         if self.twitter:
-            htm += '<a href="https://twitter.com/share" class="twitter-share-button" data-via="%s">Tweet</a>' % self.twitter
+            htm += '<div class="btn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="%s">Tweet</a></div>' % self.twitter
         if self.facebook:
-            htm += '<div class="fb-like" data-href="%s" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>' % self.url
-        if self.link:
-            link = ' data-href="' + self.link + '" '
+            htm += '<div class="btn"><div class="fb-share-button" data-href="%s" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></div>' % self.url
+        if self.linkedin:
+            htm += '<div class="btn"><script type="IN/Share" data-url="%s" data-counter="right"></script></div>' % self.url
         if self.plus is True:
-            htm += '<div size="standard" class="g-plusone" ' + link + self.action + ' data-size="' + self.size + '" data-annotation="' + self.annotation + '" count="true"></div>'
+            htm += '<div class="btn"><div size="standard" class="g-plusone" data-href="%s"  data-size="medium" data-annotation="bubble" count="true"></div></div>' % self.url
         return htm
 

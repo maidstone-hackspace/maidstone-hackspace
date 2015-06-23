@@ -18,6 +18,7 @@ class control(www.default.html_ui):
             self.current_column = 0
         self.cols[self.current_column].append(content)
         self.current_column += 1
+        return self
 
     def render(self):
-        return '<div>%s</div>' % '</div><div>'.join(self.next_column())
+        return '<div class="col">%s</div>' % '</div><div class="col">'.join(self.next_column())
