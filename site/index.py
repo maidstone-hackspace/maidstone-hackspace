@@ -7,6 +7,7 @@ from flask import make_response
 
 import generate
 from pages import homepage
+from pages import chat
 from pages import blog
 from pages import competition
 
@@ -34,6 +35,11 @@ def index():
 def competition_index():
     """competition page"""
     return make_response(competition.index())
+
+@web_app.route("/chat/", methods=['GET'])
+def chat_index():
+    """competition page"""
+    return make_response(chat.index())
 
 if __name__ == '__main__':
     web_app.run(host='0.0.0.0', port=5000, debug=True)

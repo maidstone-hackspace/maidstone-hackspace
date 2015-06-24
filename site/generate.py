@@ -38,6 +38,7 @@ if __name__ == "__main__":
     pages_list = (
         ('pages.homepage', 'index', 'index.html'),
         ('pages.blog', 'index', 'blog.html'),
+        ('pages.chat', 'index', 'chat.html'),
         ('pages.competition', 'index', 'competition.html'))
 
     for module, page, filename in pages_list:
