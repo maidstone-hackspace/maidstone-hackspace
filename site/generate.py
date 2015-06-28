@@ -22,10 +22,10 @@ def examples():
 
     #this is as simple as you can get
     web.page.section('put some content on the page')
-    
+
     #render to the template
     web.template.body.append(web.page.render())
-    
+
     #finish of the page
     return footer()
 

@@ -44,6 +44,7 @@ features = [
     ('1 x 9V battery',),
     ('1 x 2.54mm 40pin pin header',)]
 
+
 def index():
     """ page for testing new components"""
     header()
@@ -57,19 +58,24 @@ def index():
         ).render())
 
     web.paragraph.create(
-        """Welcome to the first ever maidstone hackspace competition, we are a new hackspace, so we are looking to get the word out and get some collaberation going.""")
-    web.paragraph.append(
-        """The First cometition will be to design a device which can sort a jar of screws by size, the winning entry we will attempt to build.""")
+        """Welcome to the first Maidstone Hackspace challenge! A great opportunity for all  to show off their creative flair and to join our community of makers, tinkerers, artists and more.""")
     web.page.section(web.paragraph.render())
     
-    bullet_list = [
-        ("Submit designs by 31st of July", ),
-        ("Images can be design in any software or drawn on a piece of paper but must be submitted as a jpg on the mailing list.", ),
-        ("Stick figures and crude line drawing are fine, we are not judge your artistic ability.",)]
+    web.page.append(web.title.create('The Challenge:').render())
+    web.paragraph.create(
+        """Design a device which can sort a jar of screws by size, the winning entry will be built by Maidstone Hackspace.""").render()
+    web.page.section(web.paragraph.render())
+    web.paragraph.create(
+        """Concepts can be designed in any software as long as the finished product is viewable without any specialist software e.g.JPG images. If you prefer to paint or draw we accept that too.""")
+    web.page.section(web.paragraph.render())
+    web.paragraph.create(
+        """Submissions must be via our mailing list. The closing date is the 31st of July, submissions after this date will not be entered.""")
+    web.page.section(web.paragraph.render())
 
-    web.list.create(ordered=False).set_classes('bullet-list')
-    web.list * bullet_list
-    web.page.section(web.list.render())
+    web.paragraph.create(
+        web.link.create('Submit your image here.', 'Submit your image here.', 'https://groups.google.com/forum/#!forum/maidstone-hackspace').render())
+    web.page.section(web.paragraph.render())
+
 
     web.page.section(web.title.create('Win a UNO Basic Starter Kit', 2).render())
 

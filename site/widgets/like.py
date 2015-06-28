@@ -23,29 +23,30 @@ class control(base_widget):
         self.facebook = facebook
         self.linkedin = linkedin
         
-        if plus:
+        if plus is not None:
             if self.plus_script is False:
                 self.plus_script = True
-                self.includes.append("""<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>""")
-
-        if twitter:
+                if int(plus) > 0:
+                    self.includes.append("""<script type="text/javascript" async="true" defer="defer" src="https://apis.google.com/js/platform.js?publisherid=%s"></script>""" % self.plus)
+                else:
+                    self.includes.append("""<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>""")
+        if twitter is not None:
             if self.twitter_script is False:
                 self.twitter_script = True
                 self.footer.append("""
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>""")
+                    <script><!--//--><![CDATA[//><!--!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n//]]></script>""")
 
-        if linkedin:
+        if linkedin is not None:
             if self.linkedin_script is False:
                 self.linkedin_script = True
                 self.footer.append("""
                     <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>""") 
 
-        if facebook:
+        if facebook is not None:
             if self.facebook_script is False:
                 self.facebook_script = True
                 self.footer.append("""
-                    <div id="fb-root"></div><script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script>""") 
-        
+                    <div id="fb-root"></div><script><!--//--><![CDATA[//><!--(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));\n//]]></script>""") 
         return self
 
     def render(self):

@@ -29,7 +29,7 @@ def header():
 
     #web.header_strip.social(web.google_plus.create(web.template.domain, plus=True, share=False, comments=False).render())
 
-    web.header_strip.social(web.like.create(url=web.template.domain, plus=True, linkedin=True, twitter='MHackspace').render())
+    web.header_strip.social(web.like.create(url=web.template.domain, plus=True, linkedin=True, facebook=True, twitter='MHackspace').render())
     web.template.body.append(web.header_strip.render())
 
     # navigation
@@ -50,3 +50,10 @@ def footer():
     web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
     web.template.body.append(web.google_analytics.render())
     return web.render()
+
+
+class default_page:
+
+    def __enter__(self):
+        header()
+        return self
