@@ -26,10 +26,11 @@ class control(base_widget):
         if plus is not None:
             if self.plus_script is False:
                 self.plus_script = True
-                if int(plus) > 0:
-                    self.includes.append("""<script type="text/javascript" async="true" defer="defer" src="https://apis.google.com/js/platform.js?publisherid=%s"></script>""" % self.plus)
+                if int(plus) > 1:
+                    self.footer.append("""<script type="text/javascript" async="true" defer="defer" src="https://apis.google.com/js/platform.js?publisherid=%s"></script>""" % self.plus)
                 else:
-                    self.includes.append("""<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>""")
+                    self.footer.append("""<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>""")
+        
         if twitter is not None:
             if self.twitter_script is False:
                 self.twitter_script = True
@@ -46,7 +47,7 @@ class control(base_widget):
             if self.facebook_script is False:
                 self.facebook_script = True
                 self.footer.append("""
-                    <div id="fb-root"></div><script><!--//--><![CDATA[//><!--(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));\n//]]></script>""") 
+                    <div id="fb-root"></div><script><!--//--><![CDATA[//><!--\n//facebook share\n(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));\n//]]></script>""") 
         return self
 
     def render(self):
@@ -55,7 +56,7 @@ class control(base_widget):
         if self.twitter:
             htm += '<div class="btn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="%s">Tweet</a></div>' % self.twitter
         if self.facebook:
-            htm += '<div class="btn"><div class="fb-share-button" data-href="%s" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></div>' % self.url
+            htm += '<div class="btn"><div class="fb-share-button" data-href="%s" data-layout="button_count"></div></div>' % self.url
         if self.linkedin:
             htm += '<div class="btn"><script type="IN/Share" data-url="%s" data-counter="right"></script></div>' % self.url
         if self.plus is True:

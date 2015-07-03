@@ -11,7 +11,6 @@ from pages import chat
 from pages import blog
 from pages import competition
 
-
 web_app = Flask(__name__, static_url_path='/static')
 
 # local testing server, add your pages here

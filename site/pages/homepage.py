@@ -7,11 +7,8 @@ from pages import header, footer
 
 
 def index():
+    web.template.create('Maidstone Hackspace')
     header()
-
-    web.template.body.append(web.header_strip.create({}).render())
-    web.template.body.append(web.menu.render())
-
     web.page.create('')
     web.page.section(
         web.images.create(

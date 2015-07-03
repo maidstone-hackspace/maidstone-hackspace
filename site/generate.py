@@ -3,6 +3,9 @@ import sys
 import codecs
 import argparse
 
+sys.path.append(os.path.abspath('../../../scaffold/'))
+sys.path.insert(0,os.path.abspath('../../../scaffold/'))
+
 from scaffold.web import web as html
 from scaffold.web import www
 

@@ -57,7 +57,10 @@ class feed_reader:
             self.author = feed_info.get('author')
             self.tags = feed_info.get('tags')
             if feed_info.get('url').startswith('http:'):
-                response = requests.get(feed_info.get('url'), stream=True, timeout=timeout)
+                try:
+                    response = requests.get(feed_info.get('url'), stream=True, timeout=timeout)
+                except requests.exceptions.Timeout as e:
+                    continue
                 if response.headers.get('content-encoding') == 'gzip':
                     response.raw.read = functools.partial(response.raw.read, decode_content=True)
                 try:

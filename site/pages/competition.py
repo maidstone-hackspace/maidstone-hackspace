@@ -47,8 +47,9 @@ features = [
 
 def index():
     """ page for testing new components"""
-    header()
-
+    web.template.create(title="Maidstone Hackspace - Screw sorting competition")
+    header('competition')
+    
     web.page.create(
         web.images.create(
             image='/static/images/competitions/screw_sorting_competition_banner.jpg',
@@ -60,7 +61,7 @@ def index():
     web.paragraph.create(
         """Welcome to the first Maidstone Hackspace challenge! A great opportunity for all  to show off their creative flair and to join our community of makers, tinkerers, artists and more.""")
     web.page.section(web.paragraph.render())
-    
+
     web.page.append(web.title.create('The Challenge:').render())
     web.paragraph.create(
         """Design a device which can sort a jar of screws by size, the winning entry will be built by Maidstone Hackspace.""").render()
