@@ -8,7 +8,7 @@ from pages import header, footer
 
 def index():
     web.template.create('Maidstone Hackspace - Chat room')
-    header('chat')
+    header('Maidstone Hackspace Chat')
     #web.template.body.append(web.header_strip.create({}).render())
     #web.template.body.append(web.menu.render())
     web.page.create(web.title.create('IRC Chat Room').render())

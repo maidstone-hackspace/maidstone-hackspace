@@ -37,7 +37,7 @@ with web.template as setup:
 #~ <meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
 #~ <meta property="og:image" content="http://ia.media-imdb.com/images/rock.jpg" />
 
-def header(title, description, url=''):
+def header(title, description='Maidstone Hackspace is a shared space where artists, designers, makers, hackers, programmers, tinkerers, professionals and hobbyists can work on their projects', url=''):
     # logo and social links at very top of the page
     web.header_strip.create({})
 

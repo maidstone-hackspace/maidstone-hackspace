@@ -48,7 +48,9 @@ label {margin-bottom:10px;float:left;clear:both;display:block;color:#fff;}
 input {width:100%;margin:0px;margin-bottom:20px;padding:10px;}
 button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; border-radius: 3px;box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);}
 
-.tile-right {float:right;clear:right;}
+.tile-right {margin-top:20px;width:230px;float:right;margin-right:20px;}
+.tile-right img {float:right;}
+.tile-image {float:right;clear:right;}
 #headerstrip{position:absolute;left:0px;right:0px;height:68px;top:0px;background-color:#00232D;}
 #headerstrip .navstrip{margin:10px;height:48px;}
 #headerstrip .mini-logo{font-size:22px;padding-top: 12px;color:#fff;font-weight:bold;padding-left:58px;height:48px;background-image:url('/static/template/images/hackspace.png');background-repeat:no-repeat;}
@@ -71,11 +73,11 @@ button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; bor
 .google-groups-signup input{width:274px;}
 .google-groups-signup a{color:#fff;}
 
-.banner-slide {position:absolute;width:750px;}
-.banner-slide ul{position:relative;overflow:hidden;width:750px;height:300px;margin:0px;}
+.banner-slide {position:absolute;width:700px;margin:20px;}
+.banner-slide ul{position:relative;overflow:hidden;width:700px;height:300px;margin:0px;}
 .banner-slide li{position:absolute;left:0px;top:0px;list-style-type:none;padding:0px;margin:0px;}
-.banner-slide .button{background-color: #0087A8;border-radius:50%;opacity: 0.4;}
-.banner-slide .content{display:none;position:absolute;top:250px;width:100%;background-color: #eee;}
+.banner-slide .button{background-color: #0087A8;border-radius:50%;opacity:0.4;}
+.banner-slide .content{position:absolute;top:250px;width:100%;background-color: #eee;opacity: 0.4;}
 .banner-slide .left{text-align:left;padding:6px;font-size:48px;color:#fff;position:absolute;top:122px;left:0px;width:60px;height:60px;background-color: transparent;}
 .banner-slide .right{text-align:right;padding:6px;font-size:48px;color:#fff;position:absolute;top:122px;right:0px;width:60px;height:60px;background-color: transparent;}
 

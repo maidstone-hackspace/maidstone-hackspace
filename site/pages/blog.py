@@ -7,7 +7,7 @@ from pages import header, footer
 
 
 def index():
-    header()
+    header('Maidstone Hackspace Blog')
     web.page.create('blogs')
 
     web.columns.create()

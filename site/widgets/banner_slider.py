@@ -19,10 +19,11 @@ class control(www.default.html_ui):
         self.content = []
 
     def append(self, image, link, title, intro=''):
+        text = '<div class="content">%s<br />%s</div>' % (title, intro) if title else ''
         if link:
-            self.content.append(u'<a href="%s" ><img src="%s" /><div class="content">%s<br />%s</div></a>' % (link, image, title, intro))
+            self.content.append(u'<a href="%s" ><img src="%s" />%s</a>' % (link, image, text))
         else:
-            self.content.append(u'<img src="%s" /><div class="content">%s<br />%s</div>' % (image, title, intro))
+            self.content.append(u'<img src="%s" />%s' % (image, text))
 
     def render(self):
         self.count += 1

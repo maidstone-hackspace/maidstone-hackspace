@@ -8,14 +8,16 @@ from pages import header, footer
 
 def index():
     web.template.create('Maidstone Hackspace')
-    header()
+    header('Maidstone Hackspace Homepage')
     web.page.create('')
     web.page.section(
-        web.images.create(
-            '/static/template/images/tile-01.jpg'
-        ).append(
-            '/static/template/images/tile-01.jpg'
-        ).set_classes('tile-right').render())
+        web.div.create(
+            web.images.create(
+                '/static/template/images/tile-01.jpg'
+            ).append(
+                '/static/template/images/tile-01.jpg'
+            ).render()
+        ).set_classes('tile-right tile-image').render())
     web.banner_slider.reset()
     web.banner_slider * site.banner_images
     

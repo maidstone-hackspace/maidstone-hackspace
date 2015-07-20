@@ -6,9 +6,13 @@ page_menu = [
     ('Contact', '#mailing-list-signup')]
 
 banner_images = [
-    ('/static/template/images/hackspace-banner.png', '', 'title', 'intro text'),
-    ('/static/template/images/example-01.jpg', '', 'title', 'intro text'),
-    ('/static/template/images/example-02.jpg', '', 'title', 'intro text')]
+    ('/static/images/banners/hackspace-banner.png', '', '', ''),
+    ('/static/images/banners/audio_board.jpg', 'Audio board', 'Audio board', ''),
+    ('/static/images/banners/microscope.jpg', '', 'Microscope', ''),
+    ('/static/images/banners/object_avoiding_robot.jpg', '', 'Object avoiding robot', ''),
+    ('/static/images/banners/rocket_camera.jpg', 'Rocket Camera', 'Rocket Camera', '')]
+    #~ ('/static/template/images/example-01.jpg', '', 'title', 'intro text'),
+    #~ ('/static/template/images/example-02.jpg', '', 'title', 'intro text')]
 
 tile_images = [
     ('/static/template/images/tile-01.jpg',),

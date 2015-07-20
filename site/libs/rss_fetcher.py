@@ -8,6 +8,7 @@ import requests
 import functools
 import requests.exceptions
 
+from lxml import etree
 from lxml.html.clean import Cleaner
 
 namespaces = {
@@ -37,10 +38,12 @@ from email.utils import parsedate_tz, mktime_tz
 class feed_reader:
     """parse a list of feeds and return details as dictionary data"""
     #create the html cleaner, this is to clean out unwanted html tags in the description text
+    #page_structure=True,remove_unknown_tags=True
     html_cleaner = Cleaner()
     html_cleaner.javascript = True 
     html_cleaner.style = True
-    html_cleaner.remove_tags = ['script', 'iframe', 'link', 'style', 'img']
+    html_cleaner.remove_tags = ['script', 'iframe', 'link', 'style', 'img', 'div']
+    #~ html_cleaner.allow_tags = ['a', 'p', 'strong']
 
     filter_by_date = datetime.datetime.now() - datetime.timedelta(days=int(1.5*365)) #  1 and a half years ago
 
@@ -93,6 +96,27 @@ class feed_reader:
 
     def clean_up_text(self, text):
         """strip out any dirty tags like <script> they may break the sites"""
+        cleaned_html = self.html_cleaner.clean_html(text)
+        
+        # parse large text seperately
+        if len(text) > 600:
+            description = lxml.etree.parse(StringIO.StringIO(cleaned_html), self.html_parser)
+            root = description.getroot()
+            build = ''
+            for node in root[-1][-1].iter():
+                #skip any nodes with no text
+                if node.text is None and node.tail is None:
+                    continue
+                # we may want to do some other node checks here 
+                # perhaps count paragraphs, html layout changes a lot
+                if node.tag == 'br':
+                    return build
+                else: 
+                    if node.tag == 'a' and node.text is None:
+                        build += node.tail
+                    else:
+                        build += etree.tostring(node)
+
         return self.html_cleaner.clean_html(text)
 
     def fetch_image_from_node_text(self, text):
@@ -123,6 +147,7 @@ class feed_reader:
 
         # no image so lets fall back to the channel image if it exists
         return self.channel_image
+
 
     def fetch_node_text(self, node, name, default=''):
         """fetch the text from the node we are given, we are working in unicode
@@ -172,7 +197,6 @@ class feed_reader:
     def __iter__(self):
         """return results ordered by date"""
         for order in sorted(self.results.keys(), reverse=True):
-            #print str(self.results[order]['date']) + ' - ' + self.results[order]['author'] + ' - ' + self.results[order]['title']
             yield self.results[order]
 
 if __name__ == "__main__":

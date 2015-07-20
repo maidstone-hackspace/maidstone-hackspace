@@ -7,5 +7,5 @@ from pages import header, footer
 
 
 def index():
-    header()
+    header('Maidstone Hackspace Forge')
     return footer()

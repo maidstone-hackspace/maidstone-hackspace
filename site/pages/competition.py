@@ -48,7 +48,7 @@ features = [
 def index():
     """ page for testing new components"""
     web.template.create(title="Maidstone Hackspace - Screw sorting competition")
-    header('competition')
+    header('Maidstone Hackspace - Competition')
     
     web.page.create(
         web.images.create(
