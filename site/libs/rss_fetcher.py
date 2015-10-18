@@ -8,6 +8,7 @@ import requests
 import functools
 import requests.exceptions
 
+from operator import itemgetter
 from lxml import etree
 from lxml.html.clean import Cleaner
 
@@ -192,19 +193,39 @@ class feed_reader:
         for item in self.feed.xpath('.//item', namespaces=namespaces):
             date = self.convert_rfc822_to_datetime(self.fetch_node_text(item, 'pubDate'))
             if date > self.filter_by_date and self.filter_by_tags(item):
-                self.results[date] = {
+                author = self.format_author(self.fetch_node_text(item, 'author', self.author))
+                self.results.setdefault(author, []).append({
+                #~ self.results.append({
                     'title': self.fetch_node_text(item, 'title'),
                     'date': date,
                     'url': self.fetch_node_text(item, 'link'),
-                    'author': self.format_author(self.fetch_node_text(item, 'author', self.author)),
+                    'author': author,
                     'image': self.fetch_image(item),
-                    'description': self.clean_up_text(self.fetch_node_text(item, 'description'))}
+                    'description': self.clean_up_text(self.fetch_node_text(item, 'description'))})
 
+        #order authors articles by date
+        for author in self.results.keys():
+            self.results[author] = sorted(self.results[author], key=itemgetter('date'), reverse=True)
+
+    def alternate_dict_and_sort_by_list_item_key(self, dict_of_lists, sort_key='date'):
+        """ take a dictonary of ordered lists, step through each row and sort the current
+        item position in each list and yield the result.
+        
+        basically gives the ordering of date while stepping through the blog entries to make it fair
+        for people who do not blog often. """
+        
+
+        longest_list_length = max([len(dict_of_lists[d]) for d in dict_of_lists.keys()])
+        for i in xrange(0, longest_list_length):
+            #get first value from each key, and order the list
+            results = sorted([d.pop() for d in dict_of_lists.values() if d], key=itemgetter(sort_key), reverse=True)
+            for item in results:
+                yield item
 
     def __iter__(self):
         """return results ordered by date"""
-        for order in sorted(self.results.keys(), reverse=True):
-            yield self.results[order]
+        for author in self.alternate_dict_and_sort_by_list_item_key(self.results):
+            yield author
 
 
 if __name__ == "__main__":
