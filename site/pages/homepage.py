@@ -13,9 +13,9 @@ def index():
     web.page.section(
         web.div.create(
             web.images.create(
-                '/static/template/images/tile-01.jpg'
+                site.tile_images[0][0]
             ).append(
-                '/static/template/images/tile-01.jpg'
+                site.tile_images[1][0]
             ).render()
         ).set_classes('tile-right tile-image').render())
     web.banner_slider.reset()

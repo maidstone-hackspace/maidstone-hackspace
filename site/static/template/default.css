@@ -53,8 +53,22 @@ button {margin-bottom:20px;background-color: #fff; height: 48px; width:100%; bor
 .tile-image {float:right;clear:right;}
 #headerstrip{position:absolute;left:0px;right:0px;height:68px;top:0px;background-color:#00232D;}
 #headerstrip .navstrip{margin:10px;height:48px;}
-#headerstrip .mini-logo{font-size:22px;padding-top: 12px;color:#fff;font-weight:bold;padding-left:58px;height:48px;background-image:url('/static/template/images/hackspace.png');background-repeat:no-repeat;}
+#headerstrip .mini-logo-text{position:absolute;padding-top: 12px;font-size:22px;color:#fff;font-weight:bold;padding-left:10px;}
+#headerstrip .mini-logo:hover{
+transition:ease-in-out;
+-webkit-transform-origin: 50% 50%;
+-moz-transform-origin: 50% 50%;
+-o-transform-origin: 50% 50%;
+transform-origin: 50% 50%;
+
+height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animation:spin 2s linear infinite;animation:spin 2s linear infinite;}
 #headerstrip .middle{}
+
+
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 #navstrip{}
 

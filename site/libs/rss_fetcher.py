@@ -96,6 +96,8 @@ class feed_reader:
 
     def clean_up_text(self, text):
         """strip out any dirty tags like <script> they may break the sites"""
+        if text is None:
+            return ''
         cleaned_html = self.html_cleaner.clean_html(text)
         
         # parse large text seperately
@@ -153,13 +155,14 @@ class feed_reader:
         """fetch the text from the node we are given, we are working in unicode
         so decode byte strings to unicode""" 
         result = node.xpath('./%s' % name)
-        if result:
-            if type(result[-1].text) is str:
-                return result[-1].text.decode('utf8')
-            else:
-                return result[-1].text
-        else:
+        if result is None:
             return default
+
+        if type(result[-1].text) is str:
+            return result[-1].text.decode('utf8')
+        else:
+            return result[-1].text
+
 
     def fetch_node_attribute(self, node, name, attribs, default):
         result = node.xpath('./%s' % name)
@@ -168,9 +171,11 @@ class feed_reader:
         else:
             return default
 
+
     def format_author(self, author):
         """extract the authors name from the author text node"""
         return author.split('(')[-1].strip(')')
+
 
     def filter_by_tags(self, node, tags=None):
         """filter the feed out by category tag, if no tags assume its pre filtered"""
@@ -180,6 +185,7 @@ class feed_reader:
             if category.text.lower() in self.tags:
                 return True
         return False
+
 
     def parse_feed(self):
         """Parse the items in the feed, filter out bad data and put in defaults"""
@@ -194,10 +200,12 @@ class feed_reader:
                     'image': self.fetch_image(item),
                     'description': self.clean_up_text(self.fetch_node_text(item, 'description'))}
 
+
     def __iter__(self):
         """return results ordered by date"""
         for order in sorted(self.results.keys(), reverse=True):
             yield self.results[order]
+
 
 if __name__ == "__main__":
     rss_tests = [

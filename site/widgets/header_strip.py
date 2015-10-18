@@ -11,7 +11,7 @@ class control(base_widget):
 
     def render(self):
         htm = '<div id="headerstrip"><nav class="navstrip">'
-        htm += '<div class="left mini-logo">Maidstone Hackspace</div>'
+        htm += '<div class="left"><img src="/static/template/images/hackspace.png" class="mini-logo"><span class="mini-logo-text">Maidstone Hackspace</span></div>'
         htm += '<div class="social">'
         htm += "".join(self.social_html)
         htm += '</div>'

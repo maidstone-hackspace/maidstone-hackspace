@@ -1,7 +1,7 @@
 
 page_menu = [
     ('Home', '/'),
-    ('Competition', '/competition'),
+    #('Competition', '/competition'),
     ('Chat', '/chat'),
     ('Contact', '#mailing-list-signup')]
 
@@ -15,8 +15,8 @@ banner_images = [
     #~ ('/static/template/images/example-02.jpg', '', 'title', 'intro text')]
 
 tile_images = [
-    ('/static/template/images/tile-01.jpg',),
-    ('/static/template/images/tile-02.jpg',)]
+    ('/static/images/tiles/malta-inn.jpg',),
+    ('/static/images/tiles/meetup-malta-inn-31-07-2005.jpg',)]
 
 #required (author,url)
 #optional (tags, image)
@@ -24,7 +24,7 @@ rss_feeds = [
     {'author':'Simon Ridley',
      'url': 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'},
     {'author':'Mathew Beddow', 'tags': ['tech'], 'url': 'http://www.matthewbeddow.co.uk/?feed=rss2'},
-    #{'author':'Oliver Marks', 'url': 'http://www.digitaloctave.co.uk/rss.xml'},
+    {'author':'Oliver Marks', 'url': 'http://www.digitaloctave.co.uk/rss.xml'},
     {'author':'Mike McRoberts', 'url': 'http://thearduinoguy.org/?feed=rss2'}]
 
 kent_hackspace = ['http://www.medwaymakers.co.uk/', 'http://canterbury.hackspace.org.uk/']

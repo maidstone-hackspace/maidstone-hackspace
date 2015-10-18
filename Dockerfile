@@ -26,3 +26,7 @@ EXPOSE 5000 5000
 #RUN /bin/sh -c 'cd /var/www; python index.py'
 
 ENTRYPOINT /bin/sh -c 'cd /var/www; python index.py'
+
+
+#docker build -t mhackspace .
+#docker run -d --name=mhackspace_container --restart=always mhackspace 

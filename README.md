@@ -15,3 +15,12 @@ The simplest way to setup this site locally to test and make changes is to run.
     docker run -p 5000:5000 maidstone-hackspace
 
 If you plan on making large changes consider discussing it first so you dont wast your own time.
+
+Generating static content
+-------------------------
+
+Most of the content is generated statically to avoid hitting a database on each request.
+
+To generate static content you can run the code below.
+
+``` python generate.py ```

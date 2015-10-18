@@ -30,10 +30,10 @@ def index():
     """home page"""
     return make_response(homepage.index())
 
-@web_app.route("/competition/", methods=['GET'])
-def competition_index():
-    """competition page"""
-    return make_response(competition.index())
+#~ @web_app.route("/competition/", methods=['GET'])
+#~ def competition_index():
+    #~ """competition page"""
+    #~ return make_response(competition.index())
 
 @web_app.route("/chat/", methods=['GET'])
 def chat_index():
