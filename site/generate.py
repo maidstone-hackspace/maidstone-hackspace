@@ -35,7 +35,7 @@ def examples():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate static pages')
-    parser.add_argument('--folder', dest='folder', nargs='?', help='output folder')
+    parser.add_argument('--folder', dest='folder', default='./html/' ,nargs='?', help='output folder')
 
     #module, function, output file
     pages_list = (
@@ -44,11 +44,18 @@ if __name__ == "__main__":
         ('pages.chat', 'index', 'chat.html'),
         ('pages.competition', 'index', 'competition.html'))
 
+    args = parser.parse_args()
+    print args.folder
+
     for module, page, filename in pages_list:
         page_module = __import__(module, globals(), locals(), page)
-        with codecs.open('./html/%s' % filename, 'w', "utf-8") as fp:
+        with codecs.open(args.folder + '%s' % filename, 'w', "utf-8") as fp:
             try:
                 fp.write(getattr(page_module, page)().decode('utf-8'))
-                print('Successfully Generated ./html/%s' % filename)
-            except:
-                print('Failed to Generate ./html/%s' % filename)
+                print('Successfully Generated %s%s' % (args.folder, filename))
+            except Exception as e:
+                print('Failed to Generate %s%s' % (args.folder, filename))
+                import traceback
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_tb(exc_traceback, limit=5, file=sys.stdout)
+                

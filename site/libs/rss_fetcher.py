@@ -155,7 +155,7 @@ class feed_reader:
         """fetch the text from the node we are given, we are working in unicode
         so decode byte strings to unicode""" 
         result = node.xpath('./%s' % name)
-        if result is None:
+        if result is None or len(result) is 0:
             return default
 
         if type(result[-1].text) is str:
