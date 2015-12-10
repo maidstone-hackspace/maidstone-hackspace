@@ -1,6 +1,6 @@
-from scaffold.web import www
+from scaffold.core.widget import base_widget
 
-class control(www.default.html_ui):
+class control(base_widget):
 
     def create(self, cols=2):
         self.cols = []
@@ -21,4 +21,4 @@ class control(www.default.html_ui):
         return self
 
     def render(self):
-        return '<div class="col">%s</div>' % '</div><div class="col">'.join(self.next_column())
+        return '<div class="col">%s</div><div style="clear:left;"></div>' % '</div><div class="col">'.join(self.next_column())

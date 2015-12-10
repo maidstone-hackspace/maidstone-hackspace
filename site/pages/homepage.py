@@ -1,8 +1,8 @@
 import constants as site
 
 from libs.rss_fetcher import feed_reader
-
-from pages import web
+from scaffold import web
+#~ from pages import web
 from pages import header, footer
 
 
@@ -13,9 +13,9 @@ def index():
     web.page.section(
         web.div.create(
             web.images.create(
-                site.tile_images[0][0]
+                web.template.uri.add_domain(site.tile_images[0][0])
             ).append(
-                site.tile_images[1][0]
+                web.template.uri.add_domain(site.tile_images[1][0])
             ).render()
         ).set_classes('tile-right tile-image').render())
     web.banner_slider.reset()
@@ -49,11 +49,8 @@ def index():
 
     web.div.create('').set_classes('panel')
 
-    web.twitter_feed.create(username='MHackspace', widget_id='606798560374484992')
-    feed = feed_reader(site.rss_feeds)
-    
     web.columns.create()
-    web.columns.append(web.twitter_feed.render())
+    feed = feed_reader(site.rss_feeds)
     for row in feed:
         web.tiles.create()
         web.columns.append(

@@ -3,3 +3,4 @@ lxml
 requests
 pytz
 pip install -e bzr+lp:scaffold#egg=scaffold
+python-requests-oauthlib

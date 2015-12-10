@@ -11,8 +11,8 @@ banner_images = [
     ('/static/images/banners/microscope.jpg', '', 'Microscope', ''),
     ('/static/images/banners/object_avoiding_robot.jpg', '', 'Object avoiding robot', ''),
     ('/static/images/banners/rocket_camera.jpg', 'Rocket Camera', 'Rocket Camera', '')]
-    #~ ('/static/template/images/example-01.jpg', '', 'title', 'intro text'),
-    #~ ('/static/template/images/example-02.jpg', '', 'title', 'intro text')]
+    #~ ('/static/images/example-01.jpg', '', 'title', 'intro text'),
+    #~ ('/static/images/example-02.jpg', '', 'title', 'intro text')]
 
 tile_images = [
     ('/static/images/tiles/malta-inn.jpg',),
@@ -38,3 +38,10 @@ email_server = {
     'port': 465,
     'from': 'support@maidstone-hackspace.org.uk',
     'to': 'support@maidstone-hackspace.org.uk'}
+
+
+url_home= '/'
+url_profile = '/profile'
+url_change_password = '/change_password'
+url_change_password = '/reset_password'
+url_login = '/login'

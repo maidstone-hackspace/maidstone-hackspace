@@ -46,13 +46,15 @@ class feed_reader:
     html_cleaner.remove_tags = ['script', 'iframe', 'link', 'style', 'img', 'div']
     #~ html_cleaner.allow_tags = ['a', 'p', 'strong']
 
-    filter_by_date = datetime.datetime.now() - datetime.timedelta(days=int(1.5*365)) #  1 and a half years ago
+    filter_by_date_expire = datetime.datetime.now() - datetime.timedelta(days=int(1.5*365)) #  1 and a half years ago
 
     html_img_cleaner = Cleaner(allow_tags=['img'], remove_unknown_tags=False)
     html_img_cleaner.allow_tags = ['img']
 
     html_parser = lxml.etree.HTMLParser()
     xml_parser = lxml.etree.XMLParser(remove_blank_text=True, ns_clean=True, encoding='utf-8')
+
+    enable_date_filter = True
 
     def __init__(self, feed_details, timeout=5):
         self.results = {}
@@ -187,12 +189,20 @@ class feed_reader:
                 return True
         return False
 
+    def filter_by_date(self, date):
+        """filter the feed out by date"""
+        if self.enable_date_filter is False:
+            return True
+        if date > self.filter_by_date_expire:
+            return True
+        return False
+
 
     def parse_feed(self):
         """Parse the items in the feed, filter out bad data and put in defaults"""
         for item in self.feed.xpath('.//item', namespaces=namespaces):
             date = self.convert_rfc822_to_datetime(self.fetch_node_text(item, 'pubDate'))
-            if date > self.filter_by_date and self.filter_by_tags(item):
+            if self.filter_by_date(date) and self.filter_by_tags(item):
                 author = self.format_author(self.fetch_node_text(item, 'author', self.author))
                 self.results.setdefault(author, []).append({
                 #~ self.results.append({

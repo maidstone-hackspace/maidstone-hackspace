@@ -24,3 +24,13 @@ Most of the content is generated statically to avoid hitting a database on each 
 To generate static content you can run the code below.
 
 ``` python generate.py ```
+
+
+
+
+Run locally with uwsgi on port 9090
+
+uwsgi --plugins python --http-socket :9090 -w wsgi
+
+Run locally with flask
+python index.py

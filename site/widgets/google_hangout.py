@@ -1,6 +1,6 @@
-from scaffold.web import www
+from scaffold.core.widget import base_widget
 
-class control(www.default.html_ui):
+class control(base_widget):
     def create(self, appid):
         self.appid = appid
         return self

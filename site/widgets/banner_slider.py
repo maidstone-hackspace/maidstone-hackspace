@@ -1,12 +1,13 @@
 import os
-from scaffold.web import www
+from scaffold.core.widget import base_widget
 
-class control(www.default.html_ui): 
+class control(base_widget): 
     """Image cycle widgets"""
     view = []
     buttons = []
     content = []
     count = 0
+
     with open(os.path.abspath('./widgets/banner_slider.js')) as fp:
         script = [fp.read()]
     
@@ -21,9 +22,9 @@ class control(www.default.html_ui):
     def append(self, image, link, title, intro=''):
         text = '<div class="content">%s<br />%s</div>' % (title, intro) if title else ''
         if link:
-            self.content.append(u'<a href="%s" ><img src="%s" />%s</a>' % (link, image, text))
+            self.content.append(u'<a href="%s" ><img src="%s" />%s</a>' % (link, self.uri.add_domain(image), text))
         else:
-            self.content.append(u'<img src="%s" />%s' % (image, text))
+            self.content.append(u'<img src="%s" />%s' % (self.uri.add_domain(image), text))
 
     def render(self):
         self.count += 1

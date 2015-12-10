@@ -11,7 +11,7 @@ RUN \
     apt-get update &&   \
     apt-get upgrade -y && \
     apt-get install -y software-properties-common python-software-properties && \
-    apt-get install -y python-requests python-lxml python-flask python-tz
+    apt-get install -y python-requests python-lxml python-flask python-flask-login python-misaka python-tz python-mysqldb python-psycopg2 python-requests-oauthlib
 
 RUN add-apt-repository -y ppa:oly/ppa
 RUN apt-get update

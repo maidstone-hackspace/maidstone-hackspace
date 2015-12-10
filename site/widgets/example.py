@@ -1,7 +1,7 @@
 import os
-from scaffold.web import www
+from scaffold.core.widget import base_widget
 
-class control(www.default.html_ui): 
+class control(base_widget):
     """Image cycle widgets"""
     buttons = []
     count = 0
