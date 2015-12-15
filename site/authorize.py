@@ -108,8 +108,17 @@ def auth_required():
 def register_form():
     header('Register for access')
     web.page.create('Register for access')
-    web.page.section(web.register_form.create().render())
+    #~ web.page.section(web.register_form.create().render())
+
+    web.form.create('Register new user account', '/register')
+    web.form.append(name='name', label='Your full name', placeholder='Ralf Green', value='')
+    web.form.append(name='email', label='Valid Email', placeholder='ralf@maidstone-hackspace.org.uk', value='')
+    web.form.append(input_type='password', name='password', label='Password', placeholder='quick brown fox jumped over', value='')
+    web.form.append(input_type='password', name='password_confirm', label='Password Confirm', placeholder='quick brown fox jumped over', value='')
+
+    web.page.section(web.form.render())
     web.template.body.append(web.page.render())
+
     return make_response(footer())
 
 @authorize_pages.route("/register", methods=['POST'])
@@ -155,6 +164,7 @@ def oauth(provider=None):
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
     print session
+    print provider
     if provider:
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
@@ -168,9 +178,10 @@ def oauth(provider=None):
             oauth_provider.get('auth_uri'),
             access_type=oauth_access_type,
             approval_prompt=oauth_approval_prompt)
-
+        print state
         # State is used to prevent CSRF, keep this for later, make sure oauth returns to the same url.
         session['oauth_state'] = state
+        session.modified = True
         return redirect(authorization_url)
 
     print session
@@ -365,7 +376,6 @@ def login_screen_submit():
 
 
 @authorize_pages.route("/logout")
-@login_required
 def logout():
     logout_user()
     return redirect('/')

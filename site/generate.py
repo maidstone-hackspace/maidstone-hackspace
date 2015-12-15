@@ -6,7 +6,8 @@ import argparse
 sys.path.append(os.path.abspath('../../../scaffold/'))
 sys.path.insert(0,os.path.abspath('../../../scaffold/'))
 
-from scaffold import www
+from scaffold import web
+web.load_widgets('widgets')
 
 from libs.rss_fetcher import feed_reader
 
@@ -16,6 +17,9 @@ from pages import web
 from pages import header, footer
 from pages import blog
 from pages import competition
+from pages import donate
+
+from config.settings import *
 
 
 def examples():
@@ -41,6 +45,7 @@ if __name__ == "__main__":
         ('pages.homepage', 'index', 'index.html'),
         ('pages.blog', 'index', 'blog.html'),
         ('pages.chat', 'index', 'chat.html'),
+        ('pages.donate', 'index', 'donate.html'),
         ('pages.competition', 'index', 'competition.html'))
 
     args = parser.parse_args()

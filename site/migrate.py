@@ -9,8 +9,8 @@ db.config(settings.database)
 from scaffold.core.data import migrations
 from scaffold.core.data.migrations import export_schema, import_schema
 
-#export_schema()
-import_schema()
+export_schema()
+#import_schema()
 
 
 

@@ -1,4 +1,31 @@
 table_name, column_name, column_type, default
+#members
+ALTER TABLE members ADD COLUMN id int(5) unsigned zerofill  PRIMARY KEY (`id`) ;
+ALTER TABLE members CHANGE COLUMN id id int(5) unsigned zerofill  PRIMARY KEY (`id`) ;
+ALTER TABLE members ADD COLUMN user_id varchar(45) NULL ;
+ALTER TABLE members CHANGE COLUMN user_id user_id varchar(45) NULL ;
+
+
+#pledges
+ALTER TABLE pledges ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE pledges CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE pledges ADD COLUMN name varchar(255) NULL ;
+ALTER TABLE pledges CHANGE COLUMN name name varchar(255) NULL ;
+ALTER TABLE pledges ADD COLUMN total decimal(10,2) NULL DEFAULT 0.00;
+ALTER TABLE pledges CHANGE COLUMN total total decimal(10,2) NULL DEFAULT 0.00;
+
+
+#pledge_amounts
+ALTER TABLE pledge_amounts ADD COLUMN amount decimal(10,2) NULL ;
+ALTER TABLE pledge_amounts CHANGE COLUMN amount amount decimal(10,2) NULL ;
+ALTER TABLE pledge_amounts ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE pledge_amounts CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE pledge_amounts ADD COLUMN pledge_id varchar(20) NULL ;
+ALTER TABLE pledge_amounts CHANGE COLUMN pledge_id pledge_id varchar(20) NULL ;
+ALTER TABLE pledge_amounts ADD COLUMN reference varchar(255) NULL ;
+ALTER TABLE pledge_amounts CHANGE COLUMN reference reference varchar(255) NULL ;
+
+
 #requests
 ALTER TABLE requests ADD COLUMN description varchar(255) NULL ;
 ALTER TABLE requests CHANGE COLUMN description description varchar(255) NULL ;

@@ -11,7 +11,7 @@ from pages import web
 from pages import header, footer
 from data.site_user import get_user_details
 from data.profile import update_description
-
+from config.settings import gocardless_enviroment, gocardless_credentials
 
 profile_pages = Blueprint('profile_pages', __name__, template_folder='templates')
 
@@ -24,7 +24,6 @@ def index():
     header('User Profile', url='/profile')
     print current_user
     user = get_user_details({'id': current_user.get_id()}).get()
-    
 
     name = '%s %s' % (user.get('first_name', '').capitalize(), user.get('last_name', '').capitalize())
     web.page.create('%s - Profile' % name)
@@ -47,15 +46,12 @@ def index():
             '/profile/details'
         ).set_classes('ajaxPopup').render())
 
-    web.form.create('Join Maidstone Hackspace', '/profile/membership')
-    web.form.append(name='amount', label='Subscription Amount', placeholder='20.00', value='20.00')
-    #~ web.form.append(name='skills', label='skills', placeholder='python, arduino, knitting')
-    web.form.render()
+    #~ web.form.create('Join Maidstone Hackspace', '/profile/membership')
+    #~ web.form.append(name='amount', label='Subscription Amount', placeholder='20.00', value='20.00')
+    #~ web.form.render()
 
     web.columns.append(web.paragraph.render())
-    web.columns.append(web.google_calendar.create().render())
     web.columns.append(web.member_card.create(str(user.get('user_id')).zfill(5), name).render())
-    web.columns.append(web.form.render())
     web.page.section(web.columns.render())
     web.template.body.append(web.page.render())
     web.template.body.append(web.popup.create('').render())
@@ -66,14 +62,14 @@ def index():
 @login_required
 def pay_membership():
     import gocardless
-
+    
     gocardless.environment = gocardless_enviroment
     gocardless.set_details(**gocardless_credentials)
     url = gocardless.client.new_subscription_url(
-        amount=20.00, 
+        amount=request.form.get('amount'), 
         interval_length=1, 
         interval_unit="month",
-        name="Membership Renewal for MH0001")
+        name="Membership Subscription for MH0001")
     return redirect(url)
 
 

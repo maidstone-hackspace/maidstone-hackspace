@@ -3,6 +3,7 @@ page_menu = [
     ('Home', '/'),
     #('Competition', '/competition'),
     ('Chat', '/chat'),
+    ('Donate', '/donate'),
     ('Contact', '#mailing-list-signup')]
 
 banner_images = [

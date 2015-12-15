@@ -1,34 +1,36 @@
 from scaffold.core.widget import base_widget_extended
+from datetime import datetime
+import time
 import requests
 
 class control(base_widget_extended):
     contents = []
     def create(self, title="Events", calendar_id=None, api_key=None):
         super(control, self).create()
-        response = requests.get('https://www.googleapis.com/calendar/v3/calendars/0rtjmmdbsb8e9351mkip02g8n8@group.calendar.google.com/events?singleEvents=true&maxResults=2&timeMin=2015-12-01T10:00:00-00:00&key=AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0')
+        date_now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S-00:00')
+        print date_now
+        response = requests.get('https://www.googleapis.com/calendar/v3/calendars/contact@maidstone-hackspace.org.uk/events?singleEvents=true&maxResults=2&timeMin=%s&key=AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0' % date_now)
         calendar_data = response.json()
         self.contents = []
+        print calendar_data
         for event in calendar_data.get('items'):
+            str_datetime = time.strptime(event.get('start').get('dateTime'), '%Y-%m-%dT%H:%M:%SZ')
+            formatted_date = time.strftime('%d %b %Y %H:%M', str_datetime)
+            description = event.get('description') + '<br />' if event.get('description') else ''
+            location = '<a target="_blank" href="https://www.google.co.uk/maps/search/%s">%s</a>'  % (event.get('location'), event.get('location')) if event.get('location') else ''
             self.contents.append((
-                event.get('summary'), event.get('description'), event.get('location') + ' @ ' + event.get('start').get('dateTime')))
+                event.get('summary')+ '<br />', description, formatted_date+ '<br />' +location))
         return self
 
     def render(self):
         htm = ''
         for row in self.contents:
-            htm += '<li>%s</li><li>%s</li><li>%s</li>' % row
+            htm += '<li>%s %s %s</li>' % row
         return '''<div class="calendar">
             <ul>%s</ul>
-            <span>Subscribe</span><span>View All</span></div>''' % htm
-
-
-#~ import requests
-
-#~ requests.get('https://www.googleapis.com/calendar/v3/calendars/%s/events?key=%s')
-#~ response = requests.get('https://www.googleapis.com/calendar/v3/calendars/0rtjmmdbsb8e9351mkip02g8n8@group.calendar.google.com/events?singleEvents=true&maxResults=2&timeMin=2015-12-01T10:00:00-00:00&key=AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0')
-#~ calendar_data = response.json()
-#~ for event in calendar_data.get('items'):
-    #~ print event.get('summary')
-    #~ print event.get('description')
-    #~ print event.get('location')
-    #~ print event.get('start').get('dateTime')
+            <span>
+                <a class="left but" href="https://calendar.google.com/calendar/render?cid=http://www.google.com/calendar/ical/contact@maidstone-hackspace.org.uk/public/basic.ics">Subscribe</a>
+            </span>
+            <span>
+                <a class="right but" href="https://www.google.com/calendar/embed?src=contact@maidstone-hackspace.org.uk&ctz=Europe/London">View All</a>
+            </span></div>''' % htm

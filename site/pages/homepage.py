@@ -12,11 +12,12 @@ def index():
     web.page.create('')
     web.page.section(
         web.div.create(
-            web.images.create(
-                web.template.uri.add_domain(site.tile_images[0][0])
-            ).append(
-                web.template.uri.add_domain(site.tile_images[1][0])
-            ).render()
+            web.google_calendar.create().render()
+            #~ web.images.create(
+                #~ web.template.uri.add_domain(site.tile_images[0][0])
+            #~ ).append(
+                #~ web.template.uri.add_domain(site.tile_images[1][0])
+            #~ ).render()
         ).set_classes('tile-right tile-image').render())
     web.banner_slider.reset()
     web.banner_slider * site.banner_images

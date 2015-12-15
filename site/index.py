@@ -18,6 +18,7 @@ from pages import competition
 
 from pages import members
 
+from pages.donate import donate_pages
 from pages.google_groups import google_groups_pages
 from pages.equipment import equipment_pages
 from pages.profile import profile_pages
@@ -32,6 +33,7 @@ web_app.register_blueprint(authorize_pages)
 web_app.register_blueprint(equipment_pages)
 web_app.register_blueprint(profile_pages)
 web_app.register_blueprint(google_groups_pages)
+web_app.register_blueprint(donate_pages)
 
 
 # local testing server, add your pages here
@@ -68,6 +70,11 @@ def index():
     #~ """home page"""
     #~ equipment.insert()
     #~ return make_response(equipment.index())
+
+#~ @web_app.route("/donate/", methods=['GET'])
+#~ def donate_index():
+    #~ """list of members"""
+    #~ return make_response(donate.index())
 
 @web_app.route("/members/", methods=['GET'])
 def members_index():

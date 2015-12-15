@@ -26,10 +26,10 @@ class control(base_widget):
 
         htm+= '''
             <div id="login_box">
-            <form id="user_info" method="post" action="/login" ><frameset>
+            <form id="user_login" method="post" action="/login" ><frameset>
             <label for="username">E-Mail<p><input id="username" name="username" type="text"/></p></label>
             <label for="password">Password<p><input id="password" name="password" type="password"/></p></label>
-            <input class="btn" type="submit" value="Login"/>
+            <button class="btn" form="user_login" type="submit" value="Login"/>Login</button>
             </frameset></form>
             <a href="/register">Register for an account</a>&nbsp;|&nbsp;<a href="/reset-password">Reset password</a>'''
 

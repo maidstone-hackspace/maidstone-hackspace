@@ -32,6 +32,7 @@ oauth_conf = {
 
 
 gocardless_enviroment = 'sandbox'
+gocardless_redirect_uri = 'https://test.maidstone-hackspace.org.uk'
 gocardless_credentials = {
     'app_id': '',
     'app_secret': '',

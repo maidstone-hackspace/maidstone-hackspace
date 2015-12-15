@@ -1,4 +1,15 @@
 table_name, column_name, column_type, default
+#members
+
+
+#pledges
+ALTER TABLE pledges ADD INDEX id_UNIQUE (id ASC);
+
+
+#pledge_amounts
+ALTER TABLE pledge_amounts ADD INDEX id_UNIQUE (id ASC);
+
+
 #requests
 
 
