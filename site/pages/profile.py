@@ -1,17 +1,14 @@
-from flask import session
 from flask import Blueprint
 from flask import request
-from flask import redirect, abort
+from flask import redirect
 from flask.ext.login import current_user, login_required
-import constants as site
 import gocardless
 
-from libs.rss_fetcher import feed_reader
 from pages import web
 from pages import header, footer
 from data.site_user import get_user_details
-from data.profile import update_description
-from config.settings import gocardless_enviroment, gocardless_credentials
+from data.profile import update_description, create_description
+from config.settings import gocardless_environment, gocardless_credentials
 
 profile_pages = Blueprint('profile_pages', __name__, template_folder='templates')
 
@@ -37,7 +34,10 @@ def index():
     web.paragraph.add('Last Login %s' % (user.get('last_login', '')))
     web.paragraph.add('Member since %s' % (user.get('created', '')))
     web.paragraph.add('Description %s' % (user.get('description', '')))
+    web.paragraph.add('Skills %s' % (user.get('skills', '')))
     web.columns.append(web.paragraph.render())
+
+    web.columns.append(web.member_card.create(str(user.get('user_id')).zfill(5), name).render())
 
     web.paragraph.create(
         web.link.create(
@@ -51,10 +51,12 @@ def index():
     #~ web.form.render()
 
     web.columns.append(web.paragraph.render())
-    web.columns.append(web.member_card.create(str(user.get('user_id')).zfill(5), name).render())
+    
     web.page.section(web.columns.render())
     web.template.body.append(web.page.render())
     web.template.body.append(web.popup.create('').render())
+    
+    web.template.body.append('<script type="type/javascript">document.cookie = "status=1";</script>')
     return footer()
 
 
@@ -76,10 +78,14 @@ def pay_membership():
 @profile_pages.route("/profile/details", methods=['GET'])
 @login_required
 def edit_profile():
-    user = get_user_details({'id': current_user.get_id()}).get()
+    user_details = get_user_details({'id': current_user.get_id()}).get() or {}
+    print user_details
+    if not user_details:
+        print 'create'
+        create_description().execute({'user_id': current_user.get_id()})
     web.form.create('Update your details', '/profile/update')
-    web.form.append(name='description', label='Description', placeholder='This is me i am great')
-    web.form.append(name='skills', label='skills', placeholder='python, arduino, knitting')
+    web.form.append(name='description', label='Description', placeholder='This is me i am great', value=user_details.get('description'))
+    web.form.append(name='skills', label='skills', placeholder='python, arduino, knitting', value=user_details.get('skills'))
     return web.form.render()
 
 

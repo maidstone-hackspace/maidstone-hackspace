@@ -1,12 +1,11 @@
 import os
-import time
 import sys
 sys.path.append(os.path.abspath('../../../../scaffold/'))
 sys.path.insert(0,os.path.abspath('../../../../scaffold/'))
 from scaffold.core.data.select import select_data
 from scaffold.core.data.insert import insert_data
 from scaffold.core.data.update import update_data
-from scaffold.core.data.delete import delete_data
+#~ from scaffold.core.data.delete import delete_data
 from scaffold.core.data.sql import query_builder
 
 query_builder.query_path = os.path.abspath('./data/sql/')

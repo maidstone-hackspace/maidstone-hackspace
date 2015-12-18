@@ -24,7 +24,7 @@ class control(base_widget):
                 htm += u'<div class="tile-img" style="background:center no-repeat url(%s);background-size:contain;"></div>' % project.get('image')
             else:
                 htm += u'<div class="tile-img"></div>'
-            htm += u'<header class="tile-content"><h2><a href="%s/%s">%s</a> Skills in %s</h2></header>' % (
+            htm += u'<header class="tile-content"><h2><a href="%s/%s">%s</a> Skilled in %s</h2></header>' % (
                 project.get('link'), project.get('name'), project.get('name'), project.get('skills'))
             htm += u'<div class="tile-content"><p>%s</p></div>' % (project.get('description'))
             htm += u'</div>'

@@ -31,7 +31,7 @@ oauth_conf = {
 }
 
 
-gocardless_enviroment = 'sandbox'
+gocardless_environment = 'sandbox'
 gocardless_redirect_uri = 'https://test.maidstone-hackspace.org.uk'
 gocardless_credentials = {
     'app_id': '',
@@ -40,7 +40,8 @@ gocardless_credentials = {
     'merchant_id': ''
 }
 
-
+google_calendar_id = 'contact@maidstone-hackspace.org.uk'
+google_calendar_api_key = 'AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0'
 
 if os.path.exists('config/settings_dev.py'):
     print 'Using settings for dev enviroment'

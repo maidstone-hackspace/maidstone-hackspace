@@ -1,15 +1,8 @@
-from flask import session
-from flask import request
 from flask import Blueprint
-from flask import make_response
-from flask.ext.login import current_user, login_required
-import constants as site
+from flask.ext.login import login_required
 
-from libs.rss_fetcher import feed_reader
 from pages import web
 from pages import header, footer
-from data import equipment
-
 
 google_groups_pages = Blueprint('google_group', __name__, template_folder='templates')
 

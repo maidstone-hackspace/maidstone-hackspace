@@ -9,15 +9,8 @@ sys.path.insert(0,os.path.abspath('../../../scaffold/'))
 from scaffold import web
 web.load_widgets('widgets')
 
-from libs.rss_fetcher import feed_reader
-
-import constants as site
-import pages
 from pages import web
 from pages import header, footer
-from pages import blog
-from pages import competition
-from pages import donate
 
 from config.settings import *
 

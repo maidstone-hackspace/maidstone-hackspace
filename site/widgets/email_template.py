@@ -1,6 +1,4 @@
 import os
-from scaffold import web
-from scaffold.loaders import load
 from scaffold.readers.markdown_reader import markdown_reader
 from scaffold.core.widget import base_widget
 

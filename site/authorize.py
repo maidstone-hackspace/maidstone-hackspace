@@ -1,25 +1,21 @@
 import os
-import sys
-import time
 import uuid
 import hashlib
 import datetime
 
-from werkzeug import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, session, flash, get_flashed_messages
+from flask import session, flash
 from flask import redirect, abort
 from flask import make_response
 from flask import request
 from flask import Blueprint
-from flask.ext.login import LoginManager, login_required, UserMixin, login_user, logout_user, current_user, make_secure_token
+from flask.ext.login import LoginManager, login_required, UserMixin, login_user, logout_user, make_secure_token
 from requests_oauthlib import OAuth2Session
 
 
 from scaffold import web
 from libs.mail import sendmail
 from pages import header, footer
-from pages import profile
 from data import site_user
 from config.settings import *
 from constants import *
@@ -162,10 +158,9 @@ def oauth(provider=None):
         oauth_access_type = 'offline'
         oauth_approval_prompt = "force"
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
-    print session
-    print provider
+    
     if provider:
+        print provider
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
             scope=oauth_provider.get('scope'), 
@@ -173,25 +168,27 @@ def oauth(provider=None):
 
         # offline for refresh token
         # force to always make user click authorize
-        #generate the google url we will use to authorize and redirect there
+        # generate the google url we will use to authorize and redirect there
         authorization_url, state = oauth_session.authorization_url(
             oauth_provider.get('auth_uri'),
             access_type=oauth_access_type,
             approval_prompt=oauth_approval_prompt)
         print state
         # State is used to prevent CSRF, keep this for later, make sure oauth returns to the same url.
+        # if testing and oauth_state errors make sure you logged in with localhost and not 127.0.0.1
         session['oauth_state'] = state
         session.modified = True
+        print session
         return redirect(authorization_url)
 
     print session
-    #allready authorised so lets handle the callback
+    # allready authorised so lets handle the callback
     oauth_session = OAuth2Session(
         oauth_provider.get('client_id'), 
         state=session['oauth_state'], 
         redirect_uri=oauth_provider.get('redirect_uri'))
 
-    token = oauth_session.fetch_token(
+    oauth_session.fetch_token(
         oauth_provider.get('token_uri'),
         client_secret=oauth_provider.get('client_secret'),
         authorization_response=request.url,
@@ -201,11 +198,6 @@ def oauth(provider=None):
     r = oauth_session.get('https://www.googleapis.com/oauth2/v1/userinfo')
 
     oauth_user = r.json()
-
-    #https://www.googleapis.com/auth/plus.login
-    #https://www.googleapis.com/auth/plus.me
-
-    print oauth_user
     user_details = site_user.get_by_email({
         'email': oauth_user.get('email')
     }).get()    
@@ -227,6 +219,7 @@ def oauth(provider=None):
     login_user(user)
     site_user.update_last_login().execute(user_details)
     return redirect('/profile')
+
 
 @authorize_pages.route("/change-password/<code>", methods=['GET'])
 @authorize_pages.route("/change-password", methods=['GET'])

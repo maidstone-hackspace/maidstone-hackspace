@@ -1,6 +1,10 @@
 import constants as site
 
-from libs.rss_fetcher import feed_reader
+#~ from config.settings import *
+from config.settings import google_calendar_id, google_calendar_api_key
+
+from scaffold.readers.rss_reader import feed_reader
+#~ from libs.rss_fetcher import feed_reader
 from scaffold import web
 #~ from pages import web
 from pages import header, footer
@@ -12,16 +16,12 @@ def index():
     web.page.create('')
     web.page.section(
         web.div.create(
-            web.google_calendar.create().render()
-            #~ web.images.create(
-                #~ web.template.uri.add_domain(site.tile_images[0][0])
-            #~ ).append(
-                #~ web.template.uri.add_domain(site.tile_images[1][0])
-            #~ ).render()
+            web.google_calendar.create(
+                calendar_id=google_calendar_id,
+                api_key=google_calendar_api_key).render()
         ).set_classes('tile-right tile-image').render())
     web.banner_slider.reset()
     web.banner_slider * site.banner_images
-    
     web.page.append(web.banner_slider.render())
 
     web.page.section(web.title.create('Introduction').render())
@@ -48,8 +48,9 @@ def index():
     web.list * bullet_list
     web.page.append(web.list.render())
 
-    web.div.create('').set_classes('panel')
+    #~ web.div.create('').set_classes('panel')
 
+    # fetch the rss feeds from the various blogs for the homepage
     web.columns.create()
     feed = feed_reader(site.rss_feeds)
     for row in feed:

@@ -35,7 +35,7 @@ class control(base_widget):
             if self.twitter_script is False:
                 self.twitter_script = True
                 self.footer.append("""
-                    <script><!--//--><![CDATA[//><!--!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n//]]></script>""")
+                    <script><!--//--><![CDATA[//><!--!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'http://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');\n//]]></script>""")
 
         if linkedin is not None:
             if self.linkedin_script is False:
@@ -54,7 +54,7 @@ class control(base_widget):
         self.count += 1
         htm = ''
         if self.twitter:
-            htm += '<div class="btn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="%s">Tweet</a></div>' % self.twitter
+            htm += '<div class="btn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="%s">Tweet</a></div>' % self.url
         if self.facebook:
             htm += '<div class="btn"><div class="fb-share-button" data-href="%s" data-layout="button_count"></div></div>' % self.url
         if self.linkedin:

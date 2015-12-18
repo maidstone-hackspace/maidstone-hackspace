@@ -25,5 +25,4 @@ class control(base_widget):
             <label>Confirm Password</label><input id="password" name="password_confirm" type="password"/>
             <input type="Update" value="password_change"/>
             </form>'''
-        return htm
 

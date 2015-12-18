@@ -6,6 +6,14 @@ page_menu = [
     ('Donate', '/donate'),
     ('Contact', '#mailing-list-signup')]
 
+nav_for_authenticated_user = (
+    ('Profile', '/profile'),
+    ('Equipment', '/equipment'),
+    ('Members', '/members'),
+    ('Mailing List', '/mailing-list'),
+    ('Logout', '/logout')
+)
+
 banner_images = [
     ('/static/images/banners/hackspace-banner.png', '', '', ''),
     ('/static/images/banners/audio_board.jpg', 'Audio board', 'Audio board', ''),

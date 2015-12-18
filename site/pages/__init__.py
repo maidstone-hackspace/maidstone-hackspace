@@ -1,7 +1,5 @@
 import os
-import sys
 
-from libs.rss_fetcher import feed_reader
 
 from scaffold.web import webpage as html
 
@@ -56,10 +54,11 @@ def header(title, description='Maidstone Hackspace is a shared space where artis
     if current_user and current_user.is_authenticated:
         web.menu.append('logout', '/logout')
         web.navigation_bar.create(hide=(False if url=='/profile' else True))
-        web.navigation_bar.append('Profile', '/profile')
-        web.navigation_bar.append('Equipment', '/equipment')
-        web.navigation_bar.append('Members', '/members')
-        web.navigation_bar.append('Mailing List', '/mailing-list')
+        web.navigation_bar * site.nav_for_authenticated_user
+        #~ web.navigation_bar.append('Profile', '/profile')
+        #~ web.navigation_bar.append('Equipment', '/equipment')
+        #~ web.navigation_bar.append('Members', '/members')
+        #~ web.navigation_bar.append('Mailing List', '/mailing-list')
         web.template.body.append(web.navigation_bar.render())
     else:
         web.menu.append('login', '/login')

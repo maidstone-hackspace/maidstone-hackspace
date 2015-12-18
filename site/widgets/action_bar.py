@@ -1,5 +1,5 @@
 from scaffold.core.widget import base_widget_extended
-import requests
+
 
 class control(base_widget_extended):
     link = None

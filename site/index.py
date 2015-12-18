@@ -1,10 +1,7 @@
 import os
 import sys
-import requests
-from lxml import etree
 from flask import Flask
 from flask import make_response
-from flask.ext.login import LoginManager, login_required
 
 sys.path.append(os.path.abspath('../../../scaffold/'))
 sys.path.insert(0,os.path.abspath('../../../scaffold/'))
@@ -14,8 +11,6 @@ import generate
 from pages import homepage
 from pages import chat
 from pages import blog
-from pages import competition
-
 from pages import members
 
 from pages.donate import donate_pages
@@ -51,30 +46,6 @@ def blogs():
 def index():
     """home page"""
     return make_response(homepage.index())
-
-#~ @login_required
-#~ @web_app.route("/equipment", methods=['GET'])
-#~ def equipment_view():
-    #~ """home page"""
-    #~ return make_response(equipment.index())
-
-#~ @login_required
-#~ @web_app.route("/equipment/edit/<request_id>/", methods=['GET'])
-#~ def equipment_edit_view(request_id):
-    #~ """home page"""
-    #~ return make_response(equipment.edit(request_id))
-
-#~ @login_required
-#~ @web_app.route("/equipment", methods=['POST'])
-#~ def equipment_submit():
-    #~ """home page"""
-    #~ equipment.insert()
-    #~ return make_response(equipment.index())
-
-#~ @web_app.route("/donate/", methods=['GET'])
-#~ def donate_index():
-    #~ """list of members"""
-    #~ return make_response(donate.index())
 
 @web_app.route("/members/", methods=['GET'])
 def members_index():

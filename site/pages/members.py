@@ -1,9 +1,5 @@
-from flask import session
-from flask import request
-from flask.ext.login import current_user, login_required
-import constants as site
+from flask.ext.login import login_required
 
-from libs.rss_fetcher import feed_reader
 from pages import web
 from pages import header, footer
 from data import members
@@ -16,9 +12,7 @@ def index():
     web.page.create('Members')
     web.member_tiles.create()
     for item in members.get_members():
-        print item
         name = '%s %s' % (item.get('first_name'), item.get('last_name'))
-        user_id = '%s %s' % (item.get('first_name'), item.get('last_name'))
         web.member_tiles.append(
             name = name, 
             image = item.get('profile_image'), 
