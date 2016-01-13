@@ -17,7 +17,7 @@ class control(base_widget_extended):
                     <p>MHS%s</p><p>%s</p>
                 </div>
             </div>'''  % (self.reference, self.name)
-        content='<form action="/profile/membership" method="post"><fieldset><legend>Join Maidstone Hackspace</legend><p><label for="amount">Subscription Amount<input name="amount" placeholder="20.00" value="20.00" type="text"></label></p><button type="submit">submit</button></fieldset></form>'
+        content='<form action="/profile/membership" method="post"><fieldset><legend>Join Maidstone Hackspace</legend><p><label for="amount">Subscription Amount<input name="amount" placeholder="20.00" value="20.00" type="text"></label></p><p class="button"><button type="submit">submit</button></p></fieldset></form>'
         return '''
             <div id="membercard">
                 %s

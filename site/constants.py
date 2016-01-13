@@ -1,7 +1,6 @@
 
 page_menu = [
     ('Home', '/'),
-    #('Competition', '/competition'),
     ('Chat', '/chat'),
     ('Donate', '/donate'),
     ('Contact', '#mailing-list-signup')]
@@ -29,14 +28,27 @@ tile_images = [
 
 #required (author,url)
 #optional (tags, image)
-rss_feeds = [
-    {'author':'Simon Ridley',
-     'url': 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'},
-    {'author':'Mathew Beddow', 'tags': ['tech'], 'url': 'http://www.matthewbeddow.co.uk/?feed=rss2'},
-    {'author':'Oliver Marks', 'url': 'http://www.digitaloctave.co.uk/rss.xml'},
-    {'author':'Mike McRoberts', 'url': 'http://thearduinoguy.org/?feed=rss2'}]
+rss_feeds = [{
+        'author':'Simon Ridley',
+        'url': 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'
+    }, {
+        'author':'Mathew Beddow', 'tags': ['tech'], 
+        'url': 'http://www.matthewbeddow.co.uk/?feed=rss2'
+    }, {
+        'author':'Oliver Marks', 
+        'url': 'http://www.digitaloctave.co.uk/rss.xml'
+    }, {
+        'author':'Ilya Titov', 
+        'url': 'http://webboggles.com/feed/'
+    }, {
+        'author':'Mike McRoberts', 
+        'url': 'http://thearduinoguy.org/?feed=rss2'
+    }]
 
-kent_hackspace = ['http://www.medwaymakers.co.uk/', 'http://canterbury.hackspace.org.uk/']
+kent_hackspace = [
+    'http://www.medwaymakers.co.uk/',
+    'http://canterbury.hackspace.org.uk/'
+]
 
 email = 'support@maidstone-hackspace.org.uk'
 

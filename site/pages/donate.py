@@ -3,6 +3,7 @@ from flask import request
 from flask import redirect, abort
 
 from scaffold import web
+from scaffold.core.validate import validate
 from pages import header, footer
 from data import donate
 
@@ -22,7 +23,7 @@ def index():
         We may run pledges in the future for equipment in which case use the reference for the equipment your pledging towards.""")
 
     web.page.section(web.paragraph.render())
-    for item in donate.get_pledges():
+    for item in donate.get_pledges({'environment':int(gocardless_environment=='production')}):
         web.paragraph.create(
             """Currently raised &pound;%.2f towards %s target is &pound;%.2f.""" % (
             item.get('total', 0) if item.get('total', 0) else 0.0,
@@ -42,21 +43,25 @@ def index():
 @donate_pages.route("/donate/populate", methods=['GET'])
 def populate_by_name():
     pledge = donate.get_pledge({'name': '#lair'}).get()
+    print pledge
     import gocardless
     gocardless.environment = gocardless_environment
     gocardless.set_details(**gocardless_credentials)
     merchant = gocardless.client.merchant()
     for bill in merchant.bills():
         environment = int(gocardless_environment=='production')
-        donate.add_payment().execute({'pledge_id':pledge.get('id','') , 'reference': bill.id, 'amount': bill.amount_minus_fees, 'environment': environment})
-    return abort()
+        donate.add_payment().execute({'pledge_id': pledge.get('id') , 'reference': bill.id, 'amount': bill.amount_minus_fees, 'environment': environment})
+    return abort(404)
 
 
 @donate_pages.route("/donate/submit", methods=['POST'])
 def submit_donation():
+    #~ if request.form.get('amount'):
+        
+        #~ return index()
+        
     import gocardless
     gocardless.environment = gocardless_environment
-    print app_domain
     gocardless.set_details(**gocardless_credentials)
     url = gocardless.client.new_bill_url(
         request.form.get('amount'),
@@ -100,7 +105,7 @@ def success_donation():
         print bill.status
         print bill.user
         environment = int(gocardless_environment=='production')
-        donate.add_payment().execute({'pledge_id':pledge.get('name','') , 'reference': bill_id, 'amount': bill.amount_minus_fees, 'environment': environment})
+        donate.add_payment().execute({'pledge_id':pledge.get('id','') , 'reference': bill_id, 'amount': bill.amount_minus_fees, 'environment': environment})
 
 
     web.template.create('Maidstone Hackspace')

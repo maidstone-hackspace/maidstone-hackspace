@@ -38,9 +38,17 @@ def profile(user_id, user_name):
         web.images.create(user.get('profile_image', '/static/images/hackspace.png'), name).add_attributes('width', '200').render()
     )
     web.paragraph.add(name)
-    web.paragraph.add('%s' % (user.get('email')))
+    
+    #~ web.paragraph.add('%s' % (user.get('email')))
     web.paragraph.add('Last Login %s' % (user.get('last_login', '')))
     web.paragraph.add('Member since %s' % (user.get('created', '')))
+    
+    web.list.create('badges', 'ul')
+    web.list.append(web.images.create('/static/images/badges/member.png').render())
+    web.list.append(web.images.create('/static/images/badges/member.png').render())
+    web.list.append(web.images.create('/static/images/badges/member.png').render())
+    
+    web.paragraph.add(web.list.render())
 
     web.page.section(web.paragraph.render())
     web.template.body.append(web.page.render())

@@ -6,7 +6,7 @@ li p {margin: 20px 0px 0px 30px;height:45px;}
 fieldset {margin:20px;}
 fieldset p {margin: 20px 0px 0px 0px;height:45px;}
 label {color:#fff;text-align:left;}
-input {line-height:45px;float:right;margin:0px;color:#000;padding-left:10px;}
+input {line-height:40px;float:right;margin:0px;color:#000;padding-left:10px;}
 select {float:right;margin:0px;color:#000;padding:10px;}
 p {margin:25px;line-height:150%;}
 h2 {margin-left:25px;color:#fff;}
@@ -15,7 +15,7 @@ li {padding-bottom:10px;line-height:150%;}
 /*
 input {margin:0px;margin-bottom:20px;padding:10px;}
 */
-button {margin-top:20px;background-color: #fff; height: 48px; width:100%; border-radius: 3px;box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
+button {background-color: #fff; height: 48px; width:100%; border-radius: 3px;box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
     border:1px solid #000a0d; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;
     font-size:12px;font-family:arial, helvetica, sans-serif; font-weight:bold; 
     padding: 10px 10px 10px 10px; 
@@ -33,8 +33,7 @@ button {margin-top:20px;background-color: #fff; height: 48px; width:100%; border
 
 .left {float:left;}
 .right {float:right;}
-.bottom {position:absolute;bottom:0px;}
-.full_width {left:0px;right:0px;}
+
 
 .hide {display:none;}
 #ajaxPopup {position:absolute;width:750px;height:550px;background-color:#fff;top:68px;left:50%;margin-left: -375px;box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);background-color:#93B1C6;}
@@ -44,7 +43,8 @@ button {margin-top:20px;background-color: #fff; height: 48px; width:100%; border
 #ajaxPopup p {margin:20px;}
 #ajaxPopup input {width:50%;}
 #ajaxPopup button {position:absolute;bottom:0px;}
-
+#ajaxPopup .bottom {position:absolute;bottom:0px;}
+#ajaxPopup .full_width {left:0px;right:0px;}
 
 
 .margin_default {margin:10px;}
@@ -244,6 +244,9 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 #membercard .container {position:relative;top:50%; width:100%;}
 #membercard .middle {position:absolute;top:-60px;width:100%;}
 #membercard label {color:#000;text-align:left;line-height:48px;}
+#membercard input {width:140px;}
+#membercard .button {margin:0px;}
+#membercard button {margin-top:20px;}
 #membercard legend {margin-top:10px;margin-bottom:10px;font-weight:strong;}
 #membercard fieldset {position:absolute;top:0px;left:0px;right:0px;padding:0px;margin:28px;border:0px;}
 

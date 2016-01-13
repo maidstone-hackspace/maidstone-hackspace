@@ -8,23 +8,19 @@ from scaffold.core.data.sql import query_builder
 
 query_builder.query_path = os.path.abspath('./data/sql/')
 
-
-
 class get_pledge(select_data):
     debug = True
     table = 'pledges'
-    columns = {'name', 'total'}
+    columns = {'id', 'name', 'total'}
     required = {'name'}
-
 
 class get_pledges(select_data):
     debug = True
     #~ table = 'pledges'
     query_file = 'pledge_totals.sql'
-    #~ required = {'expired'}
-    columns_where = {'expired'}
+    required = {'environment'}
+    columns_where = {'expired', 'environment'}
     grouping = {'name'}
-
 
 class add_pledge(insert_data):
     debug = True
