@@ -32,8 +32,9 @@ rss_feeds = [{
         'author':'Simon Ridley',
         'url': 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'
     }, {
-        'author':'Mathew Beddow', 'tags': ['tech'], 
-        'url': 'http://www.matthewbeddow.co.uk/?feed=rss2'
+        'author':'Mathew Beddow',
+        'url': 'http://www.matthewbeddow.co.uk/?feed=rss2',
+        'tags': ['tech'], 
     }, {
         'author':'Oliver Marks', 
         'url': 'http://www.digitaloctave.co.uk/rss.xml'
@@ -48,6 +49,13 @@ rss_feeds = [{
 kent_hackspace = [
     'http://www.medwaymakers.co.uk/',
     'http://canterbury.hackspace.org.uk/'
+]
+
+maker_events = [
+    'http://bristolmakerfaire.com/',
+    'http://makerfairebrighton.com/',
+    'http://makerfaireelephantandcastle.com/',
+    'https://www.emfcamp.org/'
 ]
 
 email = 'support@maidstone-hackspace.org.uk'

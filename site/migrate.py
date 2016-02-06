@@ -4,7 +4,6 @@ sys.path.insert(0, os.path.abspath('../../../scaffold/'))
 from config import settings
 
 from scaffold.core.data.database import db
-print settings.database
 db.config(settings.database)
 from scaffold.core.data.migrations import export_schema, import_schema
 

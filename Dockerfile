@@ -31,3 +31,4 @@ ENTRYPOINT /bin/sh -c 'cd /var/www; python index.py'
 
 #docker build -t mhackspace .
 #docker run -d --name=mhackspace_container --restart=always mhackspace 
+#accesss on dockerip 172.17.0.?:5000

@@ -183,7 +183,7 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 
 .tile {position:relative;background-color:#eee;width:460px;margin-left:20px;margin-bottom:20px;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);}
 .tile-img {margin:20px;width:420px;height:200px;overflow:hidden;background-repeat: no-repeat;background-position: center;background-image:url('/static/images/background.png');}
-.tile header {background-color: #00232D;width:100%;bottom:20px;top:220px;overflow:auto;left:20px;right:20px;text-align:justify;line-height:150%;font-size:12px;}
+.tile header {background-color: #00232D;width:100%;bottom:20px;top:220px;overflow:auto;left:20px;right:20px;text-align:left;line-height:150%;font-size:12px;}
 .tile h2 {line-height:150%;font-size:12px;margin-right:20px;}
 .tile header a {color:#fff;}
 .tile-content {bottom:20px;top:220px;overflow:auto;left:20px;right:20px;text-align:justify;line-height:150%;font-size:12px;}
@@ -213,6 +213,7 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 
 .members .tile{ width:220px;float:left;}
 .members .tile-img{margin:10px;width:200px;}
+.members .badge{width:32px;height:32px;margin:0px;margin-top:5px;}
 
 #member_navigation {z-index:2;position:fixed;top:68px;left:0px;width:180px;height:100%;}
 #member_navigation a {color:#ffffff;font-weight:bold;text-decoration:none;}
@@ -233,20 +234,23 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 
 
 #membercard{
-    background-color: #FF2670;border-radius: 14px;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);
+    color:#000;
+    background-color: #8C50A5;border-radius: 14px;box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.5);
+    background-image: url('/static/images/membership_card_background.png');
     width: 430px;
     height: 240px;
     margin-left:20px;
+    text-shadow: 1px 1px #FFF;
     position:relative;
 }
 
 #membercard .date {position:absolute;margin:25px;top:0px;left:0px;}
 #membercard .container {position:relative;top:50%; width:100%;}
-#membercard .middle {position:absolute;top:-60px;width:100%;}
-#membercard label {color:#000;text-align:left;line-height:48px;}
+#membercard .middle {color:#000;position:absolute;top:-38px;width:100%;text-align:center;font-size:28px;}
+#membercard label {text-align:left;line-height:48px;color:#000;}
 #membercard input {width:140px;}
 #membercard .button {margin:0px;}
-#membercard button {margin-top:20px;}
+#membercard button {margin-top:30px;}
 #membercard legend {margin-top:10px;margin-bottom:10px;font-weight:strong;}
 #membercard fieldset {position:absolute;top:0px;left:0px;right:0px;padding:0px;margin:28px;border:0px;}
 

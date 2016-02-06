@@ -11,7 +11,6 @@ class control(base_widget_extended):
             calendar_id,
             datetime.now().strftime('%Y-%m-%dT%H:%M:%S-00:00'),
             api_key)
-        print url
         date_now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S-00:00')
         response = requests.get('https://www.googleapis.com/calendar/v3/calendars/contact@maidstone-hackspace.org.uk/events?singleEvents=true&maxResults=2&timeMin=%s&key=AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0' % date_now)
         calendar_data = response.json()

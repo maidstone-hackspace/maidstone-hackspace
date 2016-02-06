@@ -14,7 +14,7 @@ class control(base_widget):
         htm = '<div id="footer">'
         htm += '<div id="footertop"></div>'
         htm += '<div id="footerbottom"><div class="container">'
-        htm += '<div class="copyright">&copy;2015 Maidstone Hackspace</div>'
+        htm += '<div class="copyright">&copy;2016 Maidstone Hackspace</div>'
         htm += ''.join(self.items)
         htm += '</div></div>'
         htm += '<div>'

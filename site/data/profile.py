@@ -15,10 +15,13 @@ class update_description(update_data):
     table = 'user_detail'
     required = {'user_id', 'description', 'skills'}
     columns = {'user_id', 'description', 'skills'}
+    columns_optional = {'description', 'skills'}
+    columns_where = {'user_id'}
 
 class create_description(insert_data):
     debug = True
     table = 'user_detail'
     required = {'user_id'}
     columns = {'user_id'}
+    columns_optional = {'description', 'skills'}
 

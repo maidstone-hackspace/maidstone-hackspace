@@ -30,6 +30,24 @@ class update_last_login(update_data):
     #~ columns = {'id'}
     columns_where = {}
 
+class update_membership_status(update_data):
+    debug = True
+    query_str = "update `users` set `status`=%(status)s where id=%(user_id)s"
+    required = {'user_id', 'status'}
+    columns_where = {}
+
+class update_membership(update_data):
+    debug = True
+    query_str = """
+        update `user_membership` set 
+            `status`=%(status)s, 
+            subscription_id=%(subscription_is), 
+            amount=%(amount)s, 
+            join_date=%(join_date)s 
+        where id=%(user_id)s"""
+    required = {'subscription_id', 'status', 'amount', 'join_date'}
+    columns_where = {'user_id'}
+
 class delete_password_reset(delete_data):
     """clean up expired password resets"""
     table = 'user_password_reset'
@@ -58,12 +76,17 @@ class get_users(select_data):
     query_file = 'get_users.sql'
 
 
+class get_user_bio(select_data):
+    #~ debug = True
+    required = {'id'}
+    query_file = 'get_user_bio.sql'
+    columns_where = {'user_id'}
+
 class get_user_details(select_data):
     #~ debug = True
     required = {'id'}
     query_file = 'get_user_detail.sql'
     columns_where = {'users.id'}
-
 
 class get_by_email(select_data):
     required = {'email'}

@@ -10,7 +10,6 @@ class control(base_widget):
         return self
 
     def render(self):
-        print os.path.abspath(self.filepath)
         return markdown_reader(
             os.path.abspath(self.filepath)
         ).render()

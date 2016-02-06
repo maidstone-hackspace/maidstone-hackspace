@@ -11,13 +11,20 @@ def index():
     header('Members')
     web.page.create('Members')
     web.member_tiles.create()
+
     for item in members.get_members():
+        badges = []
+        print item
+        if item.get('status') == 1:
+            badges.append('member')
+        
         name = '%s %s' % (item.get('first_name'), item.get('last_name'))
         web.member_tiles.append(
             name = name, 
             image = item.get('profile_image'), 
             description=item.get('description') or 'Reclusive raccoon', 
             link=item.get('user_id'),
+            badges=badges,
             skills=item.get('skills') or 'badger taunting')
     web.container.create(web.member_tiles.render()).set_classes('members')
     web.page.section(web.container.render())

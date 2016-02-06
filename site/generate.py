@@ -35,11 +35,11 @@ if __name__ == "__main__":
 
     #module, function, output file
     pages_list = (
-        ('pages.homepage', 'index', 'index.html'),
-        ('pages.blog', 'index', 'blog.html'),
-        ('pages.chat', 'index', 'chat.html'),
-        ('pages.donate', 'index', 'donate.html'),
-        ('pages.competition', 'index', 'competition.html'))
+        ('pages.homepage', 'index', 'index.htm'),
+        ('pages.blog', 'index', 'blog.htm'),
+        ('pages.chat', 'index', 'chat.htm'),
+        ('pages.donate', 'index', 'donate.htm'),
+        ('pages.competition', 'index', 'competition.htm'))
 
     args = parser.parse_args()
     print args.folder

@@ -48,16 +48,13 @@ def todict(data):
 
 class User(UserMixin):
     def __init__(self, user_id, active=True):
-        print 'logged in ###########'
-        print user_id
         user_details = site_user.get_user_details({'id': user_id}).get()
         self.active = False
-        print user_details
         if user_details:
             #~ self.check_password(user_details.get('password'))
             self.id = user_id
             self.name = user_details.get('username')
-            self.team_id = user_details.get('team_id', 1)
+            #~ self.team_id = user_details.get('team_id', 1)
             self.active = active
 
     def get_id(self):
@@ -128,11 +125,9 @@ def register_submit():
     data['password'] = request.form.get('password')
     data['password_confirm'] = request.form.get('password')
     
-    
     data['password'] = generate_password_hash(request.form.get('password'))
     #TODO password strength tests
     if is_weak_password(request.form.get('password'), request.form.get('password_confirm')):
-        print 'password not strong enough'
         redirect('/register')
 
     header('Your account has been registered')

@@ -575,15 +575,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.8101934"
-     inkscape:cx="227.31994"
-     inkscape:cy="906.1281"
+     inkscape:cx="125.94956"
+     inkscape:cy="865.14175"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-width="1551"
+     inkscape:window-height="876"
+     inkscape:window-x="49"
+     inkscape:window-y="24"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -1976,6 +1976,29 @@
            style="fill:#ffffff"
            id="g9935" />
       </g>
+    </g>
+    <g
+       id="g5724"
+       inkscape:export-xdpi="25.26"
+       inkscape:export-ydpi="25.26">
+      <circle
+         style="fill:#008080;fill-opacity:1"
+         id="circle236-6-1-6"
+         r="57"
+         cy="184.35048"
+         cx="301.91724" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5720"
+         y="212.22142"
+         x="276.7699"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.5px;line-height:125%;font-family:Winks;-inkscape-font-specification:Winks;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:90px;font-family:'Century Schoolbook L';-inkscape-font-specification:'Century Schoolbook L Bold';fill:#ffffff;fill-opacity:1"
+           y="212.22142"
+           x="276.7699"
+           id="tspan5722"
+           sodipodi:role="line">£</tspan></text>
     </g>
   </g>
 </svg>
