@@ -9,6 +9,19 @@ from scaffold.core.data.sql import query_builder
 query_builder.query_path = os.path.abspath('./data/sql/')
 
 
+class create_basic_user(insert_data):
+    """not able to actually log in but registered on the system"""
+    table = 'users'
+    required = {'email', 'first_name', 'last_name'}
+    columns = {'email','first_name', 'last_name'}
+
+    def calculated_data(self):
+        return {'created': time.strftime('%Y-%m-%d %H:%M:%S')}
+
+    def set(self, data):
+        data['created'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        super(create_basic_user, self).set(data)
+
 class create(insert_data):
     table = 'users'
     required = {'email', 'password', 'username', 'first_name', 'last_name', 'created'}
@@ -36,17 +49,24 @@ class update_membership_status(update_data):
     required = {'user_id', 'status'}
     columns_where = {}
 
+class create_membership(insert_data):
+    debug = True
+    table = 'user_membership'
+    required = {'user_id', 'subscription_reference', 'status', 'amount', 'join_date'}
+    columns = {'user_id', 'subscription_reference', 'status', 'amount', 'join_date'}
+    columns_where = {}
+
 class update_membership(update_data):
     debug = True
-    query_str = """
-        update `user_membership` set 
-            `status`=%(status)s, 
-            subscription_id=%(subscription_is), 
+    query_str = u"""
+        update user_membership set 
+            status=%(status)s, 
+            subscription_reference=%(subscription_reference)s, 
             amount=%(amount)s, 
             join_date=%(join_date)s 
         where id=%(user_id)s"""
-    required = {'subscription_id', 'status', 'amount', 'join_date'}
-    columns_where = {'user_id'}
+    required = {'subscription_reference', 'status', 'amount', 'join_date'}
+    columns_where = {}
 
 class delete_password_reset(delete_data):
     """clean up expired password resets"""

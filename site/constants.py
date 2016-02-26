@@ -68,6 +68,15 @@ email_server = {
     'from': 'support@maidstone-hackspace.org.uk',
     'to': 'support@maidstone-hackspace.org.uk'}
 
+badge_lookup = {
+    1: 'member',
+    2: 'backer',
+    3: 'teacher',
+    4: 'chairman',
+    5: 'treasurer',
+    6: 'secretary'
+}
+
 
 url_home= '/'
 url_profile = '/profile'

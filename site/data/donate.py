@@ -31,7 +31,7 @@ class add_pledge(insert_data):
 class add_payment(insert_data):
     debug = True
     table = 'pledge_amounts'
-    required = {'pledge_id', 'reference', 'amount', 'environment'}
-    columns = {'pledge_id', 'reference', 'amount', 'environment'}
+    required = {'provider_id', 'pledge_id', 'reference', 'amount', 'environment'}
+    columns = {'provider_id', 'pledge_id', 'reference', 'amount', 'environment'}
 
 

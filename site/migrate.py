@@ -7,7 +7,7 @@ from scaffold.core.data.database import db
 db.config(settings.database)
 from scaffold.core.data.migrations import export_schema, import_schema
 
-export_schema()
+export_schema(os.path.abspath('./sql/migrations/'))
 #import_schema()
 
 

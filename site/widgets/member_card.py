@@ -17,6 +17,7 @@ class control(base_widget_extended):
                 <div class="container">
                     <div class="middle">
                         <p>MHS%s</p><p>%s</p>
+                        <a href="/profile/membership/cancel">Cancel Membership</a>
                     </div>
                 </div>
             </div>'''  % (self.reference, self.name)
@@ -26,6 +27,7 @@ class control(base_widget_extended):
                 <form action="/profile/membership" method="post">
                     <fieldset>
                         <legend>Join Maidstone Hackspace</legend>
+                        <p><label for="amount">Payment provider<select name="provider"><option value="gocardless">GoCardless</option><option value="paypal">PayPal</option></select></label></p>
                         <p><label for="amount">Subscription Amount<input name="amount" placeholder="20.00" value="20.00" type="text"></label></p>
                         <p class="button"><button type="submit">submit</button></p>
                     </fieldset>

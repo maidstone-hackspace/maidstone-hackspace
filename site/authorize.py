@@ -11,7 +11,7 @@ from flask import request
 from flask import Blueprint
 from flask.ext.login import LoginManager, login_required, UserMixin, login_user, logout_user, make_secure_token
 from requests_oauthlib import OAuth2Session
-
+from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 
 from scaffold import web
 from libs.mail import sendmail
@@ -140,12 +140,12 @@ def register_submit():
     web.template.body.append(web.page.render())
     return make_response(footer())
 
-@authorize_pages.route("/oauth", methods=['GET'])
-@authorize_pages.route("/oauth/", methods=['GET'])
+@authorize_pages.route("/oauth/<provider>/<state>", methods=['GET'])
+@authorize_pages.route("/oauth/<provider>/<state>/", methods=['GET'])
 @authorize_pages.route("/oauth/<provider>", methods=['GET'])
-def oauth(provider=None):
+def oauth(provider, state=None):
     oauth_verify = True
-    oauth_provider = oauth_conf.get('google')
+    oauth_provider = oauth_conf.get(provider)
     oauth_access_type = ''
     oauth_approval_prompt = ''
     if oauth_live is False:
@@ -153,13 +153,15 @@ def oauth(provider=None):
         oauth_access_type = 'offline'
         oauth_approval_prompt = "force"
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-    
-    if provider:
-        print provider
+    print '#####'
+    if state:
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
             scope=oauth_provider.get('scope'), 
             redirect_uri=oauth_provider.get('redirect_uri'))
+
+        if provider == 'facebook':
+            oauth_session = facebook_compliance_fix(oauth_session)
 
         # offline for refresh token
         # force to always make user click authorize
@@ -174,15 +176,26 @@ def oauth(provider=None):
         session['oauth_state'] = state
         session.modified = True
         print session
+        print authorization_url
         return redirect(authorization_url)
 
+    print '-----'
+    print provider
     print session
+    print session['oauth_state']
     # allready authorised so lets handle the callback
     oauth_session = OAuth2Session(
         oauth_provider.get('client_id'), 
         state=session['oauth_state'], 
         redirect_uri=oauth_provider.get('redirect_uri'))
 
+    #~ if provider == 'facebook':
+        #~ oauth_session = facebook_compliance_fix(oauth_session)
+
+    print '@@@@@@@'
+    print request.url
+    print oauth_provider.get('redirect_uri')
+    # code error is todo with authorisation response
     oauth_session.fetch_token(
         oauth_provider.get('token_uri'),
         client_secret=oauth_provider.get('client_secret'),
@@ -190,9 +203,12 @@ def oauth(provider=None):
         verify=oauth_verify)
 
     # Fetch a protected resource, i.e. user profile
-    r = oauth_session.get('https://www.googleapis.com/oauth2/v1/userinfo')
+    r = oauth_session.get(oauth_provider.get('user_uri'))
+
+
 
     oauth_user = r.json()
+    print oauth_user
     user_details = site_user.get_by_email({
         'email': oauth_user.get('email')
     }).get()    

@@ -2,14 +2,24 @@ from flask import Blueprint
 from flask import request
 from flask import redirect
 from flask.ext.login import current_user, login_required
-import gocardless
+
+from constants import badge_lookup
 
 from pages import web
 from pages import header, footer
-from data.site_user import get_user_details, update_membership_status, get_user_bio
-from data.profile import update_description, create_description
+from data.site_user import get_user_details, update_membership, update_membership_status, get_user_bio, create_membership
+from data.profile import update_description, create_description, fetch_users
+from data import badges
+from data import members
 from config.settings import gocardless_environment, gocardless_credentials
 from config.settings import app_domain
+
+from libs.payments import payment
+from config.settings import *
+
+#~ import gocardless
+#~ gocardless.environment = gocardless_environment
+#~ gocardless.set_details(**gocardless_credentials)
 
 profile_pages = Blueprint('profile_pages', __name__, template_folder='templates')
 
@@ -66,55 +76,93 @@ def index():
     web.template.body.append('<script type="type/javascript">document.cookie = "status=1";</script>')
     return footer()
 
+@profile_pages.route("/profile/setup", methods=['GET'])
+@login_required
+def setup():
+    """utility url, insert new data and refresh user details"""
+    web.template.body.append('Adding badge Types')
+    for badge_id, badge_name in badge_lookup.items():
+        badges.create_badge().execute({'id': badge_id, 'name': badge_name})
+
+    user_lookup = {}
+    for member in fetch_users():
+        user_lookup[member.get('email')] = member.get('user_id')
+
+    provider = payment(provider='paypal', style='payment')
+    for item in provider.fetch_subscriptions():
+        print item
+
+    print user_lookup
+    merchant = gocardless.client.merchant()
+    #https://jsfiddle.net/api/post/library/pure/
+    for paying_member in merchant.subscriptions():
+        print dir(paying_member)
+        print paying_member.user()
+        print paying_member.amount
+        user=paying_member.user()
+        
+        print '---------------'
+        print user.email
+        user_id = user_lookup.get(user.email)
+        print user_id
+        update_membership_status().execute({'user_id': user_id, 'status': '1'})
+        create_membership().execute({'user_id': user_id, 'status': '1', 'join_date': paying_member.created_at, 'amount': paying_member.amount, 'subscription_id': paying_member.id})
+
+
+    return footer()
 
 @profile_pages.route("/profile/membership", methods=['POST'])
 @login_required
 def pay_membership():
-    import gocardless
-    
     user = get_user_details({'id': current_user.get_id()}).get()
     user_code = str(user.get('user_id')).zfill(5)
-    
-    gocardless.environment = gocardless_environment
-    gocardless.set_details(**gocardless_credentials)
-    url = gocardless.client.new_subscription_url(
-        amount=request.form.get('amount'), 
-        interval_length=1, 
-        interval_unit="month",
+
+    selected_provider = request.form.get('provider', 'gocardless')
+    provider = payment(provider=selected_provider, style='payment')
+    success_url = '%s/profile/membership/%s/success' % (app_domain, selected_provider)
+    failure_url = '%s/profile/membership/%s/failure' % (app_domain, selected_provider)
+    url = provider.subscribe(
+        amount=request.form.get('amount'),
         name="Membership your membership id is MH%s" % user_code,
-        redirect_uri='%s/profile/gocardless' % app_domain)
+        redirect_success=success_url,
+        redirect_failure=failure_url
+        )
+
+
     return redirect(url)
 
 
+@profile_pages.route("/profile/membership/failure", methods=['GET'])
 @profile_pages.route("/profile/membership/cancel", methods=['GET'])
 @login_required
 def cancel_membership():
-    import gocardless
-    
     user = get_user_details({'id': current_user.get_id()}).get()
     user_code = str(user.get('user_id')).zfill(5)
     
-    gocardless.environment = gocardless_environment
-    gocardless.set_details(**gocardless_credentials)
+    subscription = members.fetch_member_subscription({'user_id': current_user.get_id()}).get()
+    print subscription.get('provider_id')
+    print subscription.get('subscription_reference')
+    
+    
+    provider = payment(provider='paypal', style='payment')
+    provider.lookup_provider_by_id(1)
+    url = provider.unsubscribe(reference=subscription.get('subscription_reference'))
 
-    subscription = gocardless.client.subscription('0540QD22SKND')
-    subscription.cancel()
-    return redirect(url)
+    members.update_membership_status().execute({'user_id':current_user.get_id(), 'status': '0'})
 
+    return redirect('/profile')
 
-@profile_pages.route("/profile/gocardless", methods=['GET'])
+@profile_pages.route("/profile/membership/<provider>/success", methods=['GET'])
+@profile_pages.route("/profile/membership/<provider>/success/", methods=['GET'])
 @login_required
-def gocardless_signup():
+def membership_signup(provider):
     web.template.create('Maidstone Hackspace')
     header('Maidstone Hackspace Member registration')
 
-    # confirm the payment
-    bill_id = request.args.get('resource_id')
+    provider = payment(provider=provider, style='payment')
+
+    payment_details = provider.subscribe_confirm(request.args)
     try:
-        import gocardless
-        gocardless.environment = gocardless_environment
-        gocardless.set_details(**gocardless_credentials)
-        print gocardless.client.confirm_resource(request.args)
         web.page.create('Thanks for becoming a member.')
         web.paragraph.create(
             """Your membership request has been recieved and will be active shortly.""")
@@ -124,12 +172,39 @@ def gocardless_signup():
         web.paragraph.create(
             """We could not confirm the payment something may have gone terribly wrong.""")
 
+    if payment_details is None:
+        return redirect('/profile/membership/failure')
+
     update_membership_status().execute({'user_id': current_user.get_id(), 'status': '1'})
-    update_membership().execute({'user_id': current_user.get_id(), 'status': '1', 'join_date': '', 'amount': '', 'subscription_id': ''})
+    #update_membership().execute({'user_id': str(current_user.get_id()), 'status': '1', 'join_date': details.get('start_date'), 'amount': details.get('amount'), 'subscription_reference': details.get('reference')})
+
+    #update_membership_status().execute({'user_id': user_id, 'status': '1'})
+    create_membership().execute({
+        'user_id': current_user.get_id(), 
+        'status': '1', 
+        'join_date': payment_details.get('start_date'), 
+        'amount': payment_details.get('amount'), 
+        'subscription_reference': payment_details.get('reference')})
+
+
 
     web.page.section(web.paragraph.render())
     web.template.body.append(web.page.render())
     return footer()
+
+
+@profile_pages.route("/profiles/generate", methods=['GET'])
+@login_required
+def update_profiles():
+    """this is used to sync up older accounts"""
+    for user in get_users():
+        print user
+
+    for payment in get_users():
+        print user
+
+    return web.form.render()
+
 
 
 

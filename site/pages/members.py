@@ -3,7 +3,10 @@ from flask.ext.login import login_required
 from pages import web
 from pages import header, footer
 from data import members
+from data import badges
+from constants import badge_lookup
 
+b = {'1':'test', '2': 'abc'}
 
 @login_required
 def index():
@@ -12,20 +15,29 @@ def index():
     web.page.create('Members')
     web.member_tiles.create()
 
+    members_badges = badges.fetch_user_badges_grouped()
+    count_users = 0
+    count_members = 0
     for item in members.get_members():
-        badges = []
-        print item
-        if item.get('status') == 1:
-            badges.append('member')
-        
+        member_badges = [
+            badge_lookup.get(b, '') 
+            for b in members_badges.get(item.get('user_id'), [])]
+
         name = '%s %s' % (item.get('first_name'), item.get('last_name'))
         web.member_tiles.append(
             name = name, 
             image = item.get('profile_image'), 
             description=item.get('description') or 'Reclusive raccoon', 
             link=item.get('user_id'),
-            badges=badges,
+            badges=member_badges,
             skills=item.get('skills') or 'badger taunting')
+        count_users += 1
+        if item.get('status') is 1:
+            count_members += 1
+    print count_members
+    web.page.section('Members %d' % count_members)
+    web.page.section('Users %d' % count_users)
+    
     web.container.create(web.member_tiles.render()).set_classes('members')
     web.page.section(web.container.render())
     web.template.body.append(web.page.render())

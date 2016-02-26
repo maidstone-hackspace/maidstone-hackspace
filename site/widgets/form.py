@@ -34,7 +34,12 @@ class control(base_widget):
                         item)
                 htm += '</select></label></p>'
                 continue
-            htm+='<p><label for="%s">%s<input type="%s" name="%s" placeholder="%s" value="%s"></label></p>' % (name, label, input_type ,name, placeholder, value)
+            checked = ''
+            if input_type == 'radio':
+                if placeholder == value:
+                    checked = ' checked="checked"'
+                
+            htm+='<p><label for="%s">%s<input type="%s" name="%s" placeholder="%s" value="%s"%s></label></p>' % (name, label, input_type ,name, placeholder, value, checked)
         htm+='<p class="bottom full_width"><button type="submit">%s</button></p>' % self.button
         htm+='</fieldset></form>'
         return htm

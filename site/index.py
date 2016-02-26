@@ -19,7 +19,7 @@ from pages.equipment import equipment_pages
 from pages.profile import profile_pages
 from authorize import authorize_pages, login_manager
 
-web_app = Flask(__name__, static_url_path='/static')
+web_app = Flask(__name__)
 web_app.config['PROPAGATE_EXCEPTIONS'] = True
 web_app.secret_key = settings.flask_secret_key
 login_manager.init_app(web_app)
@@ -30,6 +30,10 @@ web_app.register_blueprint(profile_pages)
 web_app.register_blueprint(google_groups_pages)
 web_app.register_blueprint(donate_pages)
 
+@web_app.route('/static/<path:path>')
+def send_js(path):
+    print path
+    return send_from_directory('/static_resources', path)
 
 # local testing server, add your pages here
 @web_app.route("/examples/", methods=['GET'])

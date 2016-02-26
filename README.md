@@ -26,11 +26,27 @@ To generate static content you can run the code below.
 ``` python generate.py ```
 
 
+Testing the payment systems
+---------------------------
+
+Both paypal and gocardless clearly show that you are using the sandbox in the url.
+
+for paypal you can use this email and password 
+
+    email = contact-buyer@maidstone-hackspace.org.uk
+    password = mhackspace
+
+To test the gocardless integration you can use these card details
+
+    sortcode = 200000
+    account number = 55779911
+
 
 
 Run locally with uwsgi on port 9090
 
-uwsgi --plugins python --http-socket :9090 -w wsgi
+    uwsgi --plugins python --http-socket :9090 -w wsgi
 
 Run locally with flask
-python index.py
+
+    python index.py
