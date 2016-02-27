@@ -11,7 +11,7 @@ RUN \
     apt-get upgrade -y && \
     apt-get install -y libssl-dev libffi-dev && \
     apt-get install -y software-properties-common python-software-properties && \
-    apt-get install -y python-MySQLdb python-psycopg2 python-pip python-dev python-requests python-lxml python-flask python-flask-login && \
+    apt-get install -y python-MySQLdb python-psycopg2 python-requests-oauthlib python-pip python-dev python-requests python-lxml python-flask python-flask-login && \
     apt-get install -y cssmin slimit && \
     add-apt-repository -y ppa:oly/ppa && \ 
     apt-get update && \
@@ -21,9 +21,9 @@ RUN pip install gocardless paypalrestsdk pytz
 
 #allow access to flask
 EXPOSE 5000 5002
-
-#RUN /bin/sh -c 'cd /var/www; python index.py'
-#ENTRYPOINT /bin/sh -c 'cd /var/www; python index.py'
+WORKDIR /var/www/
+#RUN /bin/sh -c 'cd /var/www/site; python index.py'
+ENTRYPOINT /bin/sh -c 'cd /var/www/site; python index.py'
 
 #docker build -t mhackspace .
 #docker run -d --name=mhackspace_container --restart=always mhackspace 
