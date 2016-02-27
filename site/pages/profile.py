@@ -11,7 +11,7 @@ from data.site_user import get_user_details, update_membership, update_membershi
 from data.profile import update_description, create_description, fetch_users
 from data import badges
 from data import members
-from config.settings import gocardless_environment, gocardless_credentials
+#~ from config.settings import gocardless_environment, gocardless_credentials
 from config.settings import app_domain
 
 from libs.payments import payment

@@ -11,13 +11,13 @@ RUN \
     apt-get upgrade -y && \
     apt-get install -y libssl-dev libffi-dev && \
     apt-get install -y software-properties-common python-software-properties && \
-    apt-get install -y python-pip python-dev python-requests python-lxml python-flask python-flask-login && \
+    apt-get install -y python-MySQLdb python-psycopg2 python-pip python-dev python-requests python-lxml python-flask python-flask-login && \
     apt-get install -y cssmin slimit && \
     add-apt-repository -y ppa:oly/ppa && \ 
     apt-get update && \
     apt-get install -y python-scaffold
 
-RUN pip install gocardless paypalrestsdk
+RUN pip install gocardless paypalrestsdk pytz
 
 #allow access to flask
 EXPOSE 5000 5002

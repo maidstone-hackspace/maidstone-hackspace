@@ -113,6 +113,7 @@ class get_by_email(select_data):
     query_file = 'get_users.sql'
     columns_where = {'email'}
 
+
 class get_by_username(select_data):
     required = {'email'}
     query_file = 'get_user_credentials.sql'
@@ -122,3 +123,33 @@ class authorize(select_data):
     required = {'id'}
     query_file = 'get_user_credentials.sql'
     columns_where = {'id'}
+
+
+class create_oauth_login(insert_data):
+    required = {'username', 'provider'}
+    query_file = 'get_user_by_oauth_username.sql'
+    columns_where = {'username', 'provider'}
+
+    def calculated_data(self):
+        return {'registered': time.strftime('%Y-%m-%d %H:%M:%S')}
+
+    def set(self, data):
+        data['registered'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        super(create, self).set(data)
+
+class update_oauth_login(update_data):
+    required = {'username', 'provider'}
+    query_file = 'get_user_by_oauth_username.sql'
+    columns_where = {'username', 'provider'}
+
+    def calculated_data(self):
+        return {'registered': time.strftime('%Y-%m-%d %H:%M:%S')}
+
+    def set(self, data):
+        data['registered'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        super(create, self).set(data)
+
+class fetch_oauth_login(select_data):
+    required = {'username', 'provider'}
+    query_file = 'get_user_by_oauth_username.sql'
+    columns_where = {'username', 'provider'}

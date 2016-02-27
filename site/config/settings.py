@@ -23,19 +23,15 @@ database = {
                 'db': "maidstone_hackspace",
                 'port': 3306}
 
-
+# secret so not included in default settings
 oauth_live = False
 oauth_redirect_uri = app_domain + '/oauth'
-oauth_conf = {
-    'google': {},
-    'twitter': {}
-}
-
-
-google_calendar_id = 'contact@maidstone-hackspace.org.uk'
-google_calendar_api_key = 'AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0'
-
+oauth_conf = {}
 payment_providers = {}
+google_calendar_id = ''
+google_calendar_api_key = ''
+
+
 
 if os.path.exists('config/settings_dev.py'):
     print 'Using settings for dev enviroment'
@@ -52,14 +48,14 @@ if os.path.exists('config/settings_live.py'):
 
 
 with web.template as setup:
-    #css
+    #css for jquery, material sprite sheet and custom css
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/default.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-navigation-white.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-action-white.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-content-white.css" media="" type="text/css" />')
 
-    #javascript
+    #javascript, using jquery and angular
     setup.persistent_header('<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')

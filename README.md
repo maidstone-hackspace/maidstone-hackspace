@@ -9,7 +9,9 @@ To suggest changes to the site hit the fork button on the github page, then make
 push your changes to your github account and create a pull request back into the main branch where it can be reviewed and merged
 if everything is okay.
 
-The simplest way to setup this site locally to test and make changes is to run.
+
+The simplest way to setup this site is to use docker so please install that from this site https://docs.docker.com/engine/installation/ 
+and make sure the quick start guide works https://docs.docker.com/machine/get-started/ then you can use the commands below to test and make changes.
 
     docker build -t maidstone-hackspace .
     docker run -p 5000:5000 maidstone-hackspace

@@ -195,6 +195,8 @@ def oauth(provider, state=None):
     print '@@@@@@@'
     print request.url
     print oauth_provider.get('redirect_uri')
+    print oauth_provider.get('token_uri')
+    print oauth_provider.get('client_secret')
     # code error is todo with authorisation response
     oauth_session.fetch_token(
         oauth_provider.get('token_uri'),
@@ -202,27 +204,50 @@ def oauth(provider, state=None):
         authorization_response=request.url,
         verify=oauth_verify)
 
+    #~ r = oauth_session.get('https://api.github.com/user')
+    #~ print r.content
+
     # Fetch a protected resource, i.e. user profile
-    r = oauth_session.get(oauth_provider.get('user_uri'))
+    print oauth_provider.get('user_uri')
+    response = oauth_session.get(oauth_provider.get('user_uri'))
+    oauth_user = response.json()
+    
+    if provider is 'github':
+        oauth2_github_handle_user(oauth_user)
+
+    if provider is 'facebook':
+        oauth2_github_handle_user(oauth_user)
+
+    if provider is 'google':
+        oauth2_github_handle_user(oauth_user)
 
 
-
-    oauth_user = r.json()
+    
     print oauth_user
-    user_details = site_user.get_by_email({
-        'email': oauth_user.get('email')
+    email = oauth_user.get('email') or ''
+    user_details = site_user.fetch_oauth_login({
+        'username': oauth_user.get('login') or ''
     }).get()    
-
+    
+    if oauth_user.get('login'):
+        #err what now we should probably error
+        pass 
+    
     if not user_details:
         flash('Your new profile has been created, and your now logged in')
+        site_user.create_oauth_login().execute({
+            'username': oauth_user.get('login') or '', 
+            'provider': 'oauth'})
+        
         site_user.create().execute({
-            'email': oauth_user.get('email'), 
+            'email': oauth_user.get('email') or '', 
             'password': 'oauth', 
             'profile_image': oauth_user.get('picture'),
-            'username': oauth_user.get('email'),
-            'first_name': oauth_user.get('given_name'),
-            'last_name': oauth_user.get('family_name')})
-        user_details = site_user.get_by_email({
+            'username': oauth_user.get('login'),
+            'first_name': oauth_user.get('given_name') or '',
+            'last_name': oauth_user.get('family_name') or ''})
+        
+        user_details = site_user.get_by_ouath_login({
             'email': oauth_user.get('email')
         }).get()
     
@@ -230,6 +255,10 @@ def oauth(provider, state=None):
     login_user(user)
     site_user.update_last_login().execute(user_details)
     return redirect('/profile')
+
+def oauth2_github_handle_user(user):
+    print user
+    
 
 
 @authorize_pages.route("/change-password/<code>", methods=['GET'])
@@ -343,7 +372,7 @@ def login_screen():
     header('Members Login')
     web.page.create('Member Login')
     web.page.section(
-        web.login_box.create().enable_oauth('google').render()
+        web.login_box.create().enable_oauth('google').enable_oauth('facebook').enable_oauth('github').render()
     )
     #~ web.template.body.append(web.messages.render())
     web.template.body.append(web.page.render())

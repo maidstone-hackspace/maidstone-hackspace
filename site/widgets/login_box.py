@@ -19,7 +19,7 @@ class control(base_widget):
             if 'google' in self.oauth_enabled:
                 htm += '<a title="Login with Google" href="/oauth/google/login"><img src="/static/images/oauth/google.png" /></a><br />'
             if 'facebook' in self.oauth_enabled:
-                htm += '<a title="Login with facebook" href="/oauth/facebook">Facebook</a>.<br />'
+                htm += '<a title="Login with facebook" href="/oauth/facebook/login">Facebook</a>.<br />'
             if 'github' in self.oauth_enabled:
                 htm += '<a title="Login with twitter" href="/oauth/github/login">GitHub</a><br />'
             htm += '</div>'
