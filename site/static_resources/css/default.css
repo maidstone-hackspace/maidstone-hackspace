@@ -209,7 +209,8 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 #login_box label {display:block;margin: 20px 0px 20px;}
 #login_box input {margin: 20px 0px 0px;float:none;width:100%;}
 #login_box button {margin: 20px 0px 0px;float:left;width:100%;}
-#login_box .providers {margin: 20px 0px 20px;}
+#login_box .providers {margin: 20px 0px 20px;height:48px;}
+#login_box .providers a {float:left;}
 
 
 .members .tile{ width:220px;float:left;}

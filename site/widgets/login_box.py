@@ -17,12 +17,12 @@ class control(base_widget):
         if self.oauth_enabled:
             htm += '<div class="providers">'
             if 'google' in self.oauth_enabled:
-                htm += '<a title="Login with Google" href="/oauth/google/login"><img src="/static/images/oauth/google.png" /></a><br />'
-            if 'facebook' in self.oauth_enabled:
-                htm += '<a title="Login with facebook" href="/oauth/facebook/login">Facebook</a>.<br />'
+                htm += '<a title="Login with Google" href="/oauth/google/login"><img src="/static/images/oauth/google.png" /></a>&nbsp;'
+            #~ if 'facebook' in self.oauth_enabled:
+                #~ htm += '<a title="Login with facebook" class="but row" href="/oauth/facebook/login">Login with Facebook</a>&nbsp;'
             if 'github' in self.oauth_enabled:
-                htm += '<a title="Login with twitter" href="/oauth/github/login">GitHub</a><br />'
-            htm += '</div>'
+                htm += '<a title="Login with twitter" class="but row" href="/oauth/github/login">Login with GitHub</a>'
+            htm += '<br /></div>'
 
         htm += '<p>Or alternatively login with your previously created account.</p>'
 
@@ -34,12 +34,6 @@ class control(base_widget):
             <button class="btn" form="user_login" type="submit" value="Login"/>Login</button>
             </frameset></form>
             <a href="/register">Register for an account</a>&nbsp;|&nbsp;<a href="/reset-password">Reset password</a>'''
-
-
-
         htm += '</div>'
-
-
-
         return htm
 

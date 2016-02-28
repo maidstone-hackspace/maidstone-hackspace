@@ -27,6 +27,8 @@ authorize_pages = Blueprint('authorize_pages', __name__, template_folder='templa
 login_manager = LoginManager()
 login_manager.login_view = '/login'
 
+oauth_lookup = {'google':1, 'github':2, 'facebook':3}
+
 
 def is_weak_password(password1, password2):
     if password1 != password2:
@@ -48,13 +50,16 @@ def todict(data):
 
 class User(UserMixin):
     def __init__(self, user_id, active=True):
+        print user_id
         user_details = site_user.get_user_details({'id': user_id}).get()
         self.active = False
+        print 'user'
+        print user_details
         if user_details:
             #~ self.check_password(user_details.get('password'))
             self.id = user_id
             self.name = user_details.get('username')
-            #~ self.team_id = user_details.get('team_id', 1)
+            print self.name
             self.active = active
 
     def get_id(self):
@@ -153,7 +158,7 @@ def oauth(provider, state=None):
         oauth_access_type = 'offline'
         oauth_approval_prompt = "force"
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-    print '#####'
+
     if state:
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
@@ -170,33 +175,22 @@ def oauth(provider, state=None):
             oauth_provider.get('auth_uri'),
             access_type=oauth_access_type,
             approval_prompt=oauth_approval_prompt)
-        print state
+
         # State is used to prevent CSRF, keep this for later, make sure oauth returns to the same url.
         # if testing and oauth_state errors make sure you logged in with localhost and not 127.0.0.1
         session['oauth_state'] = state
         session.modified = True
-        print session
-        print authorization_url
         return redirect(authorization_url)
 
-    print '-----'
-    print provider
-    print session
-    print session['oauth_state']
     # allready authorised so lets handle the callback
     oauth_session = OAuth2Session(
         oauth_provider.get('client_id'), 
         state=session['oauth_state'], 
         redirect_uri=oauth_provider.get('redirect_uri'))
 
-    #~ if provider == 'facebook':
-        #~ oauth_session = facebook_compliance_fix(oauth_session)
+    if provider == 'facebook':
+        oauth_session = facebook_compliance_fix(oauth_session)
 
-    print '@@@@@@@'
-    print request.url
-    print oauth_provider.get('redirect_uri')
-    print oauth_provider.get('token_uri')
-    print oauth_provider.get('client_secret')
     # code error is todo with authorisation response
     oauth_session.fetch_token(
         oauth_provider.get('token_uri'),
@@ -204,62 +198,48 @@ def oauth(provider, state=None):
         authorization_response=request.url,
         verify=oauth_verify)
 
-    #~ r = oauth_session.get('https://api.github.com/user')
-    #~ print r.content
-
     # Fetch a protected resource, i.e. user profile
-    print oauth_provider.get('user_uri')
     response = oauth_session.get(oauth_provider.get('user_uri'))
     oauth_user = response.json()
     
-    if provider is 'github':
-        oauth2_github_handle_user(oauth_user)
-
-    if provider is 'facebook':
-        oauth2_github_handle_user(oauth_user)
-
-    if provider is 'google':
-        oauth2_github_handle_user(oauth_user)
-
-
     
-    print oauth_user
-    email = oauth_user.get('email') or ''
+    #~ email = oauth_user.get('login') or ''
+    provider_id = oauth_lookup.get(provider)
     user_details = site_user.fetch_oauth_login({
-        'username': oauth_user.get('login') or ''
+        'username': oauth_user.get('login') or '',
+        'provider': provider_id
     }).get()    
     
-    if oauth_user.get('login'):
-        #err what now we should probably error
-        pass 
-    
-    if not user_details:
-        flash('Your new profile has been created, and your now logged in')
-        site_user.create_oauth_login().execute({
-            'username': oauth_user.get('login') or '', 
-            'provider': 'oauth'})
-        
-        site_user.create().execute({
-            'email': oauth_user.get('email') or '', 
-            'password': 'oauth', 
-            'profile_image': oauth_user.get('picture'),
-            'username': oauth_user.get('login'),
-            'first_name': oauth_user.get('given_name') or '',
-            'last_name': oauth_user.get('family_name') or ''})
-        
-        user_details = site_user.get_by_ouath_login({
-            'email': oauth_user.get('email')
-        }).get()
-    
-    user = User(user_details.get('user_id'))
-    login_user(user)
-    site_user.update_last_login().execute(user_details)
+    # we have matched a user so login and redirect
+    if user_details:
+        print 'oauth login 1'
+        login_user(User(user_details.get('user_id')))
+        return redirect('/profile')
+
+    flash('Your new profile has been created, and your now logged in')
+
+    print oauth_user
+    # create new user from oauth information
+    user_id = site_user.create().execute({
+        'email': oauth_user.get('email') or '', 
+        'password': 'oauth', 
+        'profile_image': oauth_user.get('picture'),
+        'username': oauth_user.get('login'),
+        'first_name': oauth_user.get('given_name') or '',
+        'last_name': oauth_user.get('family_name') or ''})
+
+    # register oauth login creation
+    site_user.create_oauth_login().execute({
+        'user_id': user_id, 
+        'username': oauth_user.get('login') or '', 
+        'provider': provider_id})
+
+    login_user(User(user_id))
+    site_user.update_last_login().execute({'id': user_id})
     return redirect('/profile')
 
 def oauth2_github_handle_user(user):
     print user
-    
-
 
 @authorize_pages.route("/change-password/<code>", methods=['GET'])
 @authorize_pages.route("/change-password", methods=['GET'])
@@ -321,7 +301,6 @@ def change_password_submit(code=None):
     )
     web.template.body.append(web.page.render())
     return make_response(footer())
-
 
 
 @authorize_pages.route("/reset-password", methods=['GET'])
@@ -404,7 +383,7 @@ def login_screen_submit():
     flash('You have successfully logged in !')
     #~ session['username'] = user_details.get('username', 'anonymous')
     #~ session['user_id'] = str(user_details.get('user_id'))
-    site_user.update_last_login(user_details)
+    site_user.update_last_login().execute(user_details)
     return redirect('/profile')
 
 

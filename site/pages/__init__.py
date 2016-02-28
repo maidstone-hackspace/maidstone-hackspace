@@ -23,7 +23,7 @@ image_path = domain + os.sep + 'images' + os.sep
 
 with web.template as setup:
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/default.css" media="" type="text/css" />')
-    setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />')
+    #~ setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />')
     #setup.persistent_header('<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">')
     #setup.persistent_header('<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-navigation-white.css" media="" type="text/css" />')
@@ -48,20 +48,18 @@ def header(title, description='Maidstone Hackspace is a shared space where artis
     web.header_strip.social(web.like.create(url=web.template.domain + url, plus=True, linkedin=True, facebook=True, twitter='MHackspace').render())
     web.template.body.append(web.header_strip.render())
 
-    # navigation
+    # top menu bar navigation
     web.menu.create('/' + url).set_id('leftNav')
     web.menu * site.page_menu
-    if current_user and current_user.is_authenticated:
-        web.menu.append('logout', '/logout')
+    web.menu.append('Group', '/mailing-list')
+
+    if current_user and current_user.is_authenticated():
+        web.menu.append('Logout', '/logout')
         web.navigation_bar.create(hide=(False if url=='/profile' else True))
-        web.navigation_bar * site.nav_for_authenticated_user
-        #~ web.navigation_bar.append('Profile', '/profile')
-        #~ web.navigation_bar.append('Equipment', '/equipment')
-        #~ web.navigation_bar.append('Members', '/members')
-        #~ web.navigation_bar.append('Mailing List', '/mailing-list')
+        web.navigation_bar * site.nav_for_authenticated_user        
         web.template.body.append(web.navigation_bar.render())
     else:
-        web.menu.append('login', '/login')
+        web.menu.append('Login', '/login')
     web.template.body.append(web.menu.render())
 
 def footer():    
@@ -74,7 +72,6 @@ def footer():
 
 
 class default_page:
-
     def __enter__(self):
         header()
         return self

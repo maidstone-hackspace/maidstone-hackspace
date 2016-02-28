@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask import make_response
 
 sys.path.append(os.path.abspath('../../../scaffold/'))
@@ -19,7 +19,7 @@ from pages.equipment import equipment_pages
 from pages.profile import profile_pages
 from authorize import authorize_pages, login_manager
 
-web_app = Flask(__name__)
+web_app = Flask(__name__, static_folder='static')
 web_app.config['PROPAGATE_EXCEPTIONS'] = True
 web_app.secret_key = settings.flask_secret_key
 login_manager.init_app(web_app)
@@ -30,10 +30,13 @@ web_app.register_blueprint(profile_pages)
 web_app.register_blueprint(google_groups_pages)
 web_app.register_blueprint(donate_pages)
 
-@web_app.route('/static/<path:path>')
-def send_js(path):
-    print path
-    return send_from_directory('/static_resources', path)
+#~ @web_app.route('/static/<path:filename>')
+#~ def send_js(filename):
+    #~ print filename
+    #~ print send_from_directory('/static_resources/', filename)
+    #~ path = os.path.abspath('./static_resources/')
+    #~ print path + 'css/'
+    #~ return send_from_directory(path + 'css/', 'default.css')
 
 # local testing server, add your pages here
 @web_app.route("/examples/", methods=['GET'])
