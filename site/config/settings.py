@@ -8,6 +8,7 @@ port = '5000'
 rel_uri = '//127.0.0.1:5000'
 app_domain = 'http:%s' % rel_uri
 app_email_template_path = 'templates/email/'
+site_name = 'Maidstone Hackspace'
 
 from_email = 'no-reply@maidstone-hackspace.org.uk'
 
@@ -19,7 +20,7 @@ database = {
                 'type': 'mysql',
                 'host': '127.0.0.1',
                 'user': 'root',
-                'passwd': "",
+                'passwd': "mhackspace",
                 'db': "maidstone_hackspace",
                 'port': 3306}
 

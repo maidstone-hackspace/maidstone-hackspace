@@ -18,8 +18,8 @@ class control(base_widget):
             htm += '<div class="providers">'
             if 'google' in self.oauth_enabled:
                 htm += '<a title="Login with Google" href="/oauth/google/login"><img src="/static/images/oauth/google.png" /></a>&nbsp;'
-            #~ if 'facebook' in self.oauth_enabled:
-                #~ htm += '<a title="Login with facebook" class="but row" href="/oauth/facebook/login">Login with Facebook</a>&nbsp;'
+            if 'facebook' in self.oauth_enabled:
+                htm += '<a title="Login with facebook" class="but row" href="/oauth/facebook/login">Login with Facebook</a>&nbsp;'
             if 'github' in self.oauth_enabled:
                 htm += '<a title="Login with twitter" class="but row" href="/oauth/github/login">Login with GitHub</a>'
             htm += '<br /></div>'

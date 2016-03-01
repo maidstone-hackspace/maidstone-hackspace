@@ -35,6 +35,8 @@ ALTER TABLE pledge_amounts ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) AU
 ALTER TABLE pledge_amounts CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
 ALTER TABLE pledge_amounts ADD COLUMN pledge_id int(10) NULL ;
 ALTER TABLE pledge_amounts CHANGE COLUMN pledge_id pledge_id int(10) NULL ;
+ALTER TABLE pledge_amounts ADD COLUMN provider_id tinyint(4) NULL ;
+ALTER TABLE pledge_amounts CHANGE COLUMN provider_id provider_id tinyint(4) NULL ;
 ALTER TABLE pledge_amounts ADD COLUMN reference varchar(255) NULL ;
 ALTER TABLE pledge_amounts CHANGE COLUMN reference reference varchar(255) NULL ;
 ALTER TABLE pledge_amounts ADD COLUMN type int(11) DEFAULT 1;
@@ -67,24 +69,22 @@ ALTER TABLE users ADD COLUMN email varchar(255) ;
 ALTER TABLE users CHANGE COLUMN email email varchar(255) ;
 ALTER TABLE users ADD COLUMN first_name varchar(45) NULL ;
 ALTER TABLE users CHANGE COLUMN first_name first_name varchar(45) NULL ;
-ALTER TABLE users ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) ;
-ALTER TABLE users CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) ;
+ALTER TABLE users ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE users CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
 ALTER TABLE users ADD COLUMN last_login varchar(45) NULL ;
 ALTER TABLE users CHANGE COLUMN last_login last_login varchar(45) NULL ;
 ALTER TABLE users ADD COLUMN last_name varchar(45) NULL ;
 ALTER TABLE users CHANGE COLUMN last_name last_name varchar(45) NULL ;
 ALTER TABLE users ADD COLUMN memberid varchar(45) NULL ;
 ALTER TABLE users CHANGE COLUMN memberid memberid varchar(45) NULL ;
-ALTER TABLE users ADD COLUMN member_reference int(5) unsigned zerofill AUTO_INCREMENT ;
-ALTER TABLE users CHANGE COLUMN member_reference member_reference int(5) unsigned zerofill AUTO_INCREMENT ;
+ALTER TABLE users ADD COLUMN member_reference int(5) unsigned zerofill ;
+ALTER TABLE users CHANGE COLUMN member_reference member_reference int(5) unsigned zerofill ;
 ALTER TABLE users ADD COLUMN password varchar(160) NULL ;
 ALTER TABLE users CHANGE COLUMN password password varchar(160) NULL ;
 ALTER TABLE users ADD COLUMN profile_image varchar(255) NULL ;
 ALTER TABLE users CHANGE COLUMN profile_image profile_image varchar(255) NULL ;
 ALTER TABLE users ADD COLUMN status tinyint(2) NULL DEFAULT 0;
 ALTER TABLE users CHANGE COLUMN status status tinyint(2) NULL DEFAULT 0;
-ALTER TABLE users ADD COLUMN team_id int(11) NULL DEFAULT 0;
-ALTER TABLE users CHANGE COLUMN team_id team_id int(11) NULL DEFAULT 0;
 ALTER TABLE users ADD COLUMN username varchar(25) NULL ;
 ALTER TABLE users CHANGE COLUMN username username varchar(25) NULL ;
 
@@ -115,29 +115,31 @@ ALTER TABLE user_detail ADD COLUMN user_id int(11) unsigned NULL ;
 ALTER TABLE user_detail CHANGE COLUMN user_id user_id int(11) unsigned NULL ;
 
 
+#user_detail_lists
+ALTER TABLE user_detail_lists ADD COLUMN id int(11)  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE user_detail_lists CHANGE COLUMN id id int(11)  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE user_detail_lists ADD COLUMN text text NULL ;
+ALTER TABLE user_detail_lists CHANGE COLUMN text text text NULL ;
+ALTER TABLE user_detail_lists ADD COLUMN type varchar(10) NULL ;
+ALTER TABLE user_detail_lists CHANGE COLUMN type type varchar(10) NULL ;
+ALTER TABLE user_detail_lists ADD COLUMN user_id int(10) unsigned ;
+ALTER TABLE user_detail_lists CHANGE COLUMN user_id user_id int(10) unsigned ;
+
+
 #user_membership
 ALTER TABLE user_membership ADD COLUMN amount decimal(10,2) DEFAULT 0.00;
 ALTER TABLE user_membership CHANGE COLUMN amount amount decimal(10,2) DEFAULT 0.00;
-ALTER TABLE user_membership ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) ;
-ALTER TABLE user_membership CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) ;
+ALTER TABLE user_membership ADD COLUMN id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
+ALTER TABLE user_membership CHANGE COLUMN id id int(10) unsigned  PRIMARY KEY (`id`) AUTO_INCREMENT ;
 ALTER TABLE user_membership ADD COLUMN join_date datetime NULL ;
 ALTER TABLE user_membership CHANGE COLUMN join_date join_date datetime NULL ;
-ALTER TABLE user_membership ADD COLUMN status tinyint(4) ;
-ALTER TABLE user_membership CHANGE COLUMN status status tinyint(4) ;
-ALTER TABLE user_membership ADD COLUMN subscription_id varchar(45) ;
-ALTER TABLE user_membership CHANGE COLUMN subscription_id subscription_id varchar(45) ;
+ALTER TABLE user_membership ADD COLUMN provider_id tinyint(1) NULL ;
+ALTER TABLE user_membership CHANGE COLUMN provider_id provider_id tinyint(1) NULL ;
+ALTER TABLE user_membership ADD COLUMN status tinyint(1) ;
+ALTER TABLE user_membership CHANGE COLUMN status status tinyint(1) ;
+ALTER TABLE user_membership ADD COLUMN subscription_reference varchar(45) ;
+ALTER TABLE user_membership CHANGE COLUMN subscription_reference subscription_reference varchar(45) ;
 ALTER TABLE user_membership ADD COLUMN user_id int(10) unsigned ;
 ALTER TABLE user_membership CHANGE COLUMN user_id user_id int(10) unsigned ;
-
-
-#user_password_reset
-ALTER TABLE user_password_reset ADD COLUMN created timestamp NULL DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE user_password_reset CHANGE COLUMN created created timestamp NULL DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE user_password_reset ADD COLUMN id int(11)  PRIMARY KEY (`id`) AUTO_INCREMENT ;
-ALTER TABLE user_password_reset CHANGE COLUMN id id int(11)  PRIMARY KEY (`id`) AUTO_INCREMENT ;
-ALTER TABLE user_password_reset ADD COLUMN reset_code varchar(160) NULL ;
-ALTER TABLE user_password_reset CHANGE COLUMN reset_code reset_code varchar(160) NULL ;
-ALTER TABLE user_password_reset ADD COLUMN user_id int(11) NULL ;
-ALTER TABLE user_password_reset CHANGE COLUMN user_id user_id int(11) NULL ;
 
 

@@ -159,6 +159,7 @@ def oauth(provider, state=None):
         oauth_approval_prompt = "force"
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
+    oauth_provider.get('redirect_uri')
     if state:
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
@@ -183,6 +184,7 @@ def oauth(provider, state=None):
         return redirect(authorization_url)
 
     # allready authorised so lets handle the callback
+    oauth_provider.get('redirect_uri')
     oauth_session = OAuth2Session(
         oauth_provider.get('client_id'), 
         state=session['oauth_state'], 
@@ -200,46 +202,58 @@ def oauth(provider, state=None):
 
     # Fetch a protected resource, i.e. user profile
     response = oauth_session.get(oauth_provider.get('user_uri'))
-    oauth_user = response.json()
+    oauth_response = response.json()
     
+    print 'oauth response'
+    print oauth_response
     
-    #~ email = oauth_user.get('login') or ''
+    oauth_id = oauth_response.get('login') or oauth_response.get('id')
     provider_id = oauth_lookup.get(provider)
-    user_details = site_user.fetch_oauth_login({
-        'username': oauth_user.get('login') or '',
+    oauth_user = site_user.fetch_oauth_login({
+        'username': oauth_id or '',
         'provider': provider_id
-    }).get()    
+    }).get()   
+
+    if oauth_user: 
+        user_details = site_user.get_user_details({
+            'id': oauth_user.get('user_id')
+        }).get()
     
-    # we have matched a user so login and redirect
-    if user_details:
-        print 'oauth login 1'
-        login_user(User(user_details.get('user_id')))
-        return redirect('/profile')
+        # we have matched a user so login and redirect
+        if user_details:
+            print user_details
+            # no E-Mail so lets ask the user to set there email before allowing login
+            #~ if not user_details.get('email'):
+                #~ return change_email()
+            login_user(User(user_details.get('user_id')))
+            return redirect('/profile')
 
     flash('Your new profile has been created, and your now logged in')
 
     print oauth_user
     # create new user from oauth information
     user_id = site_user.create().execute({
-        'email': oauth_user.get('email') or '', 
+        'email': oauth_response.get('email') or '', 
         'password': 'oauth', 
-        'profile_image': oauth_user.get('picture'),
-        'username': oauth_user.get('login'),
-        'first_name': oauth_user.get('given_name') or '',
-        'last_name': oauth_user.get('family_name') or ''})
+        'profile_image': oauth_response.get('picture'),
+        'username': oauth_id,
+        'first_name': oauth_response.get('given_name') or '',
+        'last_name': oauth_response.get('family_name') or ''})
 
     # register oauth login creation
     site_user.create_oauth_login().execute({
         'user_id': user_id, 
-        'username': oauth_user.get('login') or '', 
+        'username': oauth_id or '', 
         'provider': provider_id})
+
+    # no E-Mail so lets ask the user to set there email before allowing login
+    if not user_details.get('email'):
+        return change_email()
 
     login_user(User(user_id))
     site_user.update_last_login().execute({'id': user_id})
     return redirect('/profile')
 
-def oauth2_github_handle_user(user):
-    print user
 
 @authorize_pages.route("/change-password/<code>", methods=['GET'])
 @authorize_pages.route("/change-password", methods=['GET'])
@@ -332,7 +346,11 @@ def reset_password_submit():
         
         body = "Please follow the link below to change your password.\n" + l
         body += "{domain}change-password/{resetcode}".format(**{'domain':app_domain, 'resetcode': reset_code})
-        sendmail().send(from_address='no-reply@maidstone-hackspace.org.uk', to_address='oly@leela', subject="Reset password request", body=body)
+        sendmail().send(
+            from_address='no-reply@maidstone-hackspace.org.uk', 
+            to_address='oly@leela', 
+            subject="Reset password request", 
+            body=body)
     
     # display success page, dont give away anything about if the email is actually registered
     web.template.create('Maidstone Hackspace - Password reset')
@@ -344,6 +362,25 @@ def reset_password_submit():
     web.template.body.append(web.page.render())
     return make_response(footer())
 
+@authorize_pages.route("/profile/email", methods=['GET'])
+def change_email():
+    web.template.create('%s - Change Email' % site_name)
+    header('Members Login')
+    web.page.create('Set your E-Mail address')
+    
+    web.form.create('Set E-Mail address for account', '/profile/email')
+    web.form.append(name='email', label='Valid Email', placeholder='ralf@maidstone-hackspace.org.uk', value='')
+
+    flash('An E-Mail has been sent to you please check and confirm you identity.')
+    sendmail().send(
+        from_address='no-reply@maidstone-hackspace.org.uk', 
+        to_address='oly@leela', 
+        subject="%s - Confirm E-Mail Address" % site_name, 
+        body='generate link here')
+    
+    web.page.section(web.form.render())
+    web.template.body.append(web.page.render())
+    return make_response(footer())
 
 @authorize_pages.route("/login", methods=['GET'])
 def login_screen():
@@ -370,6 +407,11 @@ def login_screen_submit():
         flash('Failed to login with that username and password, please retry.')
         return login_screen()
 
+    # no E-Mail so lets ask the user to set there email before allowing login
+    if not user_details.get('email'):
+        return change_email()
+        
+        
     #now lets verify the users password, and bail if its wrong
     pw_hash = generate_password_hash(request.form.get('password'))
     if check_password_hash(pw_hash, user_details.get('password')):

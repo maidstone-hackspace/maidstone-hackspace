@@ -14,13 +14,25 @@ class sendmail:
     def __call__(self, **args):
         return self
 
-    def send(self, from_address, to_address, subject, body='', html=True):
-        message = Message(From="me@example.com",
-                          To=to_address,
-                          charset=self.charset)
+    def template(self, path, params=None):
+        with open(path) as fp:
+            self.body = fp.read()
+            self.body.format(**params)
+
+
+    def send(self, from_address, to_address, subject, body=None, html=True):
+        message = Message(
+            From=from_address,
+            To=to_address,
+            charset=self.charset
+        )
+
+        if body:
+            self.body = body
+
         message.Subject = "%sAn HTML Email" % self.subject_prefix
-        message.Html = body
-        message.Body = body
+        message.Html = self.body
+        message.Body = self.body
 
         sender = Mailer(self.host)
         sender.send(message)
