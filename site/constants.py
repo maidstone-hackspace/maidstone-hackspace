@@ -14,6 +14,7 @@ nav_for_authenticated_user = (
 )
 
 banner_images = [
+    ('/static/images/banners/indiegogo.png', 'https://www.indiegogo.com/projects/maidstone-hackspace/', 'Visit our campaign page', ''),
     ('/static/images/banners/hackspace-banner.png', '', '', ''),
     ('/static/images/banners/audio_board.jpg', 'Audio board', 'Audio board', ''),
     ('/static/images/banners/microscope.jpg', '', 'Microscope', ''),

@@ -11,7 +11,7 @@ RUN \
     apt-get upgrade -y && \
     apt-get install -y libssl-dev libffi-dev && \
     apt-get install -y software-properties-common python-software-properties && \
-    apt-get install -y python-MySQLdb python-psycopg2 python-requests-oauthlib python-pip python-dev python-requests python-lxml python-flask python-flask-login && \
+    apt-get install -y python-MySQLdb python-psycopg2 python-requests-oauthlib python-pip python-dev python-dateutil python-requests python-lxml python-flask python-flask-login && \
     apt-get install -y cssmin slimit && \
     add-apt-repository -y ppa:oly/ppa && \ 
     apt-get update && \

@@ -126,6 +126,7 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 .menu li:hover {}
 
 .page {width:980px;margin:auto;margin-top:155px;padding-bottom:48px;background-color:#0087A8;}
+.page .pageSection {margin-left: 20px;}
 .page .messages{color:#fff;border:10px solid #0087A8;background-color:#00232D; font-weight:bold;}
 .page .messages li{padding:10px;}
 
@@ -135,7 +136,7 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 .google-groups-signup input{margin-top:20px;width:282px;}
 .google-groups-signup a{color:#fff;width:282px;}
 
-.banner-slide {position:absolute;width:700px;margin:20px;}
+.banner-slide {position:absolute;width:700px;margin: 20px 20px 20px 0px;}
 .banner-slide ul{position:relative;overflow:hidden;width:700px;height:300px;margin:0px;}
 .banner-slide li{position:absolute;left:0px;top:0px;list-style-type:none;padding:0px;margin:0px;}
 .banner-slide .button{background-color: #0087A8;border-radius:50%;opacity:0.4;}
@@ -209,11 +210,11 @@ height:48px;width:48px; -webkit-animation:spin 2s linear infinite ;-moz-animatio
 #login_box label {display:block;margin: 20px 0px 20px;}
 #login_box input {margin: 20px 0px 0px;float:none;width:100%;}
 #login_box button {margin: 20px 0px 0px;float:left;width:100%;}
-#login_box .providers {margin: 20px 0px 20px;height:48px;}
-#login_box .providers a {float:left;}
+#login_box .providers {margin: 20px 0px 20px;height:48px;height:35px;}
+#login_box .providers a {float:left;margin-right:30px;}
 
-
-.members .tile{ width:220px;float:left;}
+.members .stats {}
+.members .tile {width:220px;float:left;}
 .members .tile-img{margin:10px;width:200px;}
 .members .badge{width:32px;height:32px;margin:0px;margin-top:5px;}
 

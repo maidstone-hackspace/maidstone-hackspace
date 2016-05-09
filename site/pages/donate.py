@@ -41,7 +41,7 @@ def index():
     web.page.append(web.form.render())
     
     web.template.body.append(web.page.render())
-    return footer()
+    return web.render()
 
 
 @donate_pages.route("/donate/populate", methods=['GET'])
@@ -103,7 +103,7 @@ def populate_by_name():
         if matched_user:
             badges.assign_badge().execute({'badge_id': badge_lookup.get('backer'), 'user_id': matched_user})
 
-    return footer()
+    return web.render()
 
 
 @donate_pages.route("/donate/submit", methods=['POST'])
@@ -112,8 +112,10 @@ def submit_donation():
         provider='paypal',
         style='payment')
     
+    # convert donation amount to 2 decimal places, paypal seems to require this else it errors
+    donation_amount = '{0:.2f}'.format(float(request.form.get('amount')))
     url = provider.make_donation(
-        amount=request.form.get('amount'),
+        amount=donation_amount,
         reference=request.form.get('reference', ''),
         redirect_success='%s/donate/success' % app_domain,
         redirect_failure='%s/donate/failure' % app_domain
@@ -123,8 +125,7 @@ def submit_donation():
 
 
 @donate_pages.route("/donate/success", methods=['GET'])
-def success_donation():
-    # confirm the payment
+def donation_successfull():
 
     provider = payment(
         provider='paypal',
@@ -157,4 +158,18 @@ def success_donation():
         """Thanks your payment has been recieved.""")
     web.page.section(web.paragraph.render())
     web.template.body.append(web.page.render())
-    return footer()
+    return web.render()
+
+
+
+
+@donate_pages.route("/donate/failure", methods=['GET'])
+def donation_failed():
+    web.template.create('Maidstone Hackspace')
+    header('Maidstone Hackspace Donations')
+    web.page.create('Looks like something went wrong.')
+    web.paragraph.create(
+        """Sorry looks like something went wrong while trying to take this payment.""")
+    web.page.section(web.paragraph.render())
+    web.template.body.append(web.page.render())
+    return web.render()

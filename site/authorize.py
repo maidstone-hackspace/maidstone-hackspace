@@ -9,7 +9,7 @@ from flask import redirect, abort
 from flask import make_response
 from flask import request
 from flask import Blueprint
-from flask.ext.login import LoginManager, login_required, UserMixin, login_user, logout_user, make_secure_token
+from flask.ext.login import current_user, LoginManager, login_required, UserMixin, login_user, logout_user, make_secure_token
 from requests_oauthlib import OAuth2Session
 from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 
@@ -51,6 +51,7 @@ def todict(data):
 class User(UserMixin):
     def __init__(self, user_id, active=True):
         print user_id
+        self.id = None
         user_details = site_user.get_user_details({'id': user_id}).get()
         self.active = False
         print 'user'
@@ -77,6 +78,7 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(userid):
+    """Flask user loader hook, internal to flask login"""
     return User(userid)
 
 
@@ -98,9 +100,9 @@ def load_token(request):
         return user
     return None 
 
-def auth_required():
-    if not session.get('user_id'):
-        redirect(domain + '/login', 301)
+#~ def auth_required():
+    #~ if not session.get('user_id'):
+        #~ redirect(domain + '/login', 301)
 
 @authorize_pages.route("/register", methods=['GET'])
 def register_form():
@@ -145,10 +147,11 @@ def register_submit():
     web.template.body.append(web.page.render())
     return make_response(footer())
 
-@authorize_pages.route("/oauth/<provider>/<state>", methods=['GET'])
-@authorize_pages.route("/oauth/<provider>/<state>/", methods=['GET'])
+@authorize_pages.route("/oauth/<provider>/<start_oauth_login>/", methods=['GET'])
+@authorize_pages.route("/oauth/<provider>/<start_oauth_login>", methods=['GET'])
+@authorize_pages.route("/oauth/<provider>/", methods=['GET'])
 @authorize_pages.route("/oauth/<provider>", methods=['GET'])
-def oauth(provider, state=None):
+def oauth(provider, start_oauth_login=False):
     oauth_verify = True
     oauth_provider = oauth_conf.get(provider)
     oauth_access_type = ''
@@ -159,8 +162,8 @@ def oauth(provider, state=None):
         oauth_approval_prompt = "force"
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-    oauth_provider.get('redirect_uri')
-    if state:
+    if start_oauth_login:
+        print oauth_provider.get('redirect_uri')
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
             scope=oauth_provider.get('scope'), 
@@ -169,9 +172,6 @@ def oauth(provider, state=None):
         if provider == 'facebook':
             oauth_session = facebook_compliance_fix(oauth_session)
 
-        # offline for refresh token
-        # force to always make user click authorize
-        # generate the google url we will use to authorize and redirect there
         authorization_url, state = oauth_session.authorization_url(
             oauth_provider.get('auth_uri'),
             access_type=oauth_access_type,
@@ -184,14 +184,18 @@ def oauth(provider, state=None):
         return redirect(authorization_url)
 
     # allready authorised so lets handle the callback
-    oauth_provider.get('redirect_uri')
     oauth_session = OAuth2Session(
         oauth_provider.get('client_id'), 
         state=session['oauth_state'], 
         redirect_uri=oauth_provider.get('redirect_uri'))
 
+    print '----------'
+    print oauth_provider.get('redirect_uri')
+    print request.url
+
     if provider == 'facebook':
         oauth_session = facebook_compliance_fix(oauth_session)
+    
 
     # code error is todo with authorisation response
     oauth_session.fetch_token(
@@ -212,33 +216,49 @@ def oauth(provider, state=None):
     oauth_user = site_user.fetch_oauth_login({
         'username': oauth_id or '',
         'provider': provider_id
-    }).get()   
+    }).get()
 
     if oauth_user: 
         user_details = site_user.get_user_details({
             'id': oauth_user.get('user_id')
         }).get()
-    
+
         # we have matched a user so login and redirect
         if user_details:
-            print user_details
-            # no E-Mail so lets ask the user to set there email before allowing login
-            #~ if not user_details.get('email'):
-                #~ return change_email()
             login_user(User(user_details.get('user_id')))
+            # no E-Mail so lets ask the user to set there email before allowing login
+            if not user_details.get('email'):
+                return redirect('/profile/change_email')
             return redirect('/profile')
 
     flash('Your new profile has been created, and your now logged in')
 
-    print oauth_user
+    print 'current user'
+    print current_user.get_id()
+    if current_user.get_id():
+        # link oauth to users account
+        site_user.create_oauth_login().execute({
+            'user_id': current_user.get_id(), 
+            'username': oauth_id or '', 
+            'provider': provider_id})
+        return redirect('/profile')
+
+    print oauth_response
+    print '-----'
+    print oauth_response.get('email') or ''
     # create new user from oauth information
-    user_id = site_user.create().execute({
-        'email': oauth_response.get('email') or '', 
+
+    new_user_details = {
         'password': 'oauth', 
         'profile_image': oauth_response.get('picture'),
         'username': oauth_id,
         'first_name': oauth_response.get('given_name') or '',
-        'last_name': oauth_response.get('family_name') or ''})
+        'last_name': oauth_response.get('family_name') or ''}
+
+    if  oauth_response.get('email'):
+        new_user_details['email']= oauth_response.get('email')
+
+    user_id = site_user.create().execute(new_user_details)
 
     # register oauth login creation
     site_user.create_oauth_login().execute({
@@ -246,12 +266,11 @@ def oauth(provider, state=None):
         'username': oauth_id or '', 
         'provider': provider_id})
 
-    # no E-Mail so lets ask the user to set there email before allowing login
-    if not user_details.get('email'):
-        return change_email()
-
     login_user(User(user_id))
     site_user.update_last_login().execute({'id': user_id})
+    if not user_id:
+        flash('Failed to create user')
+        return redirect('/login')
     return redirect('/profile')
 
 
@@ -362,71 +381,26 @@ def reset_password_submit():
     web.template.body.append(web.page.render())
     return make_response(footer())
 
-@authorize_pages.route("/profile/email", methods=['GET'])
-def change_email():
-    web.template.create('%s - Change Email' % site_name)
-    header('Members Login')
-    web.page.create('Set your E-Mail address')
-    
-    web.form.create('Set E-Mail address for account', '/profile/email')
-    web.form.append(name='email', label='Valid Email', placeholder='ralf@maidstone-hackspace.org.uk', value='')
+#~ @authorize_pages.route("/login", methods=['GET'])
+#~ def login_screen():
+    #~ web.template.create('Maidstone Hackspace - Login')
+    #~ header('Members Login')
+    #~ web.page.create('Member Login')
+    #~ web.page.section(
+        #~ web.login_box.create().enable_oauth('google').enable_oauth('facebook').enable_oauth('github').render()
+    #~ )
+    #~ web.template.body.append(web.page.render())
+    #~ return make_response(footer())
 
-    flash('An E-Mail has been sent to you please check and confirm you identity.')
-    sendmail().send(
-        from_address='no-reply@maidstone-hackspace.org.uk', 
-        to_address='oly@leela', 
-        subject="%s - Confirm E-Mail Address" % site_name, 
-        body='generate link here')
-    
-    web.page.section(web.form.render())
-    web.template.body.append(web.page.render())
-    return make_response(footer())
 
-@authorize_pages.route("/login", methods=['GET'])
-def login_screen():
-    web.template.create('Maidstone Hackspace - Login')
-    header('Members Login')
-    web.page.create('Member Login')
-    web.page.section(
-        web.login_box.create().enable_oauth('google').enable_oauth('facebook').enable_oauth('github').render()
-    )
+@authorize_pages.route("/login/failure", methods=['GET'])
+def login_Failure():
+    web.template.create('%s - Login' % site_name)
+    header('Login Failure')
+    web.page.create('Login Failure')
     #~ web.template.body.append(web.messages.render())
     web.template.body.append(web.page.render())
     return make_response(footer())
-
-
-@authorize_pages.route("/login", methods=['POST'])
-def login_screen_submit():
-    """handle the login form submit"""
-    # try to find user by username
-    user_details = site_user.get_by_username({
-        'email': request.form.get('username')}).get()
-
-    #not found so lets bail to the login screen
-    if not user_details:
-        flash('Failed to login with that username and password, please retry.')
-        return login_screen()
-
-    # no E-Mail so lets ask the user to set there email before allowing login
-    if not user_details.get('email'):
-        return change_email()
-        
-        
-    #now lets verify the users password, and bail if its wrong
-    pw_hash = generate_password_hash(request.form.get('password'))
-    if check_password_hash(pw_hash, user_details.get('password')):
-        flash('Failed to login with that username and password, please retry.')
-        return login_screen()
-
-    #login user and redirect to profile
-    login_user(
-        User(user_details.get('user_id'))
-    )
-    flash('You have successfully logged in !')
-    #~ session['username'] = user_details.get('username', 'anonymous')
-    #~ session['user_id'] = str(user_details.get('user_id'))
-    site_user.update_last_login().execute(user_details)
-    return redirect('/profile')
 
 
 @authorize_pages.route("/logout")

@@ -13,17 +13,20 @@ from pages import chat
 from pages import blog
 from pages import members
 
+from pages.core.login_pages import login_pages
 from pages.donate import donate_pages
 from pages.google_groups import google_groups_pages
 from pages.equipment import equipment_pages
 from pages.profile import profile_pages
 from authorize import authorize_pages, login_manager
 
+
 web_app = Flask(__name__, static_folder='static')
 web_app.config['PROPAGATE_EXCEPTIONS'] = True
 web_app.secret_key = settings.flask_secret_key
 login_manager.init_app(web_app)
 
+web_app.register_blueprint(login_pages)
 web_app.register_blueprint(authorize_pages)
 web_app.register_blueprint(equipment_pages)
 web_app.register_blueprint(profile_pages)

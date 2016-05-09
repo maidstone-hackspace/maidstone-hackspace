@@ -11,19 +11,12 @@ from data.site_user import get_user_details, update_membership, update_membershi
 from data.profile import update_description, create_description, fetch_users
 from data import badges
 from data import members
-#~ from config.settings import gocardless_environment, gocardless_credentials
 from config.settings import app_domain
 
 from libs.payments import payment
 from config.settings import *
 
-#~ import gocardless
-#~ gocardless.environment = gocardless_environment
-#~ gocardless.set_details(**gocardless_credentials)
-
 profile_pages = Blueprint('profile_pages', __name__, template_folder='templates')
-
-
 
 @profile_pages.route("/profile", methods=['GET'])
 @login_required
@@ -49,8 +42,6 @@ def index():
     web.columns.append(web.paragraph.render())
 
     # membership form
-    #~ if user.get('status') != 1:
-    print user
     web.columns.append(
         web.member_card.create(
             reference=str(user.get('user_id')).zfill(5),
@@ -65,6 +56,13 @@ def index():
             'Edit Description',
             '/profile/details'
         ).set_classes('ajaxPopup').render())
+
+    web.paragraph.append(
+        web.link.create(
+            'Link a provider to your account like google, by logging in while logged into your account',
+            'Link login provider',
+            '/login'
+        ).render())
 
 
     web.columns.append(web.paragraph.render())
@@ -186,8 +184,6 @@ def membership_signup(provider):
         'amount': payment_details.get('amount'), 
         'subscription_reference': payment_details.get('reference')})
 
-
-
     web.page.section(web.paragraph.render())
     web.template.body.append(web.page.render())
     return footer()
@@ -205,9 +201,6 @@ def update_profiles():
 
     return web.form.render()
 
-
-
-
 @profile_pages.route("/profile/details", methods=['GET'])
 @login_required
 def edit_profile():
@@ -220,7 +213,6 @@ def edit_profile():
     web.form.append(name='description', label='Description', placeholder='This is me i am great', value=user_details.get('description') or '')
     web.form.append(name='skills', label='skills', placeholder='python, arduino, knitting', value=user_details.get('skills') or '')
     return web.form.render()
-
 
 @profile_pages.route("/profile/update", methods=['POST'])
 @login_required

@@ -28,6 +28,8 @@ def examples():
     #finish of the page
     return footer()
 
+def generate_rss():
+    pass
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate static pages')

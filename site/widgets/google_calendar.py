@@ -1,3 +1,4 @@
+from dateutil import parser
 from scaffold.core.widget import base_widget_extended
 from datetime import datetime
 import time
@@ -7,19 +8,21 @@ class control(base_widget_extended):
     contents = []
     def create(self, title="Events", calendar_id=None, api_key=None):
         super(control, self).create()
-        url = 'https://www.googleapis.com/calendar/v3/calendars/%s/events?singleEvents=true&maxResults=2&timeMin=%s&key=%s' % (
+        date_now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+00:00')
+        date_now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S+00:00')
+        url = 'https://www.googleapis.com/calendar/v3/calendars/%s/events?singleEvents=True&orderBy=startTime&maxResults=2&timeMin=%s&key=%s' % (
             calendar_id,
             datetime.now().strftime('%Y-%m-%dT%H:%M:%S-00:00'),
             api_key)
-        date_now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S-00:00')
-        response = requests.get('https://www.googleapis.com/calendar/v3/calendars/contact@maidstone-hackspace.org.uk/events?singleEvents=true&maxResults=2&timeMin=%s&key=AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0' % date_now)
+
+        response = requests.get(url)
         calendar_data = response.json()
         self.contents = []
 
         # loop over calendar results, and format for display
         for event in calendar_data.get('items'):
-            str_datetime = time.strptime(event.get('start').get('dateTime'), '%Y-%m-%dT%H:%M:%SZ')
-            formatted_date = time.strftime('%d %b %Y %H:%M', str_datetime)
+            str_datetime = parser.parse(event.get('start').get('dateTime'))
+            formatted_date = str_datetime.strftime('%d %b %Y %H:%M')
             description = event.get('description') + '<br />' if event.get('description') else ''
             location = '<a target="_blank" href="https://www.google.co.uk/maps/search/%s">%s</a>'  % (
                 event.get('location'), event.get('location')) if event.get('location') else ''

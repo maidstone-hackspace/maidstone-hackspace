@@ -57,7 +57,7 @@ with web.template as setup:
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-content-white.css" media="" type="text/css" />')
 
     #javascript, using jquery and angular
-    setup.persistent_header('<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>')
+    setup.persistent_header('<script type="text/javascript" src="/static/js/jquery-2.2.3.min.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="/static/js/default.js"></script>')

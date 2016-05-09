@@ -52,10 +52,13 @@ class payment:
                     "description": reference}]})
 
             payment_response = payment.create()
+            print 'payment create'
             if payment_response:
+                print payment_response
                 for link in payment.links:
                     if link.method == "REDIRECT":
                         redirect_url = str(link.href)
+                        print redirect_url
                         return str(redirect_url)
             else:
                 print("Error while creating payment:")
@@ -125,6 +128,7 @@ class payment:
             }
 
         if self.provider == 'paypal':
+            print 'subscribe_confirm'
             payment_token = args.get('token', '')
             billing_agreement_response = paypal.BillingAgreement.execute(payment_token)
             amount = 0
@@ -171,7 +175,6 @@ class payment:
 
 
     def subscribe(self, amount, name, redirect_success, redirect_failure, interval_unit='month', interval_length='1'):
-        print '%s/profile/gocardless' % app_domain
         if self.provider == 'gocardless':
             return gocardless.client.new_subscription_url(
                 amount=amount, 
@@ -239,8 +242,12 @@ class payment:
 
     def confirm(self, args):
         confirm_details = {}
+        confirm_details['successfull'] = False
         print '---------------------'
         print args
+        
+
+        
         from pprint import pprint
         if self.provider == 'paypal':
             print args.get('paymentId')
@@ -249,7 +256,7 @@ class payment:
             pprint(payment)
             print pprint(payment)
             print payment
-
+            
             confirm_details['name'] = payment['payer']['payer_info'].first_name + ' ' + payment['payer']['payer_info'].last_name
             confirm_details['user'] = payment['payer']['payer_info'].email
             confirm_details['status'] = payment.state
@@ -257,8 +264,14 @@ class payment:
             confirm_details['created'] = payment.create_time
             confirm_details['reference'] = payment.id
             pprint(confirm_details)
+            
+            
+            if payment.execute({"payer_id": args.get('PayerID')}):  # return True or False
+                confirm_details['successfull'] = True
+                print("Payment[%s] execute successfully" % (args.get('paymentId')))
+            else:
+                print(payment.error)
             return confirm_details
-
 
         if self.provider == 'gocardless':
             bill_id = args.get('resource_id')
@@ -272,5 +285,6 @@ class payment:
                 #~ confirm_details['amount_minus_fees'] = bill.amount_minus_fees
                 confirm_details['created'] = bill.created_at
                 confirm_details['reference'] = bill_id
+                confirm_details['successfull'] = True
                 return confirm_details
         return None

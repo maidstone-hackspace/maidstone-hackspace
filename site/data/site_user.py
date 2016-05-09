@@ -12,8 +12,8 @@ query_builder.query_path = os.path.abspath('./data/sql/')
 class create_basic_user(insert_data):
     """not able to actually log in but registered on the system"""
     table = 'users'
-    required = {'email', 'first_name', 'last_name'}
-    columns = {'email','first_name', 'last_name'}
+    required = {'first_name', 'last_name'}
+    columns = {'first_name', 'last_name'}
 
     def calculated_data(self):
         return {'created': time.strftime('%Y-%m-%d %H:%M:%S')}
@@ -24,8 +24,8 @@ class create_basic_user(insert_data):
 
 class create(insert_data):
     table = 'users'
-    required = {'email', 'password', 'username', 'first_name', 'last_name', 'created'}
-    columns = {'email', 'password', 'username', 'first_name', 'last_name', 'created'}
+    required = {'password', 'username', 'first_name', 'last_name', 'created'}
+    columns = {'password', 'username', 'first_name', 'last_name', 'created'}
     columns_optional = {'profile_image'}
 
     def calculated_data(self):
@@ -39,6 +39,12 @@ class update_last_login(update_data):
     debug = True
     query_str = "update `users` set `last_login`=now()"
     required = {'id'}
+    columns_where = {'id'}
+
+class update_user_email(update_data):
+    debug = True
+    query_str = "update `users` set `email`=%(email)s"
+    required = {'id', 'email'}
     columns_where = {'id'}
 
 class update_membership_status(update_data):
@@ -127,27 +133,22 @@ class create_oauth_login(insert_data):
     debug = True
     table = 'user_oauth'
     required = {'username', 'provider', 'user_id'}
-    columns = {'username', 'provider', 'user_id'}
+    columns = {'username', 'provider', 'user_id', 'registered'}
 
-    #~ def calculated_data(self):
-        #~ return {'registered': time.strftime('%Y-%m-%d %H:%M:%S')}
-
-    def set(self, data):
-        data['registered'] = time.strftime('%Y-%m-%d %H:%M:%S')
-        super(create_oauth_login, self).set(data)
+    def calculated_data(self):
+        return {'registered': time.strftime('%Y-%m-%d %H:%M:%S')}
 
 class update_oauth_login(update_data):
     table = 'user_oauth'
+    columns = {'username', 'provider', 'last_login'}
     required = {'username', 'provider'}
     query_file = 'get_user_by_oauth_username.sql'
     columns_where = {'username', 'provider'}
 
     def calculated_data(self):
-        return {'registered': time.strftime('%Y-%m-%d %H:%M:%S')}
-
-    def set(self, data):
-        data['registered'] = time.strftime('%Y-%m-%d %H:%M:%S')
-        super(update_oauth_login, self).set(data)
+        return {
+            'last_login': time.strftime('%Y-%m-%d %H:%M:%S')
+        }
 
 class fetch_oauth_login(select_data):
     required = {'username', 'provider'}

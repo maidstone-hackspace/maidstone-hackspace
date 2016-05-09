@@ -16,8 +16,10 @@ class control(base_widget):
         htm += '<p>Please login with one of the oauth provider below, which is more secure and does not store passwords on our system.</p>'
         if self.oauth_enabled:
             htm += '<div class="providers">'
+            #~ if 'google' in self.oauth_enabled:
+                #~ htm += '<a title="Login with Google" href="/oauth/google/login"><img src="/static/images/oauth/google.png" /></a>&nbsp;'
             if 'google' in self.oauth_enabled:
-                htm += '<a title="Login with Google" href="/oauth/google/login"><img src="/static/images/oauth/google.png" /></a>&nbsp;'
+                htm += '<a title="Login with Google" class="but row" href="/oauth/google/login">Login with Google</a>&nbsp;'
             if 'facebook' in self.oauth_enabled:
                 htm += '<a title="Login with facebook" class="but row" href="/oauth/facebook/login">Login with Facebook</a>&nbsp;'
             if 'github' in self.oauth_enabled:

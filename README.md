@@ -36,14 +36,12 @@ Both paypal and gocardless clearly show that you are using the sandbox in the ur
 for paypal you can use this email and password 
 
     email = contact-buyer@maidstone-hackspace.org.uk
-    password = mhackspace
+    password = Mhackspace
 
 To test the gocardless integration you can use these card details
 
     sortcode = 200000
     account number = 55779911
-
-
 
 Run locally with uwsgi on port 9090
 

@@ -31,7 +31,7 @@ with web.template as setup:
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-content-white.css" media="" type="text/css" />')
 
 
-    setup.persistent_header('<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>')
+    setup.persistent_header('<script type="text/javascript" src="/static/js/jquery-2.2.3.min.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="/static/js/default.js"></script>')
@@ -61,13 +61,21 @@ def header(title, description='Maidstone Hackspace is a shared space where artis
     else:
         web.menu.append('Login', '/login')
     web.template.body.append(web.menu.render())
-
-def footer():    
+    
+    # lets create the footer
     web.footer_content.create().append(
         web.google_groups_signup.create(' and make yourself known','maidstone-hackspace').set_id('mailing-list-signup').render())
-    web.template.body.append(web.footer_content.render())
+    web.template.footer.append(web.footer_content.render())
     web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
-    web.template.body.append(web.google_analytics.render())
+    web.template.footer.append(web.google_analytics.render())
+    
+# this will be obsoleted
+def footer():
+    #~ web.footer_content.create().append(
+        #~ web.google_groups_signup.create(' and make yourself known','maidstone-hackspace').set_id('mailing-list-signup').render())
+    #~ web.template.body.append(web.footer_content.render())
+    #~ web.google_analytics.create('maidstone-hackspace.org.uk', 'UA-63373181-1')
+    #~ web.template.body.append(web.google_analytics.render())
     return web.render()
 
 

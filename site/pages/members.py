@@ -34,10 +34,12 @@ def index():
         count_users += 1
         if item.get('status') is 1:
             count_members += 1
-    print count_members
-    web.page.section('Members %d' % count_members)
-    web.page.section('Users %d' % count_users)
     
+    web.info_box.create('Current Users')
+    web.info_box.append('Members %d<br />' % count_members)
+    web.info_box.append('Users %d<br />' % count_users)
+    web.page.section(web.info_box.render())
+
     web.container.create(web.member_tiles.render()).set_classes('members')
     web.page.section(web.container.render())
     web.template.body.append(web.page.render())
