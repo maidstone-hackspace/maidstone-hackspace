@@ -1,0 +1,25 @@
+
+nginx:
+  image: olymk2/mhackspace
+  #name: mhackspace
+  links:
+      - db:database
+  dns:
+      - 8.8.8.8
+      - 8.8.4.4
+  ports:
+      - "5000:5000"
+  volumes:
+      - .:/var/www
+  restart: always
+
+db:
+  image: mariadb
+  ports:
+      - "3300:3306"
+  environment:
+      MYSQL_DATABASE: maidstone_hackspace
+      MYSQL_USER: mhackspace
+      MYSQL_PASSWORD: mhackspace
+      MYSQL_ROOT_PASSWORD: mhackspace
+  restart: always

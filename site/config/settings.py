@@ -18,8 +18,8 @@ database = {
                 'charset': 'utf8',
                 'use_unicode': True,
                 'type': 'mysql',
-                'host': '127.0.0.1',
-                'user': 'root',
+                'host': 'database',
+                'user': 'mhackspace',
                 'passwd': "mhackspace",
                 'db': "maidstone_hackspace",
                 'port': 3306}
