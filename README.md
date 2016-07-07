@@ -10,13 +10,12 @@ push your changes to your github account and create a pull request back into the
 if everything is okay.
 
 
-The simplest way to setup this site is to use docker so please install that from this site https://docs.docker.com/engine/installation/ 
+The simplest way to setup this site is to use docker-compose so please install that from this site https://docs.docker.com/engine/installation/ 
 and make sure the quick start guide works https://docs.docker.com/machine/get-started/ then you can use the commands below to test and make changes.
 
-    docker build -t maidstone-hackspace .
-    docker run -p 5000:5000 maidstone-hackspace
+    docker-compose up 
 
-If you plan on making large changes consider discussing it first so you dont wast your own time.
+If you plan on making large changes consider discussing it first so you dont waste your own time.
 
 Generating static content
 -------------------------
@@ -50,3 +49,18 @@ Run locally with uwsgi on port 9090
 Run locally with flask
 
     python index.py
+
+
+Developers recommendations
+--------------------------
+
+To run the tests you can use one of the following
+
+````
+nose2
+python -m unittest discover
+````
+
+run this in the root to setup pre commit checks, it will run unit tests and check code
+
+    ln -s developers/pre-commit.sh .git/hooks/pre-commit

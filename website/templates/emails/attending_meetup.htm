@@ -1,0 +1,39 @@
+
+Event Reservation
+
+Warning: Some of the schemas used by Gmail are still going through the standardization process of schema.org, and therefore, may change in the future. Learn More.
+Use this type to declare a reservation for one or more guests at an event. Tickets may be declared as well.
+
+Use cases
+
+The following use cases show common examples of how the EventReservation schema is used. Use these examples to ensure that you markup is properly structured.
+
+Note: Before you start, make sure you understand how to embed schemas in emails and you are familiar with testing schemas.
+Basic event reminder without a ticket
+
+If you are sending out an email confirming a user’s attendance to an event, include the following markup. Google Now will remind the user on the day of the event. The user will receive a time to leave reminder (based on traffic etc).
+
+This is an example of the minimal amount of markup that will qualify your email as an EventReservation.
+
+JSON-LDMICRODATA
+<div itemscope itemtype="http://schema.org/EventReservation">
+  <meta itemprop="reservationNumber" content="E123456789"/>
+  <link itemprop="reservationStatus" href="http://schema.org/Confirmed"/>
+  <div itemprop="underName" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="John Smith"/>
+  </div>
+  <div itemprop="reservationFor" itemscope itemtype="http://schema.org/Event">
+    <meta itemprop="name" content="Maidstone hackspace fortnightly meetup"/>
+    <meta itemprop="startDate" content="2017-03-06T19:30:00-08:00"/>
+    <div itemprop="location" itemscope itemtype="http://schema.org/Place">
+      <meta itemprop="name" content="Malta Inn"/>
+      <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+        <meta itemprop="streetAddress" content="24 Willie Mays Plaza"/>
+        <meta itemprop="addressLocality" content="San Francisco"/>
+        <meta itemprop="addressRegion" content="CA"/>
+        <meta itemprop="postalCode" content="94107"/>
+        <meta itemprop="addressCountry" content="US"/>
+      </div>
+    </div>
+  </div>
+</div>

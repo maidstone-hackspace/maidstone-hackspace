@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:sa="/">
+	<head>
+		<link rel="stylesheet" id="navigationCss" href="/static/css/default.css" media="" type="text/css" />
+		<link rel="stylesheet" id="navigationCss" href="/static/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />
+		<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-navigation-white.css" media="" type="text/css" />
+		<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-action-white.css" media="" type="text/css" />
+		<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-content-white.css" media="" type="text/css" />
+		<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>
+		<script type="text/javascript" src="/static/js/default.js"></script>
+		<link rel="icon" type="image/png" href="/static/images/favicon.png">
+		<title>Maidstone Hackspace</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	</head>
+	<body>
+	<div id="headerstrip"><nav class="navstrip"><div class="left"><a id="mini_logo" href="/login"><img src="//127.0.0.1:5000/static/images/hackspace.png" class="mini-logo"></a><span class="mini-logo-text">Maidstone Hackspace</span></div><div class="social"><div class="btn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="http://maidstone-hackspace.org.uk/">Tweet</a></div><div class="btn"><div class="fb-share-button" data-href="http://maidstone-hackspace.org.uk/" data-layout="button_count"></div></div><div class="btn"><script type="IN/Share" data-url="http://maidstone-hackspace.org.uk/" data-counter="right"></script></div><div class="btn"><div size="standard" class="g-plusone" data-href="http://maidstone-hackspace.org.uk/"  data-size="medium" data-annotation="bubble" count="true"></div></div></div></nav></div>
+<nav id="leftNav" class="menu" >
+	<ul>
+		<li class="active mi0"><a href="/" >Home</a></li>
+		<li class="mi1"><a href="/chat" >Chat</a></li>
+		<li class="mi2"><a href="/donate" >Donate</a></li>
+		<li class="mi3"><a href="#mailing-list-signup" >Contact</a></li>
+		<li class="mi4"><a href="/login" >login</a></li>
+	</ul>
+<div style="clear:both;"></div>
+</nav>
+<div class="page" >
+<header class="pageHeader">
+	Make a donation</header>
+<section class="pageSection">
+	<p>If you would like to donate to the space please type an amount and use the reference code for what ever your donating for, for example use #lair to donate to getting a space.
+        We may run pledges in the future for equipment in which case use the reference for the equipment your pledging towards.</p></section>
+<section class="pageSection">
+	<p>Currently raised &pound;5.00 towards #lair target is &pound;1000.00.</p><form action="/donate/submit" method="post" ><fieldset><legend>Donate to Maidstone Hackspace</legend><p><label for="reference">Reference<select name="reference"><option value="#lair" selected="selected">#lair</option></select></label></p><p><label for="amount">Donation Amount<input type="text" name="amount" placeholder="50.00" value="50.00"></label></p><p class="bottom full_width"><button type="submit">submit</button></p></fieldset></form></section>
+<footer class="pageFooter">
+	</footer>
+</div>
+
+<div id="footer"><div id="footertop"></div><div id="footerbottom"><div class="container"><div class="copyright">&copy;2016 Maidstone Hackspace</div><div mailing-list-signup class="google-groups-signup"><h3>Signup  and make yourself known</h3><form class="block" name="signup" method="get" action="http://groups.google.com/group/maidstone-hackspace/boxsubscribe"><label for="groups-email">Email Address</label><input id="groups-email" name="email" class="required"/><button type="submit" />Subscribe</button><a href="http://groups.google.com/group/maidstone-hackspace">Browse Archives</a></form><div style="clear:both;"></div><div></div></div><div>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+                    <script><!--//--><![CDATA[//><!--!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'http://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+//]]></script>
+
+                    <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+
+                    <div id="fb-root"></div><script><!--//--><![CDATA[//><!--
+//facebook share
+(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));
+//]]></script><script type="text/javascript" ><!--//--><![CDATA[//><!--
+
+        $(document).ready(function(){
+            $('#mini_logo').on("click", function(e){
+                e.preventDefault();
+                $('#member_navigation').toggle();
+            });
+        });
+        
+
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                
+
+ga('create', 'UA-63373181-1', 'maidstone-hackspace.org.uk');
+                
+ga('send', 'pageview');
+
+var app = angular.module('myApp', ['ngAnimate']);
+
+app.controller('sliderController', function($scope, $interval) {
+    $scope.currentSlide = 0;
+    $scope.autoSlide = true;
+    //$scope.length = 0;
+
+    $scope.next = function() {
+        $scope.autoSlide=false;
+        if ($scope.currentSlide < $scope.length - 1){
+            $scope.currentSlide += 1;
+        }else{
+            $scope.currentSlide = 0;
+        };
+    }
+
+    $scope.prev = function() {
+        $scope.autoSlide=false;
+        if ($scope.currentSlide > 0){
+            $scope.currentSlide -= 1;
+        }else{
+            $scope.currentSlide = $scope.length - 1;
+        }
+    }
+
+    $scope.isCurrentSlideIndex = function (index) {
+        return $scope.currentSlide === index;
+    };
+
+    $scope.loopSlides = function (index) {
+        if ($scope.autoSlide==false){return false;}
+        if ($scope.currentSlide < $scope.length - 1){
+            $scope.currentSlide += 1;
+        }else{
+            $scope.currentSlide = 0;
+        }
+    };
+
+    $interval(function(){$scope.loopSlides();}, 5000);
+
+});
+
+//]]>
+</script>
+
+	</body>
+</html>
+	
