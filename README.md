@@ -14,6 +14,9 @@ The simplest way to setup this site is to use docker-compose so please install t
 and make sure the quick start guide works https://docs.docker.com/machine/get-started/ then you can use the commands below to test and make changes.
 
     docker-compose up 
+    
+    docker volume create --name sockets
+    docker run -it -v /etc/uwsgi/apps-enabled/:/etc/uwsgi/apps-enabled/ -v /var/www:/var/www -v sockets:/data/sockets --name mhackspace olymk2/mhackspace
 
 If you plan on making large changes consider discussing it first so you dont waste your own time.
 

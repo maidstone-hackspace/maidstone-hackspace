@@ -12,6 +12,7 @@ from pages import homepage
 from pages import chat
 from pages import blog
 from pages import members
+from pages.contact import contact_page, submit_contact_page
 
 from pages.core.login_pages import login_pages
 from pages.core.authorize import authorize_pages, login_manager
@@ -19,7 +20,6 @@ from pages.donate import donate_pages
 from pages.google_groups import google_groups_pages
 from pages.equipment import equipment_pages
 from pages.profile import profile_pages
-
 
 
 web_app = Flask(__name__, static_folder='static')
@@ -72,6 +72,16 @@ def members_profile(user_id, name):
 def chat_index():
     """competition page"""
     return make_response(chat.index())
+
+@web_app.route("/contact-us/", methods=['GET'])
+def contact_us():
+    """Contact page"""
+    return make_response(contact_page())
+
+@web_app.route("/contact-us/", methods=['POST'])
+def submit_contact_us():
+    """Contact page"""
+    return make_response(submit_contact_page())
 
 if __name__ == '__main__':
     web_app.run(host='0.0.0.0', port=5000, debug=True)

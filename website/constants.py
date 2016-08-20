@@ -3,7 +3,7 @@ page_menu = [
     ('Home', '/'),
     ('Chat', '/chat'),
     ('Donate', '/donate'),
-    ('Contact', '#mailing-list-signup')]
+    ('Contact', '/contact-us')]
 
 nav_for_authenticated_user = (
     ('Profile', '/profile'),
@@ -14,7 +14,8 @@ nav_for_authenticated_user = (
 )
 
 banner_images = [
-    ('/static/images/banners/hackspace-banner.png', '', '', ''),
+    ('/static/images/banners/hackspace-banner.png', 'Maidstone Hackspace', 'Maidstone Hackspace', ''),
+    ('/static/images/banners/emf_2016_sign.jpg', 'EMF CAMP 2016', 'EMF CAMP 2016', ''),
     ('/static/images/banners/audio_board.jpg', 'Audio board', 'Audio board', ''),
     ('/static/images/banners/microscope.jpg', '', 'Microscope', ''),
     ('/static/images/banners/object_avoiding_robot.jpg', '', 'Object avoiding robot', ''),
@@ -42,6 +43,9 @@ rss_feeds = [{
     }, {
         'author':'Mike McRoberts', 
         'url': 'http://thearduinoguy.org/?feed=rss2'
+    }, {
+        'author': 'James',
+        'url': 'https://feeds.feedburner.com/projects-jl'
     }]
 
 kent_hackspace = [
@@ -57,14 +61,6 @@ maker_events = [
 ]
 
 email = 'support@maidstone-hackspace.org.uk'
-
-email_server = {
-    'user': '',
-    'password': '',
-    'host': 'email-smtp.us-east-1.amazonaws.com',
-    'port': 465,
-    'from': 'support@maidstone-hackspace.org.uk',
-    'to': 'support@maidstone-hackspace.org.uk'}
 
 badge_lookup = {
     1: 'member',

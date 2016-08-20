@@ -27,9 +27,9 @@ class control(base_widget_extended):
                 <form action="/profile/membership" method="post">
                     <fieldset>
                         <legend>Join Maidstone Hackspace</legend>
-                        <p><label for="amount">Payment provider<select name="provider"><option value="gocardless">GoCardless</option><option value="paypal">PayPal</option></select></label></p>
-                        <p><label for="amount">Subscription Amount<input name="amount" placeholder="20.00" value="20.00" type="text"></label></p>
-                        <p class="button"><button type="submit">submit</button></p>
+                        <div class="input-field"><select name="provider" class="select-dropdown"><option value="gocardless">GoCardless</option><option value="paypal">PayPal</option></select><label for="provider">Payment provider</label></div>
+                        <div class="input-field"><input name="amount" placeholder="20.00" value="20.00" type="text"><label for="amount">Subscription Amount</label></div>
+                        <div class="button"><button type="submit">submit</button></div>
                     </fieldset>
                 </form>
             </div>'''

@@ -35,9 +35,9 @@ def index():
         if item.get('status') is 1:
             count_members += 1
     
-    web.info_box.create('Current Users')
-    web.info_box.append('Members %d<br />' % count_members)
-    web.info_box.append('Users %d<br />' % count_users)
+    web.info_box.create('<div class="col s4 dark-blue">Current Users</div>').set_classes('row')
+    web.info_box.append('<div class="col s4 dark-blue">Members %d</div>' % count_members)
+    web.info_box.append('<div class="col s4 dark-blue">Users %d</div>' % count_users)
     web.page.section(web.info_box.render())
 
     web.container.create(web.member_tiles.render()).set_classes('members')

@@ -1,5 +1,6 @@
 import os
 
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session, flash
 from flask import redirect, abort
 from flask import make_response
@@ -12,6 +13,7 @@ from requests_oauthlib.compliance_fixes import facebook_compliance_fix
 from scaffold import web
 from libs.mail import sendmail
 from pages import header, footer
+from pages.core.authorize import User
 from data import site_user
 from config.settings import *
 from constants import *
@@ -26,9 +28,9 @@ def login_screen():
     header('Members Login')
     web.page.create('Member Login')
     web.page.section(
-        web.login_box.create().enable_oauth('google').enable_oauth('facebook').enable_oauth('github').render()
+        web.loginBox.create().enable_oauth('google').enable_oauth('facebook').enable_oauth('github').render()
     )
-    web.template.body.append(web.page.render())
+    web.template.body.append(web.page.set_classes('page col s10 offset-s1').render())
     return make_response(footer())
 
 
@@ -37,7 +39,7 @@ def login_screen_submit():
     """handle the login form submit"""
     # try to find user by username
     user_details = site_user.get_by_username({
-        'email': request.form.get('username')}).get()
+        'username': request.form.get('username')}).get()
 
     # not found so lets bail to the login screen
     if not user_details:
@@ -56,7 +58,7 @@ def login_screen_submit():
     )
 
     flash('You have successfully logged in !')
-    site_user.update_last_login().execute(user_details)
+    site_user.update_last_login().execute({'id': user_details.get('user_id')})
 
     # logged in but no E-Mail so lets ask the user for there email.
     if not user_details.get('email'):

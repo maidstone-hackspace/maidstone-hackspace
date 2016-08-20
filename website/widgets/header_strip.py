@@ -23,9 +23,9 @@ class control(base_widget):
         url = '/login'
         if self.params.get('logged_in'):
             url = '/profile'
-        htm = '<div id="headerstrip"><nav class="navstrip">'
-        htm += '<div class="left"><a id="mini_logo" href="%s"><img src="%s/static/images/hackspace.png" class="mini-logo"></a><span class="mini-logo-text">Maidstone Hackspace</span></div>' % (url, self.uri.rel)
-        htm += '<div class="social">'
+        htm = '<div id="headerstrip" class="row"><nav class="navstrip">'
+        htm += '<div class="navstripleft col s6"><a id="mini_logo" href="%s"><img src="%s/static/images/hackspace.png" class="mini-logo"></a><span class="mini-logo-text">Maidstone Hackspace</span></div>' % (url, self.uri.rel)
+        htm += '<div class="col s6 offset-s8 social">'
         htm += "".join(self.social_html)
         htm += '</div>'
         htm += '</nav></div>'

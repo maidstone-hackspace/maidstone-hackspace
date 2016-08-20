@@ -5,7 +5,8 @@ class control(page.control):
 
     def render(self):
         self.count += 1
-        htm=u"""<div%s>\n""" % self.get_attributes()
+        self.set_classes('page col s10 offset-s1')
+        htm=u"""<div class="row"><div%s>\n""" % self.get_attributes()
         
         # if this is static session will not be available
         try:
@@ -21,10 +22,10 @@ class control(page.control):
         htm+=u"""<header class="pageHeader">\n\t%s</header>\n""" % self.title
         for s in self.sections:
             if s[0]:
-                htm+=u"""<section id=\"%s\" class="pageSection">\n\t%s</section>\n""" %(s[0],''.join(s[1]))
+                htm+=u"""<section id=\"%s\" class="pageSection col s12">\n\t%s</section>\n""" %(s[0],''.join(s[1]))
             else:
-                htm+=u"""<section class="pageSection">\n\t%s</section>\n""" % ''.join(s[1])
+                htm+=u"""<section class="pageSection col s12">\n\t%s</section>\n""" % ''.join(s[1])
 
-        htm+=u"""<footer class="pageFooter">\n\t%s</footer>\n""" % self.foot
-        htm+=u"""</div>\n"""
+        htm+=u"""<footer class="pageFooter col s12">\n\t%s</footer>\n""" % self.foot
+        htm+=u"""</div></div>\n"""
         return htm

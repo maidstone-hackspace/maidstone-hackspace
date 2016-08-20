@@ -76,7 +76,6 @@ class delete_password_reset(delete_data):
     """clean up expired password resets"""
     table = 'user_password_reset'
     sql_where = 'where DATE_ADD(created, INTERVAL 1 HOUR) < now()'
-    required = {}
 
 
 class create_password_reset(insert_data):
@@ -89,14 +88,15 @@ class get_user_by_reset_code(select_data):
     columns_where = ['reset_code']
 
 class change_password(update_data):
+    debug=True
     table = 'users'
     required = {'id', 'password'}
-    columns_where = ['password']
+    columns = ['password']
+    #~ columns_where = ['password']
     sql_where = 'id=%(id)s'
 
 
 class get_users(select_data):
-    required = {}
     query_file = 'get_users.sql'
 
 
@@ -119,9 +119,9 @@ class get_by_email(select_data):
 
 
 class get_by_username(select_data):
-    required = {'email'}
+    required = {'username'}
     query_file = 'get_user_credentials.sql'
-    columns_where = {'email'}
+    columns_where = {'username'}
 
 class authorize(select_data):
     required = {'id'}
@@ -137,6 +137,18 @@ class create_oauth_login(insert_data):
 
     def calculated_data(self):
         return {'registered': time.strftime('%Y-%m-%d %H:%M:%S')}
+
+class get_registered_oauth_providers(select_data):
+    table = 'user_oauth'
+    columns = {'username', 'provider', 'last_login'}
+    required = {'user_id'}
+    query_file = 'get_user_by_oauth_username.sql'
+    columns_where = {'user_id',}
+
+    def calculated_data(self):
+        return {
+            'last_login': time.strftime('%Y-%m-%d %H:%M:%S')
+        }
 
 class update_oauth_login(update_data):
     table = 'user_oauth'

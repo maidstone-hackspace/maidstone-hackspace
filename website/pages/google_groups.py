@@ -19,6 +19,6 @@ def index(request_id=None):
     web.container.create(web.google_groups.render()).set_classes('margin_default')
     web.page.append(web.container.render())
 
-    web.template.body.append(web.page.render())
+    web.template.body.append(web.page.set_classes('page col s10 offset-s1').render())
     return footer()
 

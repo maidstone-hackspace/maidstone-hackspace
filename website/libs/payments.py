@@ -24,8 +24,8 @@ class payment:
         self.provider_id = PROVIDER_ID.get(provider)
 
         if provider == 'paypal':
-            print settings.payment_providers[provider]['credentials']
             paypal.configure(**settings.payment_providers[provider]['credentials'])
+            print(settings.payment_providers[provider]['credentials'])
             return
 
         #~ environment = int('production' = settings.payment_providers[provider]['environment'])
@@ -52,13 +52,13 @@ class payment:
                     "description": reference}]})
 
             payment_response = payment.create()
-            print 'payment create'
+            print('payment create')
             if payment_response:
-                print payment_response
+                print(payment_response)
                 for link in payment.links:
                     if link.method == "REDIRECT":
                         redirect_url = str(link.href)
-                        print redirect_url
+                        print(redirect_url)
                         return str(redirect_url)
             else:
                 print("Error while creating payment:")
@@ -84,17 +84,18 @@ class payment:
                     'amount': paying_member.amount}
 
         if self.provider == 'paypal':
+            #~ I-S39170DK26AF
             #~ start_date, end_date = "2014-07-01", "2014-07-20"
             billing_agreement = paypal.BillingAgreement.find('')
-            print billing_agreement
-            print dir(billing_agreement)
+            print(billing_agreement)
+            print(dir(billing_agreement))
             #~ print billing_agreement.search_transactions(start_date, end_date)
             #~ transactions = billing_agreement.search_transactions(start_date, end_date)
             payment_history = paypal.Payment.all({"count": 2})
 
             # List Payments
             print("List Payment:")
-            print payment_history
+            print(payment_history)
             for payment in payment_history.payments:
                 print("  -> Payment[%s]" % (payment.id))
             #~ print paypal.BillingAgreement.all()
@@ -104,8 +105,8 @@ class payment:
 
             print("List BillingPlan:")
             for plan in history.plans:
-                print dir(plan)
-                print plan.to_dict()
+                print(dir(plan))
+                print(plan.to_dict())
                 print("  -> BillingPlan[%s]" % (plan.id))
     
             #~ merchant = gocardless.client.merchant()
@@ -128,12 +129,12 @@ class payment:
             }
 
         if self.provider == 'paypal':
-            print 'subscribe_confirm'
+            print('subscribe_confirm')
             payment_token = args.get('token', '')
             billing_agreement_response = paypal.BillingAgreement.execute(payment_token)
             amount = 0
-            print billing_agreement_response
-            print billing_agreement_response.id
+            print(billing_agreement_response)
+            print(billing_agreement_response.id)
             for row in billing_agreement_response.plan.payment_definitions:
                 amount = row.amount.value
 
@@ -147,16 +148,16 @@ class payment:
 
     def unsubscribe(self, reference):
         if self.provider == 'gocardless':
-            print 'unsubscribe gocardless'
+            print('unsubscribe gocardless')
             subscription = gocardless.client.subscription(reference)
-            print subscription.cancel()
+            print(subscription.cancel())
 
         if self.provider == 'paypal':
             # this may be wrong
             # ManageRecurringPaymentsProfileStatus 
-            print reference
+            print(reference)
             billing_plan = paypal.BillingAgreement.find(reference)
-            print billing_plan
+            print(billing_plan)
             print(billing_plan.error)
             #~ billing_plan.replace([{"op": "replace","path": "/","value": {"state":"DELETED"}}])
             print(billing_plan.error)
@@ -212,7 +213,7 @@ class payment:
                 ],
                 "type": "INFINITE"
             })
-            print 'create bill'
+            print('create bill')
             
             response = billing_plan.create()
             
@@ -229,8 +230,8 @@ class payment:
                 })
                 
                 if billing_agreement.create():
-                    print 'billing agreement id'
-                    print billing_agreement.id
+                    print('billing agreement id')
+                    print(billing_agreement.id)
                     
                     for link in billing_agreement.links:
                         if link.rel == "approval_url":
@@ -238,24 +239,24 @@ class payment:
                             return approval_url
                 else:
                     print(billing_agreement.error)
-                    print 'failed'
+                    print('failed')
 
     def confirm(self, args):
         confirm_details = {}
         confirm_details['successfull'] = False
-        print '---------------------'
-        print args
+        print('---------------------')
+        print(args)
         
 
         
         from pprint import pprint
         if self.provider == 'paypal':
-            print args.get('paymentId')
-            print args.get('PayerID')
+            print(args.get('paymentId'))
+            print(args.get('PayerID'))
             payment = paypal.Payment.find(args.get('paymentId'))
             pprint(payment)
-            print pprint(payment)
-            print payment
+            print(pprint(payment))
+            print(payment)
             
             confirm_details['name'] = payment['payer']['payer_info'].first_name + ' ' + payment['payer']['payer_info'].last_name
             confirm_details['user'] = payment['payer']['payer_info'].email

@@ -52,12 +52,12 @@ class control(base_widget):
         self.count += 1
         htm = ''
         if self.twitter:
-            htm += '<div class="btn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="%s" data-hashtags="mhackspace">Tweet</a></div>' % self.url
+            htm += '<div class="socbtn"><a href="https://twitter.com/share" class="twitter-share-button" data-via="%s" data-hashtags="mhackspace">Tweet</a></div>' % self.url
         if self.facebook:
-            htm += '<div class="btn"><div class="fb-share-button" data-href="%s" data-layout="button_count"></div></div>' % self.url
+            htm += '<div class="socbtn"><div class="fb-share-button" data-href="%s" data-layout="button_count"></div></div>' % self.url
         if self.linkedin:
-            htm += '<div class="btn"><script type="IN/Share" data-url="%s" data-counter="right"></script></div>' % self.url
+            htm += '<div class="socbtn"><script type="IN/Share" data-url="%s" data-counter="right"></script></div>' % self.url
         if self.plus is True:
-            htm += '<div class="btn"><div size="standard" class="g-plusone" data-href="%s"  data-size="medium" data-annotation="bubble" count="true"></div></div>' % self.url
+            htm += '<div class="socbtn"><div size="standard" class="g-plusone" data-href="%s"  data-size="medium" data-annotation="bubble" count="true"></div></div>' % self.url
         return htm
 

@@ -3,9 +3,6 @@ import sys
 import codecs
 import argparse
 
-sys.path.append(os.path.abspath('../../../scaffold/'))
-sys.path.insert(0,os.path.abspath('../../../scaffold/'))
-
 from scaffold import web
 web.load_widgets('widgets')
 
@@ -33,7 +30,7 @@ def generate_rss():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate static pages')
-    parser.add_argument('--folder', dest='folder', default='./html/' ,nargs='?', help='output folder')
+    parser.add_argument('--folder', dest='folder', default='./static/html/' ,nargs='?', help='output folder')
 
     #module, function, output file
     pages_list = (
@@ -44,7 +41,6 @@ if __name__ == "__main__":
         ('pages.competition', 'index', 'competition.htm'))
 
     args = parser.parse_args()
-    print args.folder
 
     for module, page, filename in pages_list:
         page_module = __import__(module, globals(), locals(), page)
@@ -56,5 +52,5 @@ if __name__ == "__main__":
                 print('Failed to Generate %s%s' % (args.folder, filename))
                 import traceback
                 exc_type, exc_value, exc_traceback = sys.exc_info()
-                traceback.print_tb(exc_traceback, limit=5, file=sys.stdout)
+                traceback.print_tb(exc_traceback, limit=10, file=sys.stdout)
                 

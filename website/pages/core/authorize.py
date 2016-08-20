@@ -27,7 +27,8 @@ authorize_pages = Blueprint('authorize_pages', __name__, template_folder='templa
 login_manager = LoginManager()
 login_manager.login_view = '/login'
 
-oauth_lookup = {'google':1, 'github':2, 'facebook':3}
+oauth_lookup_id = {'google':1, 'github':2, 'facebook':3}
+oauth_lookup_name = dict((v, k) for k, v in oauth_lookup_id.items())
 
 
 def is_weak_password(password1, password2):
@@ -36,32 +37,28 @@ def is_weak_password(password1, password2):
         return True
 
     # TODO check length and chars
-    
     password1 = password2 = None
     return False
     
 
-def todict(data):
-    new_dict = {}
-    for key, value in data.items():
-        new_dict[key] = value
-    return new_dict
+#~ def todict(data):
+    #~ new_dict = {}
+    #~ for key, value in data.items():
+        #~ new_dict[key] = value
+    #~ return new_dict
 
 
 class User(UserMixin):
     def __init__(self, user_id, active=True):
-        print user_id
         self.id = None
         user_details = site_user.get_user_details({'id': user_id}).get()
         self.active = False
-        print 'user'
-        print user_details
         if user_details:
+            self.active = True
             #~ self.check_password(user_details.get('password'))
             self.id = user_id
             self.name = user_details.get('username')
-            print self.name
-            self.active = active
+            #~ self.is_authenticated = self.active
 
     def get_id(self):
         return self.id
@@ -90,8 +87,6 @@ def load_token(request):
      
     if token is not None:
         username, password = token.split(":")  # naive token
-        print username
-        print password
         user_entry = User.get(username)
     if (user_entry is not None):
         user = User(user_entry[0], user_entry[1])
@@ -144,7 +139,7 @@ def register_submit():
     new_user.execute(data)
     flash('Your account has now been created')
     
-    web.template.body.append(web.page.render())
+    web.template.body.append(web.page.set_classes('page col s10 offset-s1').render())
     return make_response(footer())
 
 @authorize_pages.route("/oauth/<provider>/<start_oauth_login>/", methods=['GET'])
@@ -157,17 +152,17 @@ def oauth(provider, start_oauth_login=False):
     oauth_access_type = ''
     oauth_approval_prompt = ''
     if oauth_live is False:
+        print('offline testing')
         oauth_verify = False
         oauth_access_type = 'offline'
         oauth_approval_prompt = "force"
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
     if start_oauth_login:
-        print oauth_provider.get('redirect_uri')
         oauth_session = OAuth2Session(
             oauth_provider.get('client_id'), 
             scope=oauth_provider.get('scope'), 
-            redirect_uri=oauth_provider.get('redirect_uri'))
+            redirect_uri=request.url_root + oauth_provider.get('redirect_uri'))
 
         if provider == 'facebook':
             oauth_session = facebook_compliance_fix(oauth_session)
@@ -183,15 +178,15 @@ def oauth(provider, start_oauth_login=False):
         session.modified = True
         return redirect(authorization_url)
 
+    if session.get('oauth_state', None) is None:
+        flash('Something went wrong, oauth session not started')
+        return redirect('/login')
+    
     # allready authorised so lets handle the callback
     oauth_session = OAuth2Session(
         oauth_provider.get('client_id'), 
         state=session['oauth_state'], 
-        redirect_uri=oauth_provider.get('redirect_uri'))
-
-    print '----------'
-    print oauth_provider.get('redirect_uri')
-    print request.url
+        redirect_uri=request.url_root + oauth_provider.get('redirect_uri'))
 
     if provider == 'facebook':
         oauth_session = facebook_compliance_fix(oauth_session)
@@ -208,11 +203,8 @@ def oauth(provider, start_oauth_login=False):
     response = oauth_session.get(oauth_provider.get('user_uri'))
     oauth_response = response.json()
     
-    print 'oauth response'
-    print oauth_response
-    
     oauth_id = oauth_response.get('login') or oauth_response.get('id')
-    provider_id = oauth_lookup.get(provider)
+    provider_id = oauth_lookup_id.get(provider)
     oauth_user = site_user.fetch_oauth_login({
         'username': oauth_id or '',
         'provider': provider_id
@@ -233,8 +225,6 @@ def oauth(provider, start_oauth_login=False):
 
     flash('Your new profile has been created, and your now logged in')
 
-    print 'current user'
-    print current_user.get_id()
     if current_user.get_id():
         # link oauth to users account
         site_user.create_oauth_login().execute({
@@ -243,9 +233,6 @@ def oauth(provider, start_oauth_login=False):
             'provider': provider_id})
         return redirect('/profile')
 
-    print oauth_response
-    print '-----'
-    print oauth_response.get('email') or ''
     # create new user from oauth information
 
     new_user_details = {
@@ -278,13 +265,11 @@ def oauth(provider, start_oauth_login=False):
 @authorize_pages.route("/change-password", methods=['GET'])
 def change_password(code=None):
     #if we have a code this is a password reset, so try and login the user first
-    print code
     site_user.delete_password_reset().execute({})
     if code:
         
         user_details = site_user.get_user_by_reset_code({'reset_code': code}).get()
 
-        print user_details
         if not user_details:
             #invalid code so pretend the page does not even exist
             return abort(404)
@@ -292,7 +277,6 @@ def change_password(code=None):
         #datetime.datetime.now() + datetime.timedelta(minutes=15)
         has_date_expired = user_details.get('created') + datetime.timedelta(minutes=60)
         if has_date_expired < datetime.datetime.now():
-            print 'date expired'
             #date expired so clean up and pretend the page does not exist
             return abort(404)
         #challenge passed so login the user so they can change there password
@@ -307,7 +291,7 @@ def change_password(code=None):
     web.page.section(
         web.change_password_box.create().render()
     )
-    web.template.body.append(web.page.render())
+    web.template.body.append(web.page.set_classes('page col s10 offset-s1').render())
     return make_response(footer())
 
 @login_required
@@ -315,16 +299,16 @@ def change_password(code=None):
 def change_password_submit(code=None):
     if not session.get('user_id'):
         abort(404)
-    user_details = site_user.authorize({
-        'id': session.get('user_id')}).get()
 
     if is_weak_password(request.form.get('password'), request.form.get('password_confirm')):
-        print 'password not strong enough'
         redirect('/login')
-    
+
     pw_hash = generate_password_hash(request.form.get('password'))
-    
-    site_user.change_password().execute({'id': user_details.get('user_id'), 'password': pw_hash})
+    user_details = site_user.authorize({
+        'id': session.get('user_id')}).get()
+    site_user.change_password().execute({
+        'id': user_details.get('user_id'), 
+        'password': pw_hash})
     
     web.template.create('Maidstone Hackspace - Profile')
     header('User Profile')
@@ -380,18 +364,6 @@ def reset_password_submit():
     )
     web.template.body.append(web.page.render())
     return make_response(footer())
-
-#~ @authorize_pages.route("/login", methods=['GET'])
-#~ def login_screen():
-    #~ web.template.create('Maidstone Hackspace - Login')
-    #~ header('Members Login')
-    #~ web.page.create('Member Login')
-    #~ web.page.section(
-        #~ web.login_box.create().enable_oauth('google').enable_oauth('facebook').enable_oauth('github').render()
-    #~ )
-    #~ web.template.body.append(web.page.render())
-    #~ return make_response(footer())
-
 
 @authorize_pages.route("/login/failure", methods=['GET'])
 def login_Failure():

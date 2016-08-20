@@ -1,0 +1,28 @@
+server {
+    listen 80;
+    server_name maidstone-hackspace.org.uk live.maidstone-hackspace.org.uk www.maidstone-hackspace.org.uk;
+    root /var/www/static/html;
+
+    error_page 404 = /404.htm;
+
+    location = / {
+        # match uri equalling / only for index, if anything is after / go to next location
+        try_files $uri $uri/index.htm;
+    }
+
+    location / {
+        # if the first root location fails try this one instead and fallback to uwsgi
+        try_files $uri $uri.htm $uri/ @uwsgi_fallback;
+        #error_page 404 = @fallback;
+    }
+
+    location /static/ {
+        alias /var/www/static/;
+        log_not_found on;
+    }
+
+    location @uwsgi_fallback {
+        include         uwsgi_params;
+        uwsgi_pass      unix:///data/sockets/maidstone_hackspace.sock;
+    }
+}

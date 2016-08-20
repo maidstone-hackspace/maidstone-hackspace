@@ -1,0 +1,3 @@
+PATH=/usr/local/sbin:/usr/local/bin
+MAILTO=contact@maidstone-hackspace.org.uk
+0 2 * * * python /var/www/maidstone-hackspace.org.uk/site/generate.py

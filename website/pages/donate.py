@@ -40,7 +40,7 @@ def index():
     web.form.append(name='amount', label='Donation Amount', placeholder='50.00', value='50.00')
     web.page.append(web.form.render())
     
-    web.template.body.append(web.page.render())
+    web.template.body.append(web.page.set_classes('page col s10 offset-s1').render())
     return web.render()
 
 
@@ -67,10 +67,8 @@ def populate_by_name():
     web.template.body.append('Populating users')
     user_list = {}
     #make sure we have all users in the system
-    print '--------------'
     #~ users_emails = []
     for user in merchant.users():
-        #~ print dir(user)
         user_list[user.id] = user.email
         #~ users_emails.append(user.email)
         site_user.create_basic_user().execute({

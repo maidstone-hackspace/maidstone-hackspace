@@ -1,19 +1,16 @@
 import constants as site
-
-#~ from config.settings import *
-from config.settings import google_calendar_id, google_calendar_api_key
+from libs.image_fetcher import save_remote_image
+from config.settings import google_calendar_id, google_calendar_api_key, app_domain
 
 from scaffold.readers.rss_reader import feed_reader
-#~ from libs.rss_fetcher import feed_reader
 from scaffold import web
-#~ from pages import web
 from pages import header, footer
 
 
 def index():
     web.template.create('Maidstone Hackspace')
     header('Maidstone Hackspace Homepage')
-    web.page.create('')
+    web.page.create('').set_classes('page col s10 offset-s1')
     web.page.section(
         web.div.create(
             web.google_calendar.create(
@@ -53,18 +50,22 @@ def index():
     # fetch the rss feeds from the various blogs for the homepage
     web.columns.create()
     feed = feed_reader(site.rss_feeds)
+    
+    
+    web.tiles.create()
     for row in feed:
-        web.tiles.create()
-        web.columns.append(
-            web.tiles.append(
+        row['image'] = save_remote_image(row.get('image'), domain=app_domain + '/')
+        
+        web.tiles.append(
                 title = row.get('title'),
                 author = row.get('author'),
                 link = row.get('url'),
                 image = row.get('image'), 
                 date = row.get('date'), 
-                description = row.get('description')).render())
-    web.page.append(web.columns.render())
-
+                description = row.get('description')).render()
+        #~ web.columns.append(
+            #~ )
+    web.page.append(web.div.create(web.tiles.render()).set_classes('row').render())
     web.template.body.append(web.page.render())
 
     return footer()

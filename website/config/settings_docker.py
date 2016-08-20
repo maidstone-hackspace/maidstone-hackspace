@@ -1,3 +1,5 @@
+import os
+import socket
 
 database = {
                 'charset': 'utf8',
@@ -43,8 +45,28 @@ payment_providers = {
 google_calendar_id = 'contact@maidstone-hackspace.org.uk'
 google_calendar_api_key = 'AIzaSyA98JvRDmplA9lVLZeKwrs1f2k17resLy0'
 
-app_domain = 'http://localhost:5000'
+
+google_captcha = {
+    'secret': '',
+    'site': ''
+}
+
+# TODO in scaffold remove when commited
+def get_ip_from_hostname(hostname, schema='http'):
+    try:
+        '%s://%s' % (schema, socket.gethostbyname('nginx'))
+    except socket.gaierror:
+        return '%s://%s' % (schema, '127.0.0.1')
+        
+app_domain = 'http://%s' % socket.gethostbyname('nginx')
 app_email_template_path = 'templates/email/'
+schema = 'https:'
+domain = get_ip_from_hostname('nginx')
+port = ''
+rel_uri = '//' + domain
+app_domain = 'http:%s' % rel_uri
+app_email_template_path = 'templates/email/'
+site_name = 'Maidstone Hackspace'
 
 flask_secret_key = '4466ae96-849f-4fbe-a469-3295bf1a13f5'
 
@@ -81,3 +103,11 @@ oauth_conf = {
     }
 }
 
+email_server = {
+    'username': '',
+    'password': '',
+    'host': 'mail_server',
+    'port': 1025,
+    'use_tls': False,
+    'from': 'support@maidstone-hackspace.org.uk',
+    'to': 'support@maidstone-hackspace.org.uk'}

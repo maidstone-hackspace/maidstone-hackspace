@@ -5,9 +5,10 @@ from flask.ext.login import current_user, login_required
 
 from constants import badge_lookup
 
+from pages.core.authorize import oauth_lookup_name
 from pages import web
 from pages import header, footer
-from data.site_user import get_user_details, update_membership, update_membership_status, get_user_bio, create_membership
+from data.site_user import get_user_details, get_registered_oauth_providers, update_membership, update_membership_status, get_user_bio, create_membership
 from data.profile import update_description, create_description, fetch_users
 from data import badges
 from data import members
@@ -23,32 +24,24 @@ profile_pages = Blueprint('profile_pages', __name__, template_folder='templates'
 def index():
     web.template.create('Maidstone Hackspace - User profile')
     header('User Profile', url='/profile')
-    print current_user
     user = get_user_details({'id': current_user.get_id()}).get()
+    user_oauth_providers = [provider for provider in get_registered_oauth_providers({'user_id': current_user.get_id()})]
 
-    name = '%s %s' % (user.get('first_name', '').capitalize(), user.get('last_name', '').capitalize())
+    name = '%s %s' % (
+        user.get('first_name', '').capitalize(), 
+        user.get('last_name', '').capitalize())
     web.page.create('%s - Profile' % name)
-    web.columns.create()
-    
+
     web.paragraph.create(
         web.images.create(user.get('profile_image', '/static/images/hackspace.png'), name).add_attributes('width', '200').render()
     )
     web.paragraph.add(name)
-    web.paragraph.add('%s' % (user.get('email')))
+    web.paragraph.add('%s' % (user.get('email', '') if user.get('email', '') else ''))
     web.paragraph.add('Last Login %s' % (user.get('last_login', '')))
     web.paragraph.add('Member since %s' % (user.get('created', '')))
     web.paragraph.add('Description %s' % (user.get('description', '')))
     web.paragraph.add('Skills %s' % (user.get('skills', '')))
-    web.columns.append(web.paragraph.render())
-
-    # membership form
-    web.columns.append(
-        web.member_card.create(
-            reference=str(user.get('user_id')).zfill(5),
-            name=name,
-            active=user.get('status')==1
-        ).render()
-    )
+    web.div.create(web.paragraph.render())
 
     web.paragraph.create(
         web.link.create(
@@ -63,11 +56,33 @@ def index():
             'Link login provider',
             '/login'
         ).render())
+        
+    web.table.create('', ('Login providers', 'Last login'))
+    for provider in user_oauth_providers:
+        web.table.append((
+            str(oauth_lookup_name.get(int(provider.get('provider')))), 
+            provider.get('last_login') if provider.get('last_login') else 'Unknown'))
+        
+    web.paragraph.append(
+        web.table.render())
 
-
-    web.columns.append(web.paragraph.render())
+    web.page.section(
+        web.div.append(
+            web.paragraph.render()
+        ).set_classes('col s6').render()
+    )
+    # membership form
+    web.page.append(
+        web.div.create( 
+            web.member_card.create(
+                reference=str(user.get('user_id')).zfill(5),
+                name=name,
+                active=user.get('status')==1
+            ).render()
+        ).set_classes('col s6').render()
+    )
     
-    web.page.section(web.columns.render())
+    
     web.template.body.append(web.page.render())
     web.template.body.append(web.popup.create('').render())
     
@@ -83,26 +98,24 @@ def setup():
         badges.create_badge().execute({'id': badge_id, 'name': badge_name})
 
     user_lookup = {}
-    for member in fetch_users():
+    for member in fetch_users():    
         user_lookup[member.get('email')] = member.get('user_id')
 
     provider = payment(provider='paypal', style='payment')
     for item in provider.fetch_subscriptions():
-        print item
+        print(item)
 
-    print user_lookup
     merchant = gocardless.client.merchant()
     #https://jsfiddle.net/api/post/library/pure/
     for paying_member in merchant.subscriptions():
-        print dir(paying_member)
-        print paying_member.user()
-        print paying_member.amount
+        print(dir(paying_member))
+        print(paying_member.user())
+        print(paying_member.amount)
         user=paying_member.user()
         
-        print '---------------'
-        print user.email
+        print(user.email)
         user_id = user_lookup.get(user.email)
-        print user_id
+        print(user_id)
         update_membership_status().execute({'user_id': user_id, 'status': '1'})
         create_membership().execute({'user_id': user_id, 'status': '1', 'join_date': paying_member.created_at, 'amount': paying_member.amount, 'subscription_id': paying_member.id})
 
@@ -138,8 +151,8 @@ def cancel_membership():
     user_code = str(user.get('user_id')).zfill(5)
     
     subscription = members.fetch_member_subscription({'user_id': current_user.get_id()}).get()
-    print subscription.get('provider_id')
-    print subscription.get('subscription_reference')
+    print(subscription.get('provider_id'))
+    print(subscription.get('subscription_reference'))
     
     
     provider = payment(provider='paypal', style='payment')
@@ -194,10 +207,10 @@ def membership_signup(provider):
 def update_profiles():
     """this is used to sync up older accounts"""
     for user in get_users():
-        print user
+        print(user)
 
     for payment in get_users():
-        print user
+        print(user)
 
     return web.form.render()
 
@@ -205,9 +218,8 @@ def update_profiles():
 @login_required
 def edit_profile():
     user_details = get_user_details({'id': current_user.get_id()}).get() or {}
-    print user_details
     if not user_details:
-        print 'create'
+        print('create')
         create_description().execute({'user_id': current_user.get_id()})
     web.form.create('Update your details', '/profile/update')
     web.form.append(name='description', label='Description', placeholder='This is me i am great', value=user_details.get('description') or '')

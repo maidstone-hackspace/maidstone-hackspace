@@ -1,6 +1,7 @@
-from scaffold.core.widget import base_widget
+from scaffold.core.widget import base_widget_extended
 
-class control(base_widget):
+
+class control(base_widget_extended):
     """rss feed widgets"""
     def create(self, title=''):
         self.title = title

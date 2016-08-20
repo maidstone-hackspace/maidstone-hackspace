@@ -1,6 +1,10 @@
 import os 
+import constants
+import socket
 from scaffold.core.data.database import db
 from scaffold import web
+from libs import mail
+
 
 schema = 'https:'
 domain = '127.0.0.1'
@@ -35,27 +39,27 @@ google_calendar_api_key = ''
 
 if os.environ.get('SERVER_ENVIRONMENT') =='DOCKER':
     if os.path.exists('config/settings_docker.py'):
-        print 'Using settings for docker enviroment'
-        from settings_docker import *
+        print('Using settings for docker enviroment')
+        from config.settings_docker import *
 else:
     if os.path.exists('config/settings_dev.py'):
-        print 'Using settings for dev enviroment'
-        from settings_dev import *
+        print('Using settings for dev enviroment')
+        from config.settings_dev import *
 
     if os.path.exists('config/settings_testing.py'):
         print('Using settings for test enviroment')
-        from settings_testing import *
+        from config.settings_testing import *
 
     if os.path.exists('config/settings_live.py'):
         print('Using settings for live enviroment')
-        from settings_live import *
+        from config.settings_live import *
 
 
 
 with web.template as setup:
     #css for jquery, material sprite sheet and custom css
-    setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/default.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/materialize.css" media="" type="text/css" />')
+    setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/default.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/js/jquery-ui/themes/base/jquery-ui.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-navigation-white.css" media="" type="text/css" />')
     setup.persistent_header('<link rel="stylesheet" id="navigationCss" href="/static/css/sprite-action-white.css" media="" type="text/css" />')
@@ -65,6 +69,7 @@ with web.template as setup:
     setup.persistent_header('<script type="text/javascript" src="/static/js/jquery-2.2.3.min.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.js"></script>')
+    setup.persistent_header('<script type="text/javascript" src="/static/js/materialize.js"></script>')
     setup.persistent_header('<script type="text/javascript" src="/static/js/default.js"></script>')
 
     #other favicon etc
@@ -75,5 +80,5 @@ with web.template as setup:
         domain=domain,
         port=port)
 
-
 db.config(database)
+mail.sendmail.set_server(email_server)

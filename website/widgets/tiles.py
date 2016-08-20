@@ -17,16 +17,17 @@ class control(base_widget):
         return self
 
     def render(self):
-        htm = u''
+        htm = u'<div class="col s12">'
         for project in self.data:
-            htm += u'<div class="tile">'
+            htm += u'<div class="tile col s4"><div class="tile-border card">'
             if project.get('image'):
                 #~ htm += u'<div class="tile-img" style="%s"><img src="%s"/></div>' % (background, project.get('image'))
                 htm += u'<div class="tile-img" style="background:center no-repeat url(%s);background-size:contain;"></div>' % project.get('image')
             else:
                 htm += u'<div class="tile-img"></div>'
-            htm += u'<header class="tile-content"><h2><a href="%s">%s</a> By %s</h2></header>' % (
+            htm += u'<header class="tile-header"><h2><a href="%s">%s</a> <br />By %s</h2></header>' % (
                 project.get('link'), project.get('title'), project.get('author'))
-            htm += u'<div class="tile-content"><p>%s</p></div>' % (project.get('description'))
-            htm += u'</div>'
+            htm += u'<div class="card-content content"><p>%s</p></div>' % (project.get('description'))
+            htm += u'</div></div>'
+        htm += u'</div>'
         return htm

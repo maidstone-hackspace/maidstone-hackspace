@@ -1,25 +1,50 @@
+version: '2' 
 
-nginx:
-  image: olymk2/mhackspace
-  #name: mhackspace
-  links:
-      - db:database
-  dns:
-      - 8.8.8.8
-      - 8.8.4.4
-  ports:
-      - "5000:5000"
-  volumes:
-      - .:/var/www
-  restart: always
+services:
+    mhackspace_uwsgi:
+        image: olymk2/mhackspace
+        restart: unless-stopped
+        network_mode: bridge
+        links: 
+            - mariadb:mariadb
+            - mhackspace_web:nginx
+            - mhackspace_mail:mail_server
+        volumes:
+            - sockets:/data/sockets
+            - ./website/:/var/www
+            - ./config/uwsgi/maidstone-hackspace.org.uk.ini:/etc/uwsgi/apps-enabled/maidstone-hackspace.org.uk.ini 
 
-db:
-  image: mariadb
-  ports:
-      - "3300:3306"
-  environment:
-      MYSQL_DATABASE: maidstone_hackspace
-      MYSQL_USER: mhackspace
-      MYSQL_PASSWORD: mhackspace
-      MYSQL_ROOT_PASSWORD: mhackspace
-  restart: always
+    mhackspace_web:
+        image: olymk2/nginx
+        restart: unless-stopped
+        network_mode: bridge
+        dns:
+            - 8.8.8.8
+            - 8.8.4.4
+        volumes:
+            - ./website/:/var/www
+            - sockets:/data/sockets
+            - /etc/ssl/certs/:/etc/ssl/certs/ 
+            - ./config/nginx/docker-maidstone-hackspace.org.uk:/etc/nginx/sites-enabled/docker-maidstone-hackspace.org.uk 
+        restart: always
+
+    mariadb:
+      image: mariadb
+      network_mode: bridge
+      ports:
+          - "3300:3306"
+      environment:
+          MYSQL_DATABASE: maidstone_hackspace
+          MYSQL_USER: mhackspace
+          MYSQL_PASSWORD: mhackspace
+          MYSQL_ROOT_PASSWORD: mhackspace
+      restart: unless-stopped
+
+    mhackspace_mail:
+        image: mailhog/mailhog
+        network_mode: bridge
+        restart: unless-stopped
+
+volumes:
+    sockets:
+        driver: local
