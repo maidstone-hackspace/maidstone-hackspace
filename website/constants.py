@@ -31,10 +31,12 @@ rss_feeds = [{
         'author':'Simon Ridley',
         'url': 'http://waistcoatforensicator.blogspot.com/feeds/posts/default?alt=rss'
     }, {
+""" Temp removal of matthewbeddow.co.uk
         'author':'Mathew Beddow',
         'url': 'http://www.matthewbeddow.co.uk/?feed=rss2',
         'tags': ['tech'], 
-    }, {
+        
+    }, {"""
         'author':'Oliver Marks', 
         'url': 'http://www.digitaloctave.co.uk/rss.xml'
     }, {
